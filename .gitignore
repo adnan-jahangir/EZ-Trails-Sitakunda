@@ -1,0 +1,34 @@
+# ==========================================
+# EZ TRILL SITAKUNDA (TOURSTK) - GITIGNORE
+# Prevents sensitive credentials & large files from uploading to GitHub
+# ==========================================
+
+# Environment variables & secrets (CRITICAL)
+.env
+.env.local
+.env.*.local
+server/.env
+server/.env.local
+server/.env.production
+
+# Node dependencies
+node_modules/
+server/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# System & IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# AI / System Generated temporary files
+.system_generated/
+.agents/
+scratch/
+implementation_plan.md
+backend implementation_plan

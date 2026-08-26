@@ -1,0 +1,349 @@
+/* ============================================================
+   TOURSTK PAGE-SPECIFIC STYLES
+   ============================================================ */
+
+/* --- Homepage: How It Works --- */
+.how-step {
+  text-align: center;
+  padding: var(--space-6);
+}
+
+.how-step-num {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--color-primary-surface);
+  color: var(--color-primary);
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-4);
+}
+
+.how-step h4 {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-2);
+}
+
+.how-step p {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* --- Homepage: Why Tourstk --- */
+.why-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  transition: all var(--duration-base);
+}
+
+.why-card:hover {
+  border-color: var(--color-primary-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.why-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: var(--color-primary-surface);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: var(--space-4);
+}
+
+.why-card h4 {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--space-2);
+}
+
+.why-card p {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* --- Explore: Destination Grid --- */
+.dest-card .card-image {
+  aspect-ratio: 4 / 3;
+}
+
+.dest-card .card-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin-top: var(--space-2);
+}
+
+.dest-card .card-location .material-symbols-outlined {
+  font-size: 14px;
+}
+
+/* --- Package Card Extras --- */
+.pkg-card .card-image {
+  aspect-ratio: 16 / 9;
+  position: relative;
+}
+
+.pkg-card .card-badge {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  background: var(--color-accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: var(--weight-bold);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* --- Package Detail: Inclusion Grid --- */
+.inclusion-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+.inclusion-item {
+  background: var(--color-sand);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  text-align: center;
+}
+
+.inclusion-item .material-symbols-outlined {
+  font-size: 28px;
+  color: var(--color-primary);
+  margin-bottom: var(--space-2);
+}
+
+.inclusion-item h4 {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.inclusion-item p {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin-top: var(--space-1);
+}
+
+@media (max-width: 640px) {
+  .inclusion-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* --- Review Card --- */
+.review-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+}
+
+.review-stars {
+  display: flex;
+  gap: 2px;
+  color: var(--color-accent);
+  margin-bottom: var(--space-3);
+}
+
+.review-stars .material-symbols-outlined {
+  font-size: 16px;
+  font-variation-settings: 'FILL' 1;
+}
+
+.review-text {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+  font-style: italic;
+  margin-bottom: var(--space-4);
+}
+
+.review-author {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.review-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--color-primary-surface);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--weight-bold);
+  font-size: var(--text-sm);
+}
+
+.review-author-name {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.review-author-pkg {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+/* --- Experience Card (photography) --- */
+.exp-card {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  cursor: pointer;
+}
+
+.exp-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--duration-slow);
+}
+
+.exp-card:hover img {
+  transform: scale(1.06);
+}
+
+.exp-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%);
+  display: flex;
+  align-items: flex-end;
+  padding: var(--space-5);
+}
+
+.exp-card-overlay h4 {
+  color: #fff;
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+}
+
+/* --- Travel Guide Card --- */
+.guide-card {
+  display: flex;
+  gap: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  transition: all var(--duration-base);
+}
+
+.guide-card:hover {
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+
+.guide-card-icon {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  background: var(--color-teal-surface);
+  color: var(--color-teal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.guide-card h4 {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--space-1);
+}
+
+.guide-card p {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+/* --- Planner Interest Selector --- */
+.interest-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+.interest-card {
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--duration-fast);
+  user-select: none;
+}
+
+.interest-card:hover {
+  border-color: var(--color-primary-light);
+}
+
+.interest-card.selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary-surface);
+}
+
+.interest-card-emoji {
+  font-size: 28px;
+  margin-bottom: var(--space-2);
+}
+
+.interest-card-label {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+@media (max-width: 640px) {
+  .interest-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* --- Contact Info Cards --- */
+.contact-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+}
+
+.contact-card-icon {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  background: var(--color-primary-surface);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}

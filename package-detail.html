@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Package Details — EZ Trails Sitakunda</title>
+
+  <!-- Tailwind CSS & Fonts -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#012d1d",
+            "primary-dark": "#073824",
+            "primary-container": "#1b4332",
+            "primary-light": "#059669",
+            "primary-surface": "#ecfdf5",
+            "accent": "#d97706"
+          },
+          fontFamily: {
+            "display": ["Playfair Display", "Georgia", "serif"],
+            "body": ["Plus Jakarta Sans", "sans-serif"]
+          },
+          maxWidth: { "container-max": "1200px" }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body class="bg-white text-slate-800 font-body antialiased selection:bg-emerald-100 selection:text-emerald-900">
+
+  <!-- UNIFIED NAVBAR -->
+  <nav class="w-full bg-white border-b border-slate-100 sticky top-0 z-50">
+    <div class="max-w-container-max mx-auto px-4 sm:px-6 md:px-10 h-16 sm:h-20 flex justify-between items-center">
+      <!-- Logo Lockup (EZ Trails + Subtitle Sitakunda) -->
+      <a href="index.html" class="flex items-center gap-2 text-primary flex-shrink-0 group">
+        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-50 text-primary flex items-center justify-center border border-emerald-100 shadow-2xs group-hover:scale-105 transition-transform flex-shrink-0">
+          <svg class="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m8 3 4 8 5-5 5 15H2L8 3z"/>
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-display font-extrabold text-base sm:text-lg text-primary leading-none tracking-tight">EZ Trails</span>
+          <span class="text-[10.5px] sm:text-[11.5px] font-bold tracking-wider text-emerald-700 uppercase leading-none mt-1">Sitakunda</span>
+        </div>
+      </a>
+
+      <!-- Center Links -->
+      <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
+        <a href="index.html" class="hover:text-primary transition-colors">Home</a>
+        <a href="packages.html" class="text-primary font-bold border-b-2 border-primary pb-1">Packages</a>
+        <a href="explore.html" class="hover:text-primary transition-colors">Explore</a>
+        <a href="my-booking.html" class="hover:text-primary transition-colors">My Booking</a>
+      </div>
+
+      <!-- Right Action Button -->
+      <div class="flex items-center gap-2">
+        <a href="planner.html" class="flex bg-primary hover:bg-primary-dark text-white font-bold text-[11px] sm:text-xs md:text-sm px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full shadow-xs transition-all items-center gap-1 flex-shrink-0">
+          <span class="material-symbols-outlined text-sm sm:text-base">explore</span>
+          <span>Plan Trip</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Package Content -->
+  <main id="pkg-content-area" class="py-12 bg-white">
+    <!-- Populated by JS -->
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white text-slate-500 border-t border-slate-100 py-12 text-center text-xs">
+    <div class="max-w-container-max mx-auto px-6">
+      © 2026 EZ Trails Sitakunda (Tourstk) • Email: <a href="mailto:eztrailsbd@gmail.com" class="font-bold text-emerald-800 hover:underline">eztrailsbd@gmail.com</a> • Hotline: <a href="tel:+8801812345678" class="font-bold text-slate-700 hover:underline">+880 1812-345678</a>
+    </div>
+  </footer>
+
+  <!-- COMPACT FLOATING QUICK ACTION DOCK (Call + Facebook + WhatsApp) -->
+  <div class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col gap-2 items-center">
+    <!-- Call Button -->
+    <a href="tel:+8801812345678" class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-emerald-800 hover:bg-emerald-900 text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Call Hotline: +880 1812-345678">
+      <span class="material-symbols-outlined text-lg sm:text-xl">call</span>
+    </a>
+    <!-- Facebook Button -->
+    <a href="https://facebook.com" target="_blank" class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#1877f2] hover:bg-[#166fe5] text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Facebook Page">
+      <svg class="w-4 h-4 sm:w-5 sm:h-5 fill-current" viewBox="0 0 24 24">
+        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+      </svg>
+    </a>
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/8801812345678?text=Hello%20Tourstk,%20I%20want%20to%20plan%20a%20Sitakunda%20trip." target="_blank" class="relative w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#25d366] hover:bg-[#20ba59] text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Chat on WhatsApp">
+      <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-300 rounded-full animate-ping"></span>
+      <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border border-white"></span>
+      <svg class="w-4 h-4 sm:w-5 sm:h-5 fill-white" viewBox="0 0 24 24">
+        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+      </svg>
+    </a>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/animations.js"></script>
+  <script>
+    function renderPackageDetails() {
+      const params = new URLSearchParams(window.location.search);
+      const pkgId = params.get('id') || 'sitakunda-adventure-tour';
+      const pkg = (TOURSTK.packages || []).find(p => p.id === pkgId || p.packageId === pkgId || p._id === pkgId) || (TOURSTK.packages && TOURSTK.packages[0]);
+
+      if (!pkg) return;
+      const root = document.getElementById('pkg-content-area');
+      if (!root) return;
+
+      const scheduleDays = pkg.scheduleDays || [
+        {
+          dayNumber: 'D1',
+          dayLabel: 'DAY 1',
+          dayTitle: 'Arrival, Trail Exploration & Camp',
+          timeline: [
+            { time: '08:00 AM', text: 'Pickup from Sitakunda Bus Station & authentic breakfast' },
+            { time: '10:00 AM', text: 'Guided hiking and waterfall expedition' },
+            { time: '02:00 PM', text: 'Traditional local lunch at Sitakunda' },
+            { time: '05:30 PM', text: 'Sunset view & rest at accommodation' }
+          ]
+        }
+      ];
+
+      const scheduleHtml = scheduleDays.map((day, idx) => `
+        <div class="border border-slate-200/90 rounded-2xl overflow-hidden bg-white shadow-2xs">
+          <!-- Accordion Header (Matching User Screenshot) -->
+          <div onclick="toggleDayAccordion(${idx})" class="p-5 flex items-center justify-between cursor-pointer hover:bg-slate-50/80 transition-colors select-none">
+            <div class="flex items-center gap-3.5">
+              <!-- D1 / D2 Dark Green Badge -->
+              <span class="w-10 h-10 rounded-xl bg-[#0e4d34] text-white font-extrabold text-sm flex items-center justify-center font-display shadow-2xs">
+                ${day.dayNumber}
+              </span>
+              <div>
+                <span class="text-[10px] font-extrabold uppercase tracking-widest text-emerald-800 block">${day.dayLabel}</span>
+                <h3 class="font-display font-bold text-base sm:text-lg text-slate-900 leading-snug">${day.dayTitle}</h3>
+              </div>
+            </div>
+            <!-- Toggle Chevron Icon -->
+            <div class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 shadow-2xs">
+              <span id="chevron-${idx}" class="material-symbols-outlined text-lg transition-transform duration-200">expand_less</span>
+            </div>
+          </div>
+
+          <!-- Accordion Timeline Body (Matching User Screenshot) -->
+          <div id="body-${idx}" class="p-6 transition-all duration-300">
+            <div class="relative border-l-2 border-emerald-400 ml-3.5 pl-6 py-1 space-y-5">
+              ${day.timeline.map(item => `
+                <div class="relative">
+                  <!-- Green Timeline Dot -->
+                  <div class="absolute -left-[31px] top-1.5 w-3 h-3 rounded-full bg-emerald-600 border-2 border-white ring-2 ring-emerald-400"></div>
+                  <!-- Timeline Content -->
+                  <div class="text-xs text-slate-700 leading-relaxed">
+                    <strong class="font-bold text-slate-900 mr-1.5">${item.time}</strong>
+                    <span class="text-slate-400 mr-1.5">—</span>
+                    <span class="text-slate-600 font-medium">${item.text}</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      document.getElementById('pkg-content-area').innerHTML = `
+        <div class="max-w-container-max mx-auto px-6">
+          <a href="packages.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-primary mb-6 transition-colors">
+            <span class="material-symbols-outlined text-base">arrow_back</span>
+            Back to All Packages
+          </a>
+
+          <div class="mb-6">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-primary-surface text-primary mb-2">${pkg.type}</span>
+            <h1 class="font-display text-3xl sm:text-4xl font-bold text-primary mb-2">${pkg.name}</h1>
+            <p class="text-sm text-slate-500">${pkg.tagline || pkg.shortDesc}</p>
+          </div>
+
+          <!-- Hero Image -->
+          <div class="rounded-3xl overflow-hidden h-80 sm:h-[450px] mb-12 shadow-sm border border-slate-100 relative group">
+            <img src="${pkg.image}" alt="${pkg.name}" class="w-full h-full object-cover">
+            <div class="absolute bottom-4 left-4 bg-slate-900/80 backdrop-blur-md text-white text-xs font-semibold px-3.5 py-1.5 rounded-full flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-sm text-emerald-400">schedule</span>
+              <span>${pkg.duration}</span>
+            </div>
+          </div>
+
+          <!-- 2-Column Details -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            <div class="lg:col-span-2 space-y-10">
+              
+              <!-- Inclusions -->
+              <div>
+                <h2 class="font-display text-2xl font-bold text-primary mb-4">What's Included in This Package</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  ${(pkg.included || pkg.inclusions || pkg.includesList || ['Transport', 'Accommodation', 'Meals', 'Tour Guide']).map(inc => `
+                    <div class="bg-slate-50/80 p-4 rounded-2xl border border-slate-200/80 flex items-center gap-3">
+                      <span class="material-symbols-outlined text-emerald-600 text-xl flex-shrink-0">check_circle</span>
+                      <span class="text-xs font-semibold text-slate-800">${inc}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+
+              <!-- Itinerary Schedule (Matching User Screenshot) -->
+              <div>
+                <div class="flex items-center justify-between mb-4">
+                  <h2 class="font-display text-2xl font-bold text-primary">Tour Schedule & Itinerary</h2>
+                  <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full">${pkg.duration || '2 Days • 1 Night'}</span>
+                </div>
+                
+                <div class="space-y-4">
+                  ${scheduleHtml}
+                </div>
+              </div>
+            </div>
+
+            <!-- Sticky Booking Card -->
+            <div>
+              <div class="sticky top-28 bg-white p-6 sm:p-7 rounded-3xl border border-slate-200 shadow-sm">
+                <div class="text-xs text-slate-400">Package Starting Rate</div>
+                <div class="text-3xl font-extrabold text-primary my-1">৳${(pkg.price || 0).toLocaleString()}</div>
+                <div class="text-xs text-slate-500 mb-6">${pkg.priceNote || 'per person'}</div>
+
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 text-xs space-y-2.5 mb-6 text-slate-600">
+                  <div class="flex justify-between"><span>Duration:</span><strong class="text-slate-900 font-bold">${pkg.duration || '2 Days • 1 Night'}</strong></div>
+                  <div class="flex justify-between"><span>Departures:</span><strong class="text-slate-900 font-bold">${pkg.departures || 'Friday & Saturday'}</strong></div>
+                  <div class="flex justify-between"><span>Status:</span><strong class="text-emerald-700 font-bold">Booking Open</strong></div>
+                </div>
+
+                <a href="booking.html?pkg=${pkg.id || pkg.packageId}" class="w-full bg-primary hover:bg-primary-dark text-white text-center font-bold py-3.5 rounded-full block mb-3 text-sm transition-all shadow-xs">
+                  Book This Package
+                </a>
+
+                <a href="https://wa.me/8801812345678?text=Hello%20Tourstk,%20inquiring%20about%20${encodeURIComponent(pkg.name || 'Tour Package')}" target="_blank" class="w-full bg-[#25d366] hover:bg-[#20ba59] text-white text-center font-bold py-3.5 rounded-full flex items-center justify-center gap-2 text-sm transition-all shadow-xs">
+                  <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24">
+                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                  </svg>
+                  <span>Inquire on WhatsApp</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    window.addEventListener('tourstk:packages-updated', renderPackageDetails);
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      renderPackageDetails();
+      if (window.TourstkAPI) {
+        await TourstkAPI.fetchAndSyncPackages();
+      }
+    });
+
+    // Accordion Toggle function
+    function toggleDayAccordion(idx) {
+      const body = document.getElementById(`body-${idx}`);
+      const chevron = document.getElementById(`chevron-${idx}`);
+      if (!body || !chevron) return;
+      if (body.classList.contains('hidden')) {
+        body.classList.remove('hidden');
+        chevron.textContent = 'expand_less';
+      } else {
+        body.classList.add('hidden');
+        chevron.textContent = 'expand_more';
+      }
+    }
+  </script>
+</body>
+</html>

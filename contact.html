@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Contact Us — Tourstk</title>
+
+  <!-- Tailwind CSS & Fonts -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#012d1d",
+            "primary-container": "#1b4332",
+            "primary-light": "#059669",
+            "primary-surface": "#ecfdf5",
+            "accent": "#d97706",
+            "surface-dim": "#f8fafc",
+            "outline-variant": "#e2e8f0"
+          },
+          fontFamily: {
+            "display": ["Playfair Display", "Georgia", "serif"],
+            "body": ["Plus Jakarta Sans", "sans-serif"]
+          },
+          maxWidth: { "container-max": "1200px" }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body class="bg-white text-slate-800 font-body antialiased selection:bg-emerald-100 selection:text-emerald-900">
+
+  <!-- UNIFIED NAVBAR -->
+  <nav class="w-full bg-white border-b border-slate-100 sticky top-0 z-50">
+    <div class="max-w-container-max mx-auto px-4 sm:px-6 md:px-10 h-16 sm:h-20 flex justify-between items-center">
+      <!-- Logo Lockup (EZ Trails + Subtitle Sitakunda) -->
+      <a href="index.html" class="flex items-center gap-2 text-primary flex-shrink-0 group">
+        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-50 text-primary flex items-center justify-center border border-emerald-100 shadow-2xs group-hover:scale-105 transition-transform flex-shrink-0">
+          <svg class="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m8 3 4 8 5-5 5 15H2L8 3z"/>
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-display font-extrabold text-base sm:text-lg text-primary leading-none tracking-tight">EZ Trails</span>
+          <span class="text-[10.5px] sm:text-[11.5px] font-bold tracking-wider text-emerald-700 uppercase leading-none mt-1">Sitakunda</span>
+        </div>
+      </a>
+
+      <!-- Center Links -->
+      <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
+        <a href="index.html" class="hover:text-primary transition-colors">Home</a>
+        <a href="packages.html" class="hover:text-primary transition-colors">Packages</a>
+        <a href="explore.html" class="hover:text-primary transition-colors">Explore</a>
+        <a href="my-booking.html" class="hover:text-primary transition-colors">My Booking</a>
+      </div>
+
+      <!-- Right Action Button -->
+      <div class="flex items-center gap-2">
+        <a href="planner.html" class="flex bg-primary hover:bg-primary-dark text-white font-bold text-[11px] sm:text-xs md:text-sm px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full shadow-xs transition-all items-center gap-1 flex-shrink-0">
+          <span class="material-symbols-outlined text-sm sm:text-base">explore</span>
+          <span>Plan Trip</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="py-14 bg-slate-50 border-b border-slate-100 text-center">
+    <div class="max-w-xl mx-auto px-6">
+      <span class="text-xs font-bold uppercase tracking-widest text-emerald-700 block mb-2">Support & Office</span>
+      <h1 class="font-display text-3xl sm:text-4xl font-bold text-primary mb-3">Talk to Tourstk</h1>
+      <p class="text-sm text-slate-500">Need booking assistance, custom planning, or partner queries? We are here to help.</p>
+    </div>
+  </header>
+
+  <!-- Contact Details & Form -->
+  <section class="py-16 bg-white">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <!-- Form -->
+        <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+          <h2 class="font-display text-xl font-bold text-primary mb-1">Send a Message</h2>
+          <p class="text-xs text-slate-500 mb-6">We respond within a few hours on business days.</p>
+
+          <form onsubmit="handleContactMsg(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Your Name *</label>
+              <input type="text" required class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm focus:border-primary focus:ring-1 focus:ring-primary" placeholder="Full name">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Phone / WhatsApp *</label>
+              <input type="tel" required class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm focus:border-primary focus:ring-1 focus:ring-primary" placeholder="01XXXXXXXXX">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Message *</label>
+              <textarea required class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm focus:border-primary focus:ring-1 focus:ring-primary" rows="4" placeholder="How can we help you?"></textarea>
+            </div>
+            <button type="submit" class="w-full bg-primary hover:bg-primary-container text-white font-bold py-3.5 rounded-xl text-sm shadow-xs transition-all flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined text-lg">send</span>
+              Send Message
+            </button>
+          </form>
+        </div>
+
+        <!-- Info Cards -->
+        <div class="space-y-4">
+          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+            <div class="flex items-center gap-3 mb-2 text-primary font-bold text-sm">
+              <span class="material-symbols-outlined text-emerald-700">location_on</span>
+              Sitakunda Office
+            </div>
+            <p class="text-xs text-slate-500 leading-relaxed">Sitakunda Sadar, Chittagong 4310, Bangladesh</p>
+          </div>
+
+          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+            <div class="flex items-center gap-3 mb-2 text-primary font-bold text-sm">
+              <span class="material-symbols-outlined text-emerald-700">phone_in_talk</span>
+              Direct Helpline
+            </div>
+            <p class="text-xs text-slate-500 leading-relaxed">+880 1812-345678 (8:00 AM – 10:00 PM)</p>
+          </div>
+
+          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+            <div class="flex items-center gap-3 mb-2 text-primary font-bold text-sm">
+              <span class="material-symbols-outlined text-emerald-700">mail</span>
+              Email Support
+            </div>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              <a href="mailto:eztrailsbd@gmail.com" class="font-bold text-emerald-800 hover:underline">eztrailsbd@gmail.com</a>
+            </p>
+          </div>
+
+          <a href="https://wa.me/8801812345678" target="_blank" class="w-full bg-[#25d366] hover:bg-[#1eb956] text-white font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 text-xs shadow-xs transition-all">
+            <span class="material-symbols-outlined text-lg">chat</span>
+            Direct WhatsApp Chat
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-white text-slate-500 border-t border-slate-100 py-12 text-center text-xs">
+    <div class="max-w-container-max mx-auto px-6">
+      © 2026 Tourstk (EZ Trails Sitakunda) • Email: <a href="mailto:eztrailsbd@gmail.com" class="font-bold text-emerald-800 hover:underline">eztrailsbd@gmail.com</a> • Hotline: <a href="tel:+8801812345678" class="font-bold text-slate-700 hover:underline">+880 1812-345678</a>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/weather.js"></script>
+  <script>
+    async function handleContactMsg(e) {
+      e.preventDefault();
+      const form = e.target;
+      const inputs = form.querySelectorAll('input, textarea');
+      const submitBtn = form.querySelector('button[type="submit"]');
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'Sending...';
+      }
+
+      const payload = {
+        name: inputs[0].value,
+        phone: inputs[1].value,
+        message: inputs[2].value,
+      };
+
+      try {
+        const res = await TourstkAPI.submitContact(payload);
+        alert(res.message || 'Thank you for contacting Tourstk! Our team will reach out to you shortly.');
+      } catch (err) {
+        alert('Thank you for contacting Tourstk! Our team will reach out to you shortly.');
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<span class="material-symbols-outlined text-lg">send</span> Send Message`;
+        }
+        form.reset();
+      }
+    }
+  </script>
+
+  <!-- COMPACT FLOATING QUICK ACTION DOCK (Call + Facebook + WhatsApp) -->
+  <div class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col gap-2 items-center">
+    <!-- Call Button -->
+    <a href="tel:+8801812345678" class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-emerald-800 hover:bg-emerald-900 text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Call Hotline: +880 1812-345678">
+      <span class="material-symbols-outlined text-lg sm:text-xl">call</span>
+    </a>
+    <!-- Facebook Button -->
+    <a href="https://facebook.com" target="_blank" class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#1877f2] hover:bg-[#166fe5] text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Facebook Page">
+      <svg class="w-4 h-4 sm:w-5 sm:h-5 fill-current" viewBox="0 0 24 24">
+        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+      </svg>
+    </a>
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/8801812345678?text=Hello%20Tourstk,%20I%20want%20to%20plan%20a%20Sitakunda%20trip." target="_blank" class="relative w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#25d366] hover:bg-[#20ba59] text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Chat on WhatsApp">
+      <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-300 rounded-full animate-ping"></span>
+      <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border border-white"></span>
+      <svg class="w-4 h-4 sm:w-5 sm:h-5 fill-white" viewBox="0 0 24 24">
+        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+      </svg>
+    </a>
+  </div>
+
+</body>
+</html>

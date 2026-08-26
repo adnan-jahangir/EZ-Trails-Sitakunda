@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Tourstk — Discover Sitakunda | Curated Tour Packages & Verified Guides</title>
+  <meta name="description" content="Discover Sitakunda with Tourstk. Complete all-inclusive travel packages, local guides, transport and stress-free journeys.">
+  <meta name="theme-color" content="#0e4d34">
+
+  <!-- OpenGraph / Facebook / WhatsApp Rich Link Preview -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tourstk.com/">
+  <meta property="og:title" content="Tourstk — Discover Sitakunda | Verified Guides & Tours">
+  <meta property="og:description" content="From Chandranath Peak's mystical sunrise to Guliakhali's green swamp beach. Curated all-inclusive journeys with local experts.">
+  <meta property="og:image" content="images/og-cover.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="EZ Trails Sitakunda (Tourstk)">
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Tourstk — Discover Sitakunda | Verified Guides & Tours">
+  <meta name="twitter:description" content="Curated all-inclusive journeys with local experts in Sitakunda, Bangladesh.">
+  <meta name="twitter:image" content="images/og-cover.jpg">
+
+  <!-- Tailwind CSS & Fonts -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#0e4d34",
+            "primary-dark": "#073824",
+            "primary-light": "#10b981",
+            "primary-surface": "#ecfdf5",
+            "accent": "#d97706",
+            "surface-dim": "#f8fafc",
+            "outline-variant": "#e2e8f0",
+            "on-surface-variant": "#64748b"
+          },
+          fontFamily: {
+            "display": ["Playfair Display", "Georgia", "serif"],
+            "body": ["Plus Jakarta Sans", "sans-serif"]
+          },
+          maxWidth: {
+            "container-max": "1240px"
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="css/animations.css">
+
+  <style>
+    .glass-card {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+  </style>
+</head>
+<body class="bg-white text-slate-800 font-body antialiased selection:bg-emerald-100 selection:text-emerald-900">
+
+  <!-- 1. UNIFIED TOP NAVBAR (Exact match to all pages) -->
+  <nav class="w-full bg-white border-b border-slate-100 sticky top-0 z-50">
+    <div class="max-w-container-max mx-auto px-4 sm:px-6 md:px-10 h-16 sm:h-20 flex justify-between items-center">
+      <!-- Logo Lockup (EZ Trails + Subtitle Sitakunda) -->
+      <a href="index.html" class="flex items-center gap-2 text-primary flex-shrink-0 group">
+        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-50 text-primary flex items-center justify-center border border-emerald-100 shadow-2xs group-hover:scale-105 transition-transform flex-shrink-0">
+          <svg class="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m8 3 4 8 5-5 5 15H2L8 3z"/>
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-display font-extrabold text-base sm:text-lg text-primary leading-none tracking-tight">EZ Trails</span>
+          <span class="text-[10.5px] sm:text-[11.5px] font-bold tracking-wider text-emerald-700 uppercase leading-none mt-1">Sitakunda</span>
+        </div>
+      </a>
+
+      <!-- Center Links -->
+      <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
+        <a href="index.html" class="text-primary font-bold border-b-2 border-primary pb-1">Home</a>
+        <a href="packages.html" class="hover:text-primary transition-colors">Packages</a>
+        <a href="explore.html" class="hover:text-primary transition-colors">Explore</a>
+        <a href="my-booking.html" class="hover:text-primary transition-colors">My Booking</a>
+      </div>
+
+      <!-- Right Action Button & Weather Pill -->
+      <div class="flex items-center gap-2">
+        <div id="sitakunda-weather-pill" class="hidden lg:block"></div>
+        <a href="planner.html" class="flex bg-primary hover:bg-primary-dark text-white font-bold text-[11px] sm:text-xs md:text-sm px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full shadow-xs transition-all items-center gap-1 flex-shrink-0">
+          <span class="material-symbols-outlined text-sm sm:text-base">explore</span>
+          <span>Plan Trip</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 2. STUNNING HERO SECTION -->
+  <header class="relative min-h-[580px] md:min-h-[660px] flex items-center justify-center py-20 px-6 overflow-visible bg-primary z-20">
+    <div class="absolute inset-0 z-0 overflow-hidden">
+      <div class="absolute inset-0 bg-cover bg-center w-full h-full" style="background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1800&q=80');"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-primary/85 via-primary/65 to-primary/95"></div>
+    </div>
+
+    <div class="relative z-10 w-full max-w-4xl mx-auto text-center flex flex-col items-center">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-emerald-200 border border-white/20 text-xs font-bold uppercase tracking-wider mb-6">
+        <span class="material-symbols-outlined text-base">verified</span>
+        Discover Sitakunda. We Plan the Journey.
+      </div>
+
+      <h1 class="font-display text-4xl sm:text-6xl md:text-7xl font-bold text-white tracking-tight leading-[1.1] mb-6">
+        Experience Sitakunda Like Never Before
+      </h1>
+
+      <p class="text-emerald-100/90 text-base sm:text-xl max-w-2xl font-normal leading-relaxed mb-10">
+        From Chandranath Peak's mystical sunrise to Guliakhali's green swamp beach. Curated all-inclusive journeys with local experts.
+      </p>
+
+      <!-- SLIM & ELEGANT SPOT SEARCH DOCK -->
+      <div class="w-full max-w-2xl relative">
+        <form action="explore.html" method="GET" onsubmit="handleHeroSearchSubmit(event)" class="w-full bg-white rounded-full p-1.5 shadow-[0_15px_40px_rgba(0,0,0,0.22)] border border-white/80 flex items-center gap-2.5 text-left transition-all focus-within:ring-3 focus-within:ring-emerald-500/20">
+          
+          <!-- Search Icon Badge -->
+          <div class="w-9 h-9 rounded-full bg-emerald-50 text-emerald-800 flex items-center justify-center flex-shrink-0 ml-1">
+            <span class="material-symbols-outlined text-lg">search</span>
+          </div>
+
+          <!-- Live Search Input -->
+          <div class="flex-1 min-w-0">
+            <input 
+              type="text" 
+              id="hero-spot-search" 
+              name="q"
+              autocomplete="off" 
+              placeholder="Search spots (e.g. Chandranath, Guliakhali, Khaiyachora)..." 
+              class="w-full bg-transparent border-0 p-0 text-xs sm:text-sm font-semibold text-slate-800 placeholder:text-slate-400 focus:ring-0 outline-none"
+              oninput="handleHeroSpotLiveSearch(this.value)"
+              onfocus="handleHeroSpotLiveSearch(this.value)"
+            >
+          </div>
+
+          <!-- Clear Search Button -->
+          <button type="button" id="hero-clear-search-btn" onclick="clearHeroSearch()" class="hidden w-7 h-7 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 flex items-center justify-center transition-colors">
+            <span class="material-symbols-outlined text-sm">close</span>
+          </button>
+
+          <!-- Search / Explore CTA Button -->
+          <button type="submit" class="bg-primary hover:bg-primary-dark text-white font-bold text-xs px-5 py-2.5 rounded-full flex items-center justify-center gap-1.5 shadow-sm hover:shadow-md transition-all flex-shrink-0 cursor-pointer">
+            <span>Explore</span>
+            <span class="material-symbols-outlined text-base">arrow_forward</span>
+          </button>
+        </form>
+
+        <!-- LIVE AUTO-SUGGESTION FLOATING MODAL (Appears on Type) -->
+        <div id="hero-search-suggestions" class="absolute top-full left-0 right-0 mt-3 bg-white rounded-3xl shadow-[0_25px_60px_-10px_rgba(0,0,0,0.35)] border border-slate-200/90 p-3 z-[100] hidden max-h-[380px] overflow-y-auto divide-y divide-slate-100 text-left animate-in fade-in zoom-in-95 duration-200">
+          <!-- Dynamically populated by JS -->
+        </div>
+
+        <!-- Quick Trending Spot Badges -->
+        <div class="flex flex-wrap items-center justify-center gap-2 mt-4 text-[11px] text-white/95">
+          <span class="font-bold text-emerald-300">🔥 Popular Spots:</span>
+          <a href="destination-detail.html?id=chandranath-hill" class="px-3 py-1 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-xs transition-colors border border-white/20 font-semibold">⛰️ Chandranath Hill</a>
+          <a href="destination-detail.html?id=guliakhali-sea-beach" class="px-3 py-1 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-xs transition-colors border border-white/20 font-semibold">🌊 Guliakhali Beach</a>
+          <a href="destination-detail.html?id=khaiyachora-waterfall" class="px-3 py-1 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-xs transition-colors border border-white/20 font-semibold">💧 Khaiyachora Fall</a>
+          <a href="destination-detail.html?id=mohamaya-lake" class="px-3 py-1 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-xs transition-colors border border-white/20 font-semibold">🛶 Mohamaya Lake</a>
+          <a href="destination-detail.html?id=sitakunda-eco-park" class="px-3 py-1 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-xs transition-colors border border-white/20 font-semibold">🌲 Eco Park</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 3. TOP 3 CURATED PACKAGES -->
+  <section class="py-24 bg-white" id="packages">
+    <div class="max-w-container-max mx-auto px-6">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-emerald-700 block mb-2">Curated Journeys</span>
+          <h2 class="font-display text-3xl sm:text-4xl font-bold text-primary">Featured Sitakunda Packages</h2>
+          <p class="text-slate-500 text-sm sm:text-base mt-2">All-inclusive trips with transport, guide, meals and permits.</p>
+        </div>
+        <a href="packages.html" class="inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-emerald-700">
+          View All Packages
+          <span class="material-symbols-outlined text-base">arrow_forward</span>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8" id="featured-packages-grid">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. EXPLORE SITAKUNDA (12 Destinations Preview) -->
+  <section class="py-24 bg-slate-50 border-y border-slate-100" id="explore">
+    <div class="max-w-container-max mx-auto px-6">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-emerald-700 block mb-2">12 Iconic Destinations</span>
+          <h2 class="font-display text-3xl sm:text-4xl font-bold text-primary">Explore Sitakunda</h2>
+          <p class="text-slate-500 text-sm sm:text-base mt-2">Places worth visiting, experiences worth remembering.</p>
+        </div>
+        <a href="explore.html" class="inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-emerald-700">
+          Explore All 12 Destinations
+          <span class="material-symbols-outlined text-base">arrow_forward</span>
+        </a>
+      </div>
+
+      <!-- 6 Large Destination Cards on Homepage -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="featured-destinations-grid">
+        <!-- Rendered via JS -->
+      </div>
+
+      <div class="text-center mt-12">
+        <a href="explore.html" class="inline-flex items-center gap-2 bg-white border border-slate-200 hover:border-slate-300 text-slate-800 font-bold px-8 py-3.5 rounded-full text-sm shadow-xs transition-all">
+          <span>View All 12 Sitakunda Spots & Trails</span>
+          <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. REVIEWS & TESTIMONIALS (Auto-sliding Carousel with Write a Review Modal) -->
+  <section class="py-24 bg-white border-b border-slate-100 overflow-hidden" id="reviews-section">
+    <div class="max-w-container-max mx-auto px-6">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-6">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-emerald-700 block mb-2">Real Traveler Stories</span>
+          <h2 class="font-display text-3xl sm:text-4xl font-bold text-primary">What Travelers Say About Us</h2>
+          <p class="text-slate-500 text-sm sm:text-base mt-2">Authentic reviews from tourists who explored Sitakunda with Tourstk.</p>
+        </div>
+        
+        <!-- Action & Carousel Nav Controls -->
+        <div class="flex items-center gap-3">
+          <!-- Prev / Next Carousel Buttons -->
+          <div class="flex items-center gap-2">
+            <button id="rev-prev-btn" class="w-10 h-10 rounded-full border border-slate-200 hover:border-primary hover:bg-primary hover:text-white text-slate-700 flex items-center justify-center transition-all shadow-xs cursor-pointer" title="Previous Review">
+              <span class="material-symbols-outlined text-lg">chevron_left</span>
+            </button>
+            <button id="rev-next-btn" class="w-10 h-10 rounded-full border border-slate-200 hover:border-primary hover:bg-primary hover:text-white text-slate-700 flex items-center justify-center transition-all shadow-xs cursor-pointer" title="Next Review">
+              <span class="material-symbols-outlined text-lg">chevron_right</span>
+            </button>
+          </div>
+
+          <button id="open-review-btn" class="bg-primary hover:bg-primary-dark text-white font-bold text-sm px-6 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer">
+            <span class="material-symbols-outlined text-base">rate_review</span>
+            <span>Write a Review</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Reviews Carousel Viewport -->
+      <div class="relative overflow-hidden w-full" id="reviews-carousel-wrapper">
+        <div class="flex transition-transform duration-700 ease-in-out gap-6" id="reviews-track">
+          <!-- Rendered via JS Slider -->
+        </div>
+      </div>
+
+      <!-- Carousel Pagination Dots -->
+      <div class="flex items-center justify-center gap-2 mt-8" id="reviews-dots">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- WRITE A REVIEW POPUP MODAL -->
+  <div id="review-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative animate-in fade-in zoom-in-95 duration-200">
+      <!-- Close Button -->
+      <button id="close-review-modal" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors">
+        <span class="material-symbols-outlined text-xl">close</span>
+      </button>
+
+      <!-- Modal Header -->
+      <div class="mb-6">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-primary-surface text-primary mb-2">
+          <span class="material-symbols-outlined text-sm">star</span>
+          Share Your Experience
+        </span>
+        <h3 class="font-display text-2xl font-bold text-slate-900">Write a Review</h3>
+        <p class="text-xs text-slate-500 mt-1">Help other travelers discover the beauty of Sitakunda.</p>
+      </div>
+
+      <!-- Review Form -->
+      <form id="review-form" class="space-y-4">
+        <!-- Star Rating Picker -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Your Rating</label>
+          <div class="flex items-center gap-2" id="star-rating-picker">
+            <button type="button" data-star="1" class="star-btn text-2xl text-amber-400 focus:outline-none transition-transform hover:scale-125">★</button>
+            <button type="button" data-star="2" class="star-btn text-2xl text-amber-400 focus:outline-none transition-transform hover:scale-125">★</button>
+            <button type="button" data-star="3" class="star-btn text-2xl text-amber-400 focus:outline-none transition-transform hover:scale-125">★</button>
+            <button type="button" data-star="4" class="star-btn text-2xl text-amber-400 focus:outline-none transition-transform hover:scale-125">★</button>
+            <button type="button" data-star="5" class="star-btn text-2xl text-amber-400 focus:outline-none transition-transform hover:scale-125">★</button>
+            <span id="star-rating-label" class="text-xs font-bold text-slate-600 ml-2">5 Stars (Excellent)</span>
+          </div>
+          <input type="hidden" id="rev-rating" value="5">
+        </div>
+
+        <!-- Full Name -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Your Name *</label>
+          <input type="text" id="rev-name" required placeholder="e.g. Tanvir Hossain" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all">
+        </div>
+
+        <!-- Location / City -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">City / Occupation</label>
+            <input type="text" id="rev-role" placeholder="e.g. Dhaka / Engineer" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Package Visited</label>
+            <select id="rev-package" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all">
+              <option value="Sitakunda Classic Day Tour">Sitakunda Classic Day Tour</option>
+              <option value="2D1N Sitakunda Hill & Beach Escape">2D1N Sitakunda Hill & Beach Escape</option>
+              <option value="Khaiyachora Extreme Waterfall Trek">Khaiyachora Extreme Waterfall Trek</option>
+              <option value="Family Comfort Sitakunda Day Out">Family Comfort Sitakunda Day Out</option>
+              <option value="Custom Sitakunda Trip">Custom Sitakunda Trip</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Review Message -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Your Review *</label>
+          <textarea id="rev-text" rows="3" required placeholder="Tell us what you enjoyed most about the tour, guides, transport, or sights..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none"></textarea>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="pt-2 flex items-center justify-end gap-3">
+          <button type="button" id="cancel-review-btn" class="px-5 py-2.5 rounded-full text-xs font-bold text-slate-500 hover:bg-slate-100 transition-colors">
+            Cancel
+          </button>
+          <button type="submit" class="bg-primary hover:bg-primary-dark text-white font-bold text-xs px-6 py-2.5 rounded-full shadow-md transition-all flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-base">send</span>
+            <span>Submit Review</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SUCCESS TOAST NOTIFICATION -->
+  <div id="review-toast" class="fixed top-6 right-6 z-50 bg-slate-900 text-white px-6 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 border border-emerald-500/30 transition-all duration-300 transform translate-y-[-100px] opacity-0 pointer-events-none">
+    <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">✓</div>
+    <div>
+      <div class="text-xs font-bold text-white">Review Submitted!</div>
+      <div class="text-[11px] text-slate-400">Thank you for sharing your experience with Tourstk.</div>
+    </div>
+  </div>
+
+  <!-- 6. CLEAN CTA BANNER -->
+  <section class="py-20 bg-primary text-white text-center">
+    <div class="max-w-2xl mx-auto px-6">
+      <h2 class="font-display text-3xl sm:text-4xl font-bold mb-4">Ready to Discover Sitakunda?</h2>
+      <p class="text-emerald-100/90 text-base mb-8">We take care of all the details so you can enjoy the journey.</p>
+      <div class="flex items-center justify-center gap-4 flex-wrap">
+        <a href="packages.html" class="bg-emerald-400 text-primary hover:bg-emerald-300 font-bold px-8 py-3.5 rounded-full transition-all text-sm">
+          Explore Packages
+        </a>
+        <a href="planner.html" class="bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-3.5 rounded-full backdrop-blur-md border border-white/30 transition-all text-sm">
+          Plan Custom Trip
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. CLEAN FOOTER -->
+  <footer class="bg-white text-slate-500 border-t border-slate-100 py-16 text-sm">
+    <div class="max-w-container-max mx-auto px-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 mb-12">
+        <div>
+          <div class="flex items-center gap-2.5 mb-3">
+            <svg class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m8 3 4 8 5-5 5 15H2L8 3z"/>
+            </svg>
+            <span class="font-display font-bold text-xl text-primary">Tourstk</span>
+          </div>
+          <p class="text-xs leading-relaxed text-slate-400 mb-3">
+            “Explore Sitakunda with thoughtfully planned trips, local experiences, and hassle-free travel.”
+          </p>
+          <div class="space-y-1.5 mb-2">
+            <a href="mailto:eztrailsbd@gmail.com" class="flex items-center gap-1.5 text-xs font-bold text-emerald-800 hover:text-emerald-900 transition-colors">
+              <span class="material-symbols-outlined text-sm">mail</span>
+              <span>eztrailsbd@gmail.com</span>
+            </a>
+            <a href="tel:+8801812345678" class="flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-primary transition-colors">
+              <span class="material-symbols-outlined text-sm">call</span>
+              <span>+880 1812-345678</span>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-xs uppercase tracking-wider text-primary mb-4">Explore</h4>
+          <ul class="space-y-2.5 text-xs">
+            <li><a href="explore.html" class="hover:text-primary transition-colors">All 12 Destinations</a></li>
+            <li><a href="packages.html" class="hover:text-primary transition-colors">Tour Packages</a></li>
+            <li><a href="planner.html" class="hover:text-primary transition-colors">Trip Planner</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-xs uppercase tracking-wider text-primary mb-4">Support & Contact</h4>
+          <ul class="space-y-2.5 text-xs">
+            <li><a href="mailto:eztrailsbd@gmail.com" class="hover:text-primary transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-xs">mail</span>eztrailsbd@gmail.com</a></li>
+            <li><a href="contact.html" class="hover:text-primary transition-colors">Contact Support</a></li>
+            <li><a href="my-booking.html" class="hover:text-primary transition-colors">My Booking</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-xs uppercase tracking-wider text-primary mb-4">Company</h4>
+          <ul class="space-y-2.5 text-xs">
+            <li><a href="contact.html" class="hover:text-primary transition-colors">About Tourstk</a></li>
+            <li><a href="contact.html" class="hover:text-primary transition-colors">Partner With Us</a></li>
+            <li><a href="#" class="hover:text-primary transition-colors">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-100 pt-6 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-400 gap-3">
+        <div>© 2026 Tourstk (EZ Trails Sitakunda) • <a href="mailto:eztrailsbd@gmail.com" class="hover:underline text-emerald-800 font-semibold">eztrailsbd@gmail.com</a></div>
+        <div>Discover Sitakunda. We Plan the Journey.</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- COMPACT FLOATING QUICK ACTION DOCK (Call + Facebook + WhatsApp) -->
+  <div class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col gap-2 items-center">
+    <!-- Call Button -->
+    <a href="tel:+8801812345678" class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-emerald-800 hover:bg-emerald-900 text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Call Hotline: +880 1812-345678">
+      <span class="material-symbols-outlined text-lg sm:text-xl">call</span>
+    </a>
+    <!-- Facebook Button -->
+    <a href="https://facebook.com" target="_blank" class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#1877f2] hover:bg-[#166fe5] text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Facebook Page">
+      <svg class="w-4 h-4 sm:w-5 sm:h-5 fill-current" viewBox="0 0 24 24">
+        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+      </svg>
+    </a>
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/8801812345678?text=Hello%20Tourstk,%20I%20want%20to%20plan%20a%20Sitakunda%20trip." target="_blank" class="relative w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#25d366] hover:bg-[#20ba59] text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Chat on WhatsApp">
+      <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-300 rounded-full animate-ping"></span>
+      <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border border-white"></span>
+      <svg class="w-4 h-4 sm:w-5 sm:h-5 fill-white" viewBox="0 0 24 24">
+        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+      </svg>
+    </a>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/weather.js"></script>
+  <script>
+    // HERO SPOT LIVE SEARCH ENGINE
+    function handleHeroSpotLiveSearch(query) {
+      const q = (query || '').trim().toLowerCase();
+      const suggestionsBox = document.getElementById('hero-search-suggestions');
+      const clearBtn = document.getElementById('hero-clear-search-btn');
+
+      if (clearBtn) {
+        clearBtn.classList.toggle('hidden', q.length === 0);
+      }
+
+      if (!suggestionsBox || !TOURSTK.destinations) return;
+
+      if (!q) {
+        // Show Top 4 Recommended Spots by default on focus
+        const topSpots = TOURSTK.destinations.slice(0, 4);
+        suggestionsBox.innerHTML = `
+          <div class="px-3 py-2 text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center justify-between">
+            <span>✨ Popular Destinations in Sitakunda</span>
+            <span class="text-emerald-700">12 Total Spots</span>
+          </div>
+          ${topSpots.map(renderSuggestionItem).join('')}
+          <div class="p-2 text-center">
+            <a href="explore.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:text-emerald-700 transition-colors py-1">
+              <span>View All 12 Spots in Explore Map</span>
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
+          </div>
+        `;
+        suggestionsBox.classList.remove('hidden');
+        return;
+      }
+
+      // Filter destinations by query
+      const matches = TOURSTK.destinations.filter(d => 
+        d.name.toLowerCase().includes(q) ||
+        d.bnName.toLowerCase().includes(q) ||
+        d.category.toLowerCase().includes(q) ||
+        d.shortDesc.toLowerCase().includes(q) ||
+        d.tags.some(t => t.toLowerCase().includes(q))
+      );
+
+      if (matches.length === 0) {
+        suggestionsBox.innerHTML = `
+          <div class="p-6 text-center text-slate-500">
+            <span class="material-symbols-outlined text-3xl text-slate-300 mb-1">travel_explore</span>
+            <p class="text-xs font-bold text-slate-700">No Sitakunda spot found for "${query}"</p>
+            <p class="text-[11px] text-slate-400 mt-0.5">Try searching "Chandranath", "Beach", "Waterfall", or "Kayaking"</p>
+            <a href="explore.html" class="inline-block mt-3 bg-emerald-50 text-primary hover:bg-emerald-100 font-bold text-xs px-4 py-2 rounded-xl transition-colors">
+              Browse All Sitakunda Places
+            </a>
+          </div>
+        `;
+      } else {
+        suggestionsBox.innerHTML = `
+          <div class="px-3 py-2 text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center justify-between">
+            <span>Found ${matches.length} matching spot${matches.length > 1 ? 's' : ''}</span>
+            <span class="text-emerald-700 font-bold">Instant Preview</span>
+          </div>
+          ${matches.slice(0, 5).map(renderSuggestionItem).join('')}
+          <div class="p-2 text-center border-t border-slate-100 mt-1">
+            <a href="explore.html?q=${encodeURIComponent(query)}" class="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:text-emerald-700 transition-colors py-1">
+              <span>See all matching spots in Explore Page</span>
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
+          </div>
+        `;
+      }
+
+      suggestionsBox.classList.remove('hidden');
+    }
+
+    function renderSuggestionItem(spot) {
+      return `
+        <a href="destination-detail.html?id=${spot.id}" class="flex items-center gap-3.5 p-3 rounded-2xl hover:bg-emerald-50/70 transition-all group">
+          <img src="${spot.image}" alt="${spot.name}" class="w-12 h-12 rounded-xl object-cover flex-shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <h4 class="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-primary transition-colors truncate">${spot.name}</h4>
+              <span class="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full flex-shrink-0">${spot.category}</span>
+            </div>
+            <p class="text-[11px] text-slate-400 truncate mt-0.5">${spot.bnName} • <span class="text-slate-600">${spot.shortDesc}</span></p>
+          </div>
+          <span class="material-symbols-outlined text-slate-300 group-hover:text-primary group-hover:translate-x-1 transition-all text-lg flex-shrink-0">
+            arrow_forward
+          </span>
+        </a>
+      `;
+    }
+
+    function clearHeroSearch() {
+      const input = document.getElementById('hero-spot-search');
+      if (input) {
+        input.value = '';
+        input.focus();
+      }
+      handleHeroSpotLiveSearch('');
+    }
+
+    function handleHeroSearchSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('hero-spot-search');
+      const query = (input?.value || '').trim();
+      
+      if (!query) {
+        window.location.href = 'explore.html';
+        return;
+      }
+
+      // Check if exact or single match exists
+      const exact = TOURSTK.destinations?.find(d => 
+        d.name.toLowerCase() === query.toLowerCase() || 
+        d.id.toLowerCase() === query.toLowerCase()
+      );
+
+      if (exact) {
+        window.location.href = `destination-detail.html?id=${exact.id}`;
+      } else {
+        window.location.href = `explore.html?q=${encodeURIComponent(query)}`;
+      }
+    }
+
+    // Close suggestions when clicked outside
+    document.addEventListener('click', (e) => {
+      const suggestionsBox = document.getElementById('hero-search-suggestions');
+      const searchContainer = document.getElementById('hero-spot-search')?.closest('.relative');
+      if (suggestionsBox && searchContainer && !searchContainer.contains(e.target)) {
+        suggestionsBox.classList.add('hidden');
+      }
+    });
+
+    function renderFeaturedPackages() {
+      const pkgGrid = document.getElementById('featured-packages-grid');
+      if (pkgGrid && TOURSTK.packages) {
+        pkgGrid.innerHTML = TOURSTK.packages.slice(0, 3).map(pkg => {
+          const includes = pkg.includesList || ['Transport', 'Accommodation', 'Meals', 'Tour Guide'];
+
+          return `
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-2xs hover:shadow-md transition-all overflow-hidden flex flex-col justify-between group">
+              <!-- Top Image Area with Overlays -->
+              <div>
+                <div class="relative h-48 sm:h-52 bg-slate-100 overflow-hidden">
+                  <img src="${pkg.image}" alt="${pkg.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                  
+                  <!-- Top Badges Header Row (Flexbox to prevent overlap) -->
+                  <div class="absolute top-3 inset-x-3 flex items-center justify-between gap-2 z-10">
+                    <div class="bg-white/95 backdrop-blur-xs text-slate-800 text-[10px] font-bold px-2.5 py-1 rounded-full shadow-xs flex items-center gap-1 flex-shrink-0">
+                      <span class="material-symbols-outlined text-xs text-slate-500">schedule</span>
+                      <span>${pkg.duration}</span>
+                    </div>
+
+                    <div class="bg-[#0e4d34] text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-xs flex items-center gap-1 flex-shrink-0">
+                      <span class="material-symbols-outlined text-xs text-emerald-300">group</span>
+                      <span>${pkg.minTravelers || 'Min 4 Travelers'}</span>
+                    </div>
+                  </div>
+
+                  <!-- Bottom Gradient Overlay for Price & Difficulty -->
+                  <div class="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/85 via-black/45 to-transparent flex items-end justify-between p-3.5">
+                    <div>
+                      <div class="text-[9px] text-white/80 font-medium leading-none mb-0.5">From</div>
+                      <div class="text-white font-extrabold text-lg leading-tight">
+                        ৳${pkg.price.toLocaleString()} <span class="text-[11px] font-normal text-white/80">/ person</span>
+                      </div>
+                    </div>
+
+                    <!-- Difficulty Pill -->
+                    <div class="bg-black/50 backdrop-blur-xs border border-white/20 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full">
+                      ${pkg.difficulty || 'Moderate'}
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card Body -->
+                <div class="p-5">
+                  <h3 class="font-bold text-base text-slate-900 group-hover:text-primary transition-colors leading-snug">${pkg.name}</h3>
+                  <p class="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">${pkg.shortDesc}</p>
+
+                  <!-- Package Includes Checklist -->
+                  <div class="mt-4 pt-3 border-t border-slate-100">
+                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-2">PACKAGE INCLUDES:</span>
+                    <div class="grid grid-cols-2 gap-y-1.5 gap-x-2 text-xs font-semibold text-slate-700">
+                      ${includes.map(inc => `
+                        <div class="flex items-center gap-1.5">
+                          <span class="text-emerald-600 font-bold text-xs">✓</span>
+                          <span class="text-[11px] text-slate-600">${inc}</span>
+                        </div>
+                      `).join('')}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card Actions -->
+              <div class="px-5 pb-5 pt-2 flex items-center gap-2">
+                <a href="package-detail.html?id=${pkg.id}" class="flex-1 text-center py-2 px-3 border border-slate-200 hover:border-slate-400 hover:bg-slate-50 text-slate-800 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1">
+                  <span>View Details</span>
+                  <span>→</span>
+                </a>
+                <a href="booking.html?pkg=${pkg.id}" class="bg-[#0e4d34] hover:bg-[#073824] text-white font-bold text-xs px-4 py-2 rounded-xl shadow-xs transition-all flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                  <span>Book</span>
+                </a>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    // Live update without manual reload
+    window.addEventListener('tourstk:packages-updated', renderFeaturedPackages);
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // 1. Render Top 3 Featured Packages
+      renderFeaturedPackages();
+      if (window.TourstkAPI) {
+        await TourstkAPI.fetchAndSyncPackages();
+      }
+
+      // 2. Render Top 6 Large Destinations on Homepage
+      const destGrid = document.getElementById('featured-destinations-grid');
+      if (destGrid && TOURSTK.destinations) {
+        destGrid.innerHTML = TOURSTK.destinations.slice(0, 6).map(d => `
+          <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col group">
+            <div class="relative h-60 bg-slate-100 overflow-hidden">
+              <img src="${d.image}" alt="${d.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+              <div class="absolute top-3.5 left-3.5 bg-white/95 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-primary flex items-center gap-1 shadow-xs">
+                <span class="material-symbols-outlined text-sm text-emerald-700">${d.categoryIcon || 'place'}</span>
+                <span>${d.category}</span>
+              </div>
+              <div class="absolute bottom-3 right-3 bg-slate-950/80 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-semibold text-white">
+                ${d.difficulty}
+              </div>
+            </div>
+            <div class="p-6 flex flex-col flex-grow justify-between">
+              <div>
+                <div class="text-[11px] font-bold text-emerald-800 mb-1">${d.bnName}</div>
+                <h3 class="font-display text-xl font-bold text-slate-900 mb-2 group-hover:text-primary transition-colors">${d.name}</h3>
+                <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed mb-4">${d.shortDesc}</p>
+              </div>
+              <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+                <span class="text-[11px] text-slate-400 font-semibold">${d.bestTime}</span>
+                <a href="destination-detail.html?id=${d.id}" class="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+                  <span>Explore Place</span>
+                  <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // 3. Render Reviews & Auto-Sliding Carousel Engine
+      const reviewsTrack = document.getElementById('reviews-track');
+      const reviewsDots = document.getElementById('reviews-dots');
+      const prevBtn = document.getElementById('rev-prev-btn');
+      const nextBtn = document.getElementById('rev-next-btn');
+      const carouselWrapper = document.getElementById('reviews-carousel-wrapper');
+
+      let currentSlide = 0;
+      let autoSlideTimer = null;
+      let totalReviewItems = 0;
+
+      function getStoredReviews() {
+        try {
+          const custom = JSON.parse(localStorage.getItem('tourstk_custom_reviews') || '[]');
+          return [...custom, ...(TOURSTK.reviews || [])];
+        } catch(e) {
+          return TOURSTK.reviews || [];
+        }
+      }
+
+      function getVisibleCardsCount() {
+        if (window.innerWidth < 640) return 1;
+        if (window.innerWidth < 1024) return 2;
+        return 3;
+      }
+
+      function renderReviews() {
+        if (!reviewsTrack) return;
+        const allReviews = getStoredReviews();
+        totalReviewItems = allReviews.length;
+
+        // Render Carousel Cards
+        reviewsTrack.innerHTML = allReviews.map(r => `
+          <div class="flex-shrink-0 w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] bg-white rounded-3xl p-8 border border-slate-100 shadow-xs hover:shadow-lg transition-all flex flex-col justify-between group">
+            <div>
+              <!-- Stars & Verified Badge -->
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex text-amber-400 text-sm gap-0.5">
+                  ${'★'.repeat(r.rating || 5)}${'☆'.repeat(5 - (r.rating || 5))}
+                </div>
+                <span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full">
+                  <span class="material-symbols-outlined text-xs">verified</span>
+                  Verified Traveler
+                </span>
+              </div>
+
+              <!-- Quote Text -->
+              <p class="text-slate-600 text-sm leading-relaxed mb-6 italic line-clamp-4">
+                "${r.text}"
+              </p>
+            </div>
+
+            <!-- Reviewer Info -->
+            <div class="flex items-center gap-3.5 pt-4 border-t border-slate-100">
+              <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-primary to-emerald-600 text-white font-bold text-sm flex items-center justify-center shadow-xs flex-shrink-0">
+                ${r.initials || r.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase()}
+              </div>
+              <div class="overflow-hidden">
+                <h4 class="font-bold text-sm text-slate-900 truncate">${r.name}</h4>
+                <p class="text-xs text-slate-400 truncate">${r.role || 'Tour Traveler'} • <span class="text-emerald-700 font-semibold">${r.package}</span></p>
+              </div>
+            </div>
+          </div>
+        `).join('');
+
+        renderDots();
+        updateCarouselPosition();
+        startAutoSlide();
+      }
+
+      function getMaxSlides() {
+        const visible = getVisibleCardsCount();
+        return Math.max(0, totalReviewItems - visible);
+      }
+
+      function updateCarouselPosition() {
+        if (!reviewsTrack) return;
+        const visible = getVisibleCardsCount();
+        const max = getMaxSlides();
+        if (currentSlide > max) currentSlide = max;
+        if (currentSlide < 0) currentSlide = 0;
+
+        // Slide calculation accounting for gaps
+        const cardWidthPercent = 100 / visible;
+        const gapOffset = currentSlide * (visible > 1 ? 24 / visible : 0);
+        reviewsTrack.style.transform = `translateX(calc(-${currentSlide * cardWidthPercent}% - ${currentSlide * (visible === 1 ? 0 : 24 / visible)}px))`;
+
+        // Update active dot
+        document.querySelectorAll('.rev-dot').forEach((dot, idx) => {
+          if (idx === currentSlide) {
+            dot.className = 'rev-dot w-7 h-2.5 bg-primary rounded-full transition-all duration-300 shadow-2xs';
+          } else {
+            dot.className = 'rev-dot w-2.5 h-2.5 bg-slate-200 hover:bg-slate-300 rounded-full transition-all duration-300';
+          }
+        });
+      }
+
+      function renderDots() {
+        if (!reviewsDots) return;
+        const max = getMaxSlides();
+        const totalDots = max + 1;
+
+        let dotsHtml = '';
+        for (let i = 0; i < totalDots; i++) {
+          dotsHtml += `<button onclick="jumpToReviewSlide(${i})" class="rev-dot ${i === 0 ? 'w-7 h-2.5 bg-primary' : 'w-2.5 h-2.5 bg-slate-200'} rounded-full transition-all duration-300 cursor-pointer" aria-label="Go to slide ${i+1}"></button>`;
+        }
+        reviewsDots.innerHTML = dotsHtml;
+      }
+
+      window.jumpToReviewSlide = function(idx) {
+        currentSlide = idx;
+        updateCarouselPosition();
+        resetAutoSlide();
+      };
+
+      function nextSlide() {
+        const max = getMaxSlides();
+        if (currentSlide >= max) {
+          currentSlide = 0; // Loop back to start
+        } else {
+          currentSlide++;
+        }
+        updateCarouselPosition();
+      }
+
+      function prevSlide() {
+        const max = getMaxSlides();
+        if (currentSlide <= 0) {
+          currentSlide = max; // Loop to end
+        } else {
+          currentSlide--;
+        }
+        updateCarouselPosition();
+      }
+
+      function startAutoSlide() {
+        stopAutoSlide();
+        autoSlideTimer = setInterval(nextSlide, 4500); // Auto-slides every 4.5 seconds
+      }
+
+      function stopAutoSlide() {
+        if (autoSlideTimer) {
+          clearInterval(autoSlideTimer);
+          autoSlideTimer = null;
+        }
+      }
+
+      function resetAutoSlide() {
+        stopAutoSlide();
+        startAutoSlide();
+      }
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+          prevSlide();
+          resetAutoSlide();
+        });
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          nextSlide();
+          resetAutoSlide();
+        });
+      }
+
+      // Pause on mouse hover, resume on mouse leave
+      if (carouselWrapper) {
+        carouselWrapper.addEventListener('mouseenter', stopAutoSlide);
+        carouselWrapper.addEventListener('mouseleave', startAutoSlide);
+        carouselWrapper.addEventListener('touchstart', stopAutoSlide, { passive: true });
+        carouselWrapper.addEventListener('touchend', startAutoSlide, { passive: true });
+      }
+
+      // Resize listener for responsive cards
+      window.addEventListener('resize', () => {
+        renderDots();
+        updateCarouselPosition();
+      });
+
+      renderReviews();
+
+      // Modal Controls
+      const modal = document.getElementById('review-modal');
+      const openBtn = document.getElementById('open-review-btn');
+      const closeBtn = document.getElementById('close-review-modal');
+      const cancelBtn = document.getElementById('cancel-review-btn');
+      const reviewForm = document.getElementById('review-form');
+      const toast = document.getElementById('review-toast');
+
+      function showToast(msg) {
+        if (!toast) return;
+        toast.classList.remove('translate-y-[-100px]', 'opacity-0');
+        toast.classList.add('translate-y-0', 'opacity-100');
+        setTimeout(() => {
+          toast.classList.remove('translate-y-0', 'opacity-100');
+          toast.classList.add('translate-y-[-100px]', 'opacity-0');
+        }, 4000);
+      }
+
+      if (openBtn && modal) {
+        openBtn.addEventListener('click', () => {
+          modal.classList.remove('hidden');
+          document.body.style.overflow = 'hidden';
+        });
+      }
+
+      function closeModal() {
+        if (modal) {
+          modal.classList.add('hidden');
+          document.body.style.overflow = 'auto';
+        }
+      }
+
+      if (closeBtn) closeBtn.addEventListener('click', closeModal);
+      if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+      if (modal) {
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closeModal();
+        });
+      }
+
+      // Star Rating Picker
+      const starBtns = document.querySelectorAll('.star-btn');
+      const ratingInput = document.getElementById('rev-rating');
+      const ratingLabel = document.getElementById('star-rating-label');
+      const ratingLabels = {
+        1: '1 Star (Poor)',
+        2: '2 Stars (Fair)',
+        3: '3 Stars (Good)',
+        4: '4 Stars (Very Good)',
+        5: '5 Stars (Excellent)'
+      };
+
+      starBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const starVal = parseInt(btn.getAttribute('data-star'));
+          ratingInput.value = starVal;
+          if (ratingLabel) ratingLabel.textContent = ratingLabels[starVal];
+          
+          starBtns.forEach(b => {
+            const val = parseInt(b.getAttribute('data-star'));
+            if (val <= starVal) {
+              b.classList.remove('text-slate-300');
+              b.classList.add('text-amber-400');
+            } else {
+              b.classList.remove('text-amber-400');
+              b.classList.add('text-slate-300');
+            }
+          });
+        });
+      });
+
+      // Submit Review Form
+      if (reviewForm) {
+        reviewForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const name = document.getElementById('rev-name').value.trim();
+          const role = document.getElementById('rev-role').value.trim() || 'Verified Traveler';
+          const pkg = document.getElementById('rev-package').value;
+          const text = document.getElementById('rev-text').value.trim();
+          const rating = parseInt(ratingInput.value) || 5;
+
+          if (!name || !text) return;
+
+          const newRev = {
+            name,
+            role,
+            package: pkg,
+            rating,
+            initials: name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase(),
+            text,
+            createdAt: new Date().toISOString()
+          };
+
+          try {
+            const custom = JSON.parse(localStorage.getItem('tourstk_custom_reviews') || '[]');
+            custom.unshift(newRev);
+            localStorage.setItem('tourstk_custom_reviews', JSON.stringify(custom));
+          } catch(err) {
+            console.error('Error saving review', err);
+          }
+
+          reviewForm.reset();
+          ratingInput.value = 5;
+          if (ratingLabel) ratingLabel.textContent = '5 Stars (Excellent)';
+          starBtns.forEach(b => {
+            b.classList.remove('text-slate-300');
+            b.classList.add('text-amber-400');
+          });
+
+          closeModal();
+          renderReviews();
+          showToast();
+        });
+      }
+    });
+  </script>
+</body>
+</html>

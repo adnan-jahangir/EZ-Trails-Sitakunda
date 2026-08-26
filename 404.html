@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>404 — Page Not Found | Tourstk</title>
+
+  <!-- Tailwind CSS & Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#012d1d",
+            "primary-container": "#1b4332",
+            "primary-light": "#059669",
+            "primary-surface": "#ecfdf5",
+          },
+          fontFamily: {
+            "display": ["Playfair Display", "Georgia", "serif"],
+            "body": ["Plus Jakarta Sans", "sans-serif"]
+          },
+          maxWidth: { "container-max": "1200px" }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-body antialiased min-h-screen flex flex-col justify-between">
+
+  <!-- Navbar -->
+  <nav class="w-full bg-white border-b border-slate-100">
+    <div class="max-w-container-max mx-auto px-6 h-20 flex justify-between items-center">
+      <a href="index.html" class="flex items-center gap-2.5 text-primary font-bold text-xl tracking-tight">
+        <svg class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m8 3 4 8 5-5 5 15H2L8 3z"/>
+        </svg>
+        <span>EZ Trails Sitakunda</span>
+      </a>
+      <a href="index.html" class="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+        <span class="material-symbols-outlined text-sm">arrow_back</span>
+        <span>Back to Home</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- 404 Hero -->
+  <main class="max-w-xl mx-auto px-6 py-20 text-center flex flex-col items-center">
+    <div class="w-20 h-20 rounded-3xl bg-emerald-50 text-primary flex items-center justify-center mb-6 shadow-sm border border-emerald-100">
+      <span class="material-symbols-outlined text-4xl">landscape</span>
+    </div>
+    
+    <span class="text-xs font-black uppercase tracking-widest text-emerald-700 block mb-2">Trail Lost • Error 404</span>
+    <h1 class="font-display text-4xl sm:text-5xl font-bold text-primary mb-4">You've Wandered Off The Trail</h1>
+    <p class="text-sm text-slate-500 max-w-md mx-auto leading-relaxed mb-8">
+      The Sitakunda spot or page you are looking for has been moved or does not exist. Let's guide you back to the main journey.
+    </p>
+
+    <div class="flex flex-wrap items-center justify-center gap-3">
+      <a href="index.html" class="bg-primary hover:bg-primary-container text-white font-bold text-xs px-6 py-3.5 rounded-full shadow-sm transition-all flex items-center gap-2">
+        <span class="material-symbols-outlined text-base">home</span>
+        <span>Return to Homepage</span>
+      </a>
+      <a href="explore.html" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-800 font-bold text-xs px-6 py-3.5 rounded-full shadow-2xs transition-all flex items-center gap-2">
+        <span class="material-symbols-outlined text-base">explore</span>
+        <span>Explore All 12 Spots</span>
+      </a>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white text-slate-400 border-t border-slate-100 py-8 text-center text-xs">
+    © 2026 Tourstk (EZ Trails Sitakunda) • Email: <a href="mailto:eztrailsbd@gmail.com" class="font-bold text-emerald-800 hover:underline">eztrailsbd@gmail.com</a>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "ez-trill-sitakunda-tourstk",
+  "version": "1.0.0",
+  "description": "EZ Trails Sitakunda (Tourstk) - Complete Tourism Web Application & Node.js Backend",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node --watch server/server.js",
+    "postinstall": "cd server && npm install",
+    "seed": "cd server && node seed/seeder.js"
+  },
+  "keywords": [
+    "sitakunda",
+    "tourism",
+    "travel-booking",
+    "express",
+    "mongodb"
+  ],
+  "author": "Tourstk Team",
+  "license": "ISC"
+}

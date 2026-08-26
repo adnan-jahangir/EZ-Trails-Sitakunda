@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Destination Details — EZ Trails Sitakunda</title>
+
+  <!-- Tailwind CSS & Fonts -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+
+  <!-- Leaflet CSS for Interactive Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#012d1d",
+            "primary-dark": "#073824",
+            "primary-container": "#1b4332",
+            "primary-light": "#059669",
+            "primary-surface": "#ecfdf5",
+            "accent": "#d97706"
+          },
+          fontFamily: {
+            "display": ["Playfair Display", "Georgia", "serif"],
+            "body": ["Plus Jakarta Sans", "sans-serif"]
+          },
+          maxWidth: { "container-max": "1200px" }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="css/animations.css">
+  <style>
+    /* Custom Leaflet Map Pin Styles — Mobile-Optimized & Compact */
+    .custom-spot-pin {
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .custom-spot-pin:hover {
+      transform: scale(1.15);
+      z-index: 1000 !important;
+    }
+    .custom-spot-pin .pin-img-wrapper {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid #ffffff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      background: #ffffff;
+    }
+    .custom-spot-pin.active-spot .pin-img-wrapper {
+      width: 42px;
+      height: 42px;
+      border: 2.5px solid #10b981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.35), 0 4px 12px rgba(0, 0, 0, 0.35);
+      animation: pulse-ring 2s infinite;
+    }
+    @media (min-width: 640px) {
+      .custom-spot-pin .pin-img-wrapper {
+        width: 44px;
+        height: 44px;
+        border-width: 3px;
+      }
+      .custom-spot-pin.active-spot .pin-img-wrapper {
+        width: 52px;
+        height: 52px;
+        border-width: 3px;
+      }
+    }
+    .custom-spot-pin .pin-pointer {
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid #ffffff;
+    }
+    .custom-spot-pin.active-spot .pin-pointer {
+      border-top-color: #10b981;
+    }
+    .custom-spot-pin .pin-badge {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0e4d34;
+      color: #ffffff;
+      font-size: 8px;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 99px;
+      white-space: nowrap;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+    }
+    @keyframes pulse-ring {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5), 0 4px 10px rgba(0, 0, 0, 0.3); }
+      70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0), 0 4px 10px rgba(0, 0, 0, 0.3); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0), 0 4px 10px rgba(0, 0, 0, 0.3); }
+    }
+    /* Mobile-friendly Leaflet Popup */
+    .leaflet-popup-content-wrapper {
+      padding: 0;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    .leaflet-popup-content {
+      margin: 0;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body class="bg-white text-slate-800 font-body antialiased selection:bg-emerald-100 selection:text-emerald-900">
+
+  <!-- UNIFIED NAVBAR -->
+  <nav class="w-full bg-white border-b border-slate-100 sticky top-0 z-50">
+    <div class="max-w-container-max mx-auto px-4 sm:px-6 md:px-10 h-16 sm:h-20 flex justify-between items-center">
+      <!-- Logo Lockup (EZ Trails + Subtitle Sitakunda) -->
+      <a href="index.html" class="flex items-center gap-2 text-primary flex-shrink-0 group">
+        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-50 text-primary flex items-center justify-center border border-emerald-100 shadow-2xs group-hover:scale-105 transition-transform flex-shrink-0">
+          <svg class="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m8 3 4 8 5-5 5 15H2L8 3z"/>
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-display font-extrabold text-base sm:text-lg text-primary leading-none tracking-tight">EZ Trails</span>
+          <span class="text-[10.5px] sm:text-[11.5px] font-bold tracking-wider text-emerald-700 uppercase leading-none mt-1">Sitakunda</span>
+        </div>
+      </a>
+
+      <!-- Center Links -->
+      <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
+        <a href="index.html" class="hover:text-primary transition-colors">Home</a>
+        <a href="packages.html" class="hover:text-primary transition-colors">Packages</a>
+        <a href="explore.html" class="text-primary font-bold border-b-2 border-primary pb-1">Explore</a>
+        <a href="my-booking.html" class="hover:text-primary transition-colors">My Booking</a>
+      </div>
+
+      <!-- Right Action Button -->
+      <div class="flex items-center gap-2">
+        <a href="planner.html" class="flex bg-primary hover:bg-primary-dark text-white font-bold text-[11px] sm:text-xs md:text-sm px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full shadow-xs transition-all items-center gap-1 flex-shrink-0">
+          <span class="material-symbols-outlined text-sm sm:text-base">explore</span>
+          <span>Plan Trip</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Destination Content Area -->
+  <main id="dest-content-area" class="py-12 bg-white">
+    <!-- Rendered via JS -->
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white text-slate-500 border-t border-slate-100 py-12 text-center text-xs">
+    <div class="max-w-container-max mx-auto px-6">
+      © 2026 EZ Trails Sitakunda (Tourstk) • Email: <a href="mailto:eztrailsbd@gmail.com" class="font-bold text-emerald-800 hover:underline">eztrailsbd@gmail.com</a> • Hotline: <a href="tel:+8801812345678" class="font-bold text-slate-700 hover:underline">+880 1812-345678</a>
+    </div>
+  </footer>
+
+  <!-- COMPACT FLOATING QUICK ACTION DOCK (Call + Facebook + WhatsApp) -->
+  <div class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col gap-2 items-center">
+    <!-- Call Button -->
+    <a href="tel:+8801812345678" class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-emerald-800 hover:bg-emerald-900 text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Call Hotline: +880 1812-345678">
+      <span class="material-symbols-outlined text-lg sm:text-xl">call</span>
+    </a>
+    <!-- Facebook Button -->
+    <a href="https://facebook.com" target="_blank" class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#1877f2] hover:bg-[#166fe5] text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Facebook Page">
+      <svg class="w-4 h-4 sm:w-5 sm:h-5 fill-current" viewBox="0 0 24 24">
+        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+      </svg>
+    </a>
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/8801812345678?text=Hello%20Tourstk,%20I%20want%20to%20plan%20a%20Sitakunda%20trip." target="_blank" class="relative w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#25d366] hover:bg-[#20ba59] text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Chat on WhatsApp">
+      <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-300 rounded-full animate-ping"></span>
+      <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border border-white"></span>
+      <svg class="w-4 h-4 sm:w-5 sm:h-5 fill-white" viewBox="0 0 24 24">
+        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+      </svg>
+    </a>
+  </div>
+
+  <!-- Leaflet & App Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/weather.js"></script>
+  <script>
+    // Distance Helper (Haversine Formula in km)
+    function getDistanceKm(lat1, lon1, lat2, lon2) {
+      const R = 6371;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = 
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return (R * c).toFixed(1);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const destId = params.get('id') || 'chandranath-hill';
+      const dest = TOURSTK.destinations.find(d => d.id === destId) || TOURSTK.destinations[0];
+
+      if (!dest) return;
+
+      // Matching packages for this spot
+      const matchingPkgs = TOURSTK.packages.filter(p => p.destinations.includes(dest.id));
+
+      // Calculate distance to all other destinations
+      const nearbySpots = TOURSTK.destinations
+        .filter(d => d.id !== dest.id)
+        .map(d => {
+          const dist = (dest.lat && dest.lng && d.lat && d.lng) 
+            ? parseFloat(getDistanceKm(dest.lat, dest.lng, d.lat, d.lng)) 
+            : 5.0;
+          return { ...d, distance: dist };
+        })
+        .sort((a, b) => a.distance - b.distance);
+
+      document.getElementById('dest-content-area').innerHTML = `
+        <div class="max-w-container-max mx-auto px-6">
+          <!-- Back Link -->
+          <a href="explore.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-primary mb-6 transition-colors">
+            <span class="material-symbols-outlined text-base">arrow_back</span>
+            Back to All Spots
+          </a>
+
+          <!-- Title & Badges -->
+          <div class="mb-6">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">${dest.category}</span>
+              <span class="text-xs font-bold text-slate-400">•</span>
+              <span class="text-xs font-bold text-slate-600">${dest.bnName}</span>
+            </div>
+            <h1 class="font-display text-4xl sm:text-5xl font-bold text-primary mb-3">${dest.name}</h1>
+            <p class="text-base text-slate-600 max-w-3xl leading-relaxed">${dest.shortDesc}</p>
+          </div>
+
+          <!-- Live Sitakunda Weather & Trail Advisory -->
+          <div id="dest-weather-advisory" class="mb-8"></div>
+
+          <!-- INTERACTIVE GALLERY & 4K VIDEO PLAYER (Matching User Reference Image) -->
+          <div class="mb-12">
+            <!-- Main Display Screen -->
+            <div class="rounded-3xl overflow-hidden h-80 sm:h-[480px] shadow-md border border-slate-100 relative group bg-slate-950" id="dest-main-media-box">
+              
+              <!-- Duration Badge on Top Left (Matching User Reference) -->
+              <div class="absolute top-4 left-4 bg-black/65 backdrop-blur-md text-white text-xs font-bold px-3.5 py-1.5 rounded-xl shadow-md z-10 flex items-center gap-1.5 border border-white/10">
+                <span>${dest.duration || '2 Days • 1 Night'}</span>
+              </div>
+
+              <!-- Main Image Element -->
+              <img id="dest-hero-main-img" src="${(dest.gallery && dest.gallery[0]) ? dest.gallery[0].src : dest.image}" alt="${dest.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+              
+              <!-- Main Video Element -->
+              <video id="dest-hero-main-video" class="w-full h-full object-cover hidden" controls playsinline>
+                <source id="dest-hero-video-src" src="" type="video/mp4">
+              </video>
+
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent pointer-events-none"></div>
+              
+              <div class="absolute bottom-6 left-6 flex items-center gap-3 z-10">
+                <span class="bg-white/90 backdrop-blur-md text-primary text-xs font-bold px-4 py-2 rounded-full shadow-sm">
+                  ${dest.category}
+                </span>
+                <a href="#nearby-map-section" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-full shadow-sm flex items-center gap-1.5 transition-colors">
+                  <span class="material-symbols-outlined text-sm">map</span>
+                  <span>View on Live Map</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 4-Thumbnail Row Below -->
+            <div class="grid grid-cols-4 gap-3 sm:gap-4 mt-3.5">
+              ${(dest.gallery || [
+                { type: 'image', src: dest.image, thumb: dest.image, label: 'Main View' },
+                { type: 'image', src: dest.fallbackImage || dest.image, thumb: dest.fallbackImage || dest.image, label: 'Scenic View' },
+                { type: 'image', src: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80', thumb: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=300&q=80', label: 'Valley' },
+                { type: 'video', src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4', thumb: dest.image, label: '4K Video' }
+              ]).slice(0, 4).map((item, idx) => {
+                if (item.type === 'video') {
+                  return `
+                    <button type="button" onclick="switchDetailHeroMedia(${idx})" title="${item.label || 'Watch 4K Video Tour'}" class="dest-thumb-btn relative h-16 sm:h-24 rounded-2xl overflow-hidden border-2 border-transparent opacity-85 hover:opacity-100 hover:border-emerald-500 transition-all cursor-pointer bg-slate-900 group/vid shadow-xs">
+                      <img src="${item.thumb || dest.image}" alt="Video thumbnail" class="w-full h-full object-cover brightness-75 group-hover/vid:scale-105 transition-transform duration-300">
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="w-8 h-8 rounded-full bg-[#0e4d34] text-white flex items-center justify-center shadow-lg ring-2 ring-white/40">
+                          <span class="material-symbols-outlined text-base">play_arrow</span>
+                        </span>
+                      </div>
+                      <span class="absolute bottom-1.5 right-1.5 bg-black/80 text-[9px] font-bold text-white px-1.5 py-0.5 rounded leading-none">4K Video</span>
+                    </button>
+                  `;
+                }
+
+                return `
+                  <button type="button" onclick="switchDetailHeroMedia(${idx})" title="${item.label || 'View Photo'}" class="dest-thumb-btn relative h-16 sm:h-24 rounded-2xl overflow-hidden border-2 ${idx === 0 ? 'border-primary ring-2 ring-emerald-400/50' : 'border-transparent opacity-75 hover:opacity-100 hover:border-slate-300'} transition-all cursor-pointer shadow-xs">
+                    <img src="${item.thumb || item.src}" alt="${item.label || dest.name}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                  </button>
+                `;
+              }).join('')}
+            </div>
+          </div>
+
+          <!-- Main Details Grid -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 mb-16">
+            <!-- Left Info Column -->
+            <div class="lg:col-span-2 space-y-8">
+              <!-- About -->
+              <div>
+                <h2 class="font-display text-2xl font-bold text-primary mb-3">About ${dest.name}</h2>
+                <p class="text-sm text-slate-600 leading-relaxed">${dest.description}</p>
+              </div>
+
+              <!-- Things To Do -->
+              <div>
+                <h3 class="font-display text-xl font-bold text-primary mb-3">Things to Do & Experience</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  ${dest.thingsToDo.map(t => `
+                    <div class="bg-slate-50 text-slate-700 border border-slate-200/80 p-3.5 rounded-xl text-xs font-semibold flex items-center gap-2">
+                      <span class="material-symbols-outlined text-emerald-600 text-base flex-shrink-0">check_circle</span>
+                      <span>${t}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+
+              <!-- Tips & Recommendations -->
+              <div>
+                <h3 class="font-display text-xl font-bold text-primary mb-3">Local Tips & Travel Advice</h3>
+                <div class="space-y-2.5">
+                  ${dest.tips.map(tip => `
+                    <div class="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200/60 text-xs text-amber-950 flex items-start gap-2.5">
+                      <span class="material-symbols-outlined text-amber-700 text-base mt-0.5">tips_and_updates</span>
+                      <span class="leading-relaxed">${tip}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+
+            <!-- Sidebar Packages -->
+            <div>
+              <div class="sticky top-28 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 block mb-1">Guided Tour</span>
+                <h3 class="font-bold text-lg text-primary mb-2">Want to Visit ${dest.name}?</h3>
+                <p class="text-xs text-slate-500 mb-6 leading-relaxed">Book a complete package with dedicated AC vehicle, vetted guide, and entry tickets included.</p>
+
+                <div class="space-y-3 mb-6">
+                  ${matchingPkgs.length > 0 ? matchingPkgs.map(p => `
+                    <a href="package-detail.html?id=${p.id}" class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 block hover:border-emerald-500 transition-all group">
+                      <div class="text-xs font-bold text-primary group-hover:text-emerald-700 transition-colors">${p.name}</div>
+                      <div class="text-xs text-emerald-700 font-extrabold mt-1">৳${p.price.toLocaleString()} / person</div>
+                    </a>
+                  `).join('') : `
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-xs text-slate-500">
+                      You can customize a trip to this spot via our Trip Planner!
+                    </div>
+                  `}
+                </div>
+
+                <a href="planner.html" class="w-full bg-primary hover:bg-primary-dark text-white text-center font-bold py-3.5 rounded-full block text-xs shadow-xs transition-all">
+                  Plan Custom Trip Here
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============================================================= -->
+          <!-- INTERACTIVE MAP & NEARBY SPOTS SECTION (Requested by user) -->
+          <!-- ============================================================= -->
+          <div class="pt-12 border-t border-slate-200" id="nearby-map-section">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
+              <div>
+                <span class="text-xs font-bold uppercase tracking-widest text-emerald-700 block mb-2">Interactive Location Map</span>
+                <h2 class="font-display text-3xl font-bold text-primary">Spot Location & Nearby Attractions</h2>
+                <p class="text-slate-500 text-sm mt-1">
+                  Explore <span class="font-bold text-slate-700">${dest.name}</span> on the map and discover all nearby spots in Sitakunda.
+                </p>
+              </div>
+
+              <!-- Map Legend -->
+              <div class="flex items-center gap-3 text-xs font-semibold">
+                <span class="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-900 px-3 py-1 rounded-full border border-emerald-300">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse"></span>
+                  Current Location
+                </span>
+                <span class="inline-flex items-center gap-1.5 bg-slate-100 text-slate-700 px-3 py-1 rounded-full border border-slate-200">
+                  <span class="w-2.5 h-2.5 rounded-full bg-slate-500"></span>
+                  Nearby Spots
+                </span>
+              </div>
+            </div>
+
+            <!-- Leaflet Map Container (Responsive & Compact on Mobile) -->
+            <div class="rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200 shadow-md relative h-[250px] sm:h-[350px] md:h-[430px] mb-8">
+              <div id="dest-map" class="w-full h-full z-10"></div>
+            </div>
+
+            <!-- Nearby Spots Grid -->
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="font-display text-lg sm:text-xl font-bold text-slate-900">Closest Destinations Around ${dest.name}</h3>
+                <span class="text-[11px] font-semibold text-slate-500 hidden sm:inline">Top 4 nearest spots</span>
+              </div>
+
+              <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+                ${nearbySpots.slice(0, 4).map(spot => `
+                  <div class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-2xs hover:shadow-md transition-all flex flex-col group">
+                    <div class="relative h-24 sm:h-36 bg-slate-100 overflow-hidden">
+                      <img src="${spot.image}" alt="${spot.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                      <span class="absolute top-2 left-2 bg-white/90 backdrop-blur-xs text-primary font-bold text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-full shadow-xs">
+                        ${spot.category}
+                      </span>
+                      <span class="absolute bottom-2 right-2 bg-slate-900/85 backdrop-blur-xs text-white font-bold text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-full">
+                        ~${spot.distance} km
+                      </span>
+                    </div>
+                    <div class="p-3 sm:p-4 flex flex-col flex-grow justify-between">
+                      <div>
+                        <div class="text-[9px] sm:text-[10px] font-bold text-emerald-800 mb-0.5">${spot.bnName}</div>
+                        <h4 class="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-primary transition-colors line-clamp-1">${spot.name}</h4>
+                        <p class="text-[10px] sm:text-[11px] text-slate-500 line-clamp-1 sm:line-clamp-2 mt-0.5">${spot.shortDesc}</p>
+                      </div>
+                      <div class="pt-2 mt-2 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[9px] sm:text-[10px] text-slate-400 truncate">${spot.category}</span>
+                        <a href="destination-detail.html?id=${spot.id}" class="text-[11px] sm:text-xs font-bold text-primary hover:underline flex items-center gap-0.5 flex-shrink-0">
+                          <span>View</span>
+                          <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      `;
+
+      // =============================================================
+      // INITIALIZE LEAFLET MAP & PIN ALL SPOT IMAGES
+      // =============================================================
+      setTimeout(() => {
+        const mapContainer = document.getElementById('dest-map');
+        if (!mapContainer || typeof L === 'undefined') return;
+
+        const currentLat = dest.lat || 22.6189;
+        const currentLng = dest.lng || 91.6811;
+
+        // Initialize Map
+        const isMobile = window.innerWidth < 640;
+        const map = L.map('dest-map', {
+          center: [currentLat, currentLng],
+          zoom: isMobile ? 11 : 12,
+          scrollWheelZoom: false
+        });
+
+        // CartoDB Voyager Clean High-Resolution Map Tiles
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+          attribution: '&copy; OpenStreetMap &copy; CARTO',
+          subdomains: 'abcd',
+          maxZoom: 19
+        }).addTo(map);
+
+        // Pin each of the 12 destinations on the Map
+        TOURSTK.destinations.forEach(spot => {
+          if (!spot.lat || !spot.lng) return;
+
+          const isCurrent = spot.id === dest.id;
+          const distText = isCurrent ? 'Current Location' : `~${getDistanceKm(currentLat, currentLng, spot.lat, spot.lng)} km away`;
+
+          // Custom HTML Pin with Spot Image
+          const pinHtml = `
+            <div class="custom-spot-pin ${isCurrent ? 'active-spot' : ''}">
+              ${isCurrent ? `<span class="pin-badge">📍 Here</span>` : ''}
+              <div class="pin-img-wrapper">
+                <img src="${spot.image}" alt="${spot.name}" style="width:100%;height:100%;object-fit:cover;">
+              </div>
+              <div class="pin-pointer"></div>
+            </div>
+          `;
+
+          const pinW = isCurrent ? (isMobile ? 42 : 52) : (isMobile ? 34 : 44);
+          const pinH = isCurrent ? (isMobile ? 46 : 58) : (isMobile ? 38 : 50);
+
+          const customIcon = L.divIcon({
+            html: pinHtml,
+            className: 'custom-leaflet-div-icon',
+            iconSize: [pinW, pinH],
+            iconAnchor: [pinW / 2, pinH],
+            popupAnchor: [0, -pinH]
+          });
+
+          // Popup Card Content (Mobile Sized & Crisp)
+          const popupContent = `
+            <div style="width: 190px; font-family: 'Plus Jakarta Sans', sans-serif;">
+              <div style="height: 85px; position: relative; overflow: hidden;">
+                <img src="${spot.image}" style="width:100%; height:100%; object-fit:cover;">
+                <span style="position:absolute; top:6px; left:6px; background:rgba(255,255,255,0.92); font-size:9px; font-weight:800; padding:1px 6px; border-radius:99px; color:#0e4d34;">
+                  ${spot.category}
+                </span>
+              </div>
+              <div style="padding: 10px;">
+                <div style="font-size:9px; font-weight:bold; color:#059669;">${spot.bnName}</div>
+                <h4 style="font-size:12px; font-weight:bold; margin:2px 0; color:#0f172a; line-height:1.2;">${spot.name}</h4>
+                <div style="font-size:10px; color:#64748b; margin-bottom:6px;">${distText}</div>
+                <a href="destination-detail.html?id=${spot.id}" style="display:block; text-align:center; background:#0e4d34; color:#fff; font-size:10px; font-weight:bold; padding:5px 0; border-radius:99px; text-decoration:none;">
+                  Explore Spot →
+                </a>
+              </div>
+            </div>
+          `;
+
+          const marker = L.marker([spot.lat, spot.lng], { icon: customIcon }).addTo(map);
+          marker.bindPopup(popupContent);
+
+          // If current destination, open popup by default
+          if (isCurrent && !isMobile) {
+            marker.openPopup();
+          }
+        });
+
+      // Store gallery globally for switcher
+      window.currentDestGallery = dest.gallery || [
+        { type: 'image', src: dest.image, thumb: dest.image, label: 'Main View' },
+        { type: 'image', src: dest.fallbackImage || dest.image, thumb: dest.fallbackImage || dest.image, label: 'Scenic View' },
+        { type: 'image', src: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80', thumb: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=300&q=80', label: 'Valley' },
+        { type: 'video', src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4', thumb: dest.image, label: '4K Video' }
+      ];
+
+      }, 100);
+    });
+
+    function switchDetailHeroMedia(itemIndex) {
+      if (!window.currentDestGallery || !window.currentDestGallery[itemIndex]) return;
+      const item = window.currentDestGallery[itemIndex];
+      const mainImg = document.getElementById('dest-hero-main-img');
+      const mainVideo = document.getElementById('dest-hero-main-video');
+      const videoSrc = document.getElementById('dest-hero-video-src');
+
+      // Update active border on thumbnails
+      document.querySelectorAll('.dest-thumb-btn').forEach((btn, idx) => {
+        if (idx === itemIndex) {
+          btn.className = btn.className.replace(/border-transparent|opacity-75/g, '') + ' border-primary ring-2 ring-emerald-400/50 opacity-100';
+        } else {
+          btn.className = btn.className.replace(/border-primary|ring-2 ring-emerald-400\/50/g, '') + ' border-transparent opacity-75';
+        }
+      });
+
+      if (item.type === 'video') {
+        if (mainImg) mainImg.classList.add('hidden');
+        if (mainVideo && videoSrc) {
+          videoSrc.src = item.src;
+          mainVideo.load();
+          mainVideo.classList.remove('hidden');
+          mainVideo.play().catch(() => {});
+        }
+      } else {
+        if (mainVideo) {
+          mainVideo.pause();
+          mainVideo.classList.add('hidden');
+        }
+        if (mainImg) {
+          mainImg.src = item.src;
+          mainImg.classList.remove('hidden');
+        }
+      }
+    }
+  </script>
+</body>
+</html>

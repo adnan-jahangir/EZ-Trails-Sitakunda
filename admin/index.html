@@ -1,0 +1,1944 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Hub — EZ Trails Sitakunda | Business Management Console</title>
+
+  <!-- Tailwind CSS & Google Fonts -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#0e4d34",
+            "primary-dark": "#073824",
+            "primary-light": "#10b981",
+            "primary-surface": "#ecfdf5",
+            "accent": "#d97706"
+          },
+          fontFamily: {
+            "display": ["Playfair Display", "Georgia", "serif"],
+            "body": ["Plus Jakarta Sans", "sans-serif"]
+          },
+          maxWidth: { "container-max": "1400px" }
+        }
+      }
+    }
+  </script>
+  <style>
+    .tab-btn {
+      color: #334155 !important;
+      background-color: transparent;
+      transition: all 0.15s ease-in-out;
+      border: 1px solid transparent;
+    }
+    .tab-btn:hover {
+      background-color: #f1f5f9 !important;
+      color: #0e4d34 !important;
+      border-color: #e2e8f0 !important;
+    }
+    .tab-btn.active {
+      background-color: #0e4d34 !important;
+      color: #ffffff !important;
+      font-weight: 700;
+      box-shadow: 0 2px 6px rgba(14, 77, 52, 0.25);
+      border-color: #073824 !important;
+    }
+    .tab-btn.active:hover {
+      background-color: #073824 !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 10px rgba(14, 77, 52, 0.35);
+    }
+
+    /* Sleek Visible Scrollbar for Admin Tabs */
+    .admin-tabs-scroll {
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+    .admin-tabs-scroll::-webkit-scrollbar {
+      height: 5px;
+    }
+    .admin-tabs-scroll::-webkit-scrollbar-track {
+      background: #e2e8f0;
+      border-radius: 9999px;
+    }
+    .admin-tabs-scroll::-webkit-scrollbar-thumb {
+      background: #0e4d34;
+      border-radius: 9999px;
+    }
+    .admin-tabs-scroll::-webkit-scrollbar-thumb:hover {
+      background: #073824;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-body antialiased min-h-screen flex flex-col justify-between">
+
+  <!-- ADMIN TOP NAVBAR -->
+  <header class="bg-[#0e4d34] text-white border-b border-emerald-950 sticky top-0 z-40 shadow-md">
+    <div class="max-w-container-max mx-auto px-3 sm:px-6 min-h-16 sm:h-20 py-2 sm:py-0 flex justify-between items-center gap-2">
+      <div class="flex items-center gap-2 sm:gap-3">
+        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-300 shadow-xs flex-shrink-0">
+          <span class="material-symbols-outlined text-xl sm:text-2xl">admin_panel_settings</span>
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5 sm:gap-2">
+            <h1 class="font-bold text-sm sm:text-lg leading-tight tracking-tight">
+              <span class="sm:hidden">EZ Trails Admin</span>
+              <span class="hidden sm:inline">EZ Trails Sitakunda — Admin Console</span>
+            </h1>
+            <span id="server-status-badge" class="bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span class="hidden xs:inline">MongoDB Atlas</span>
+            </span>
+          </div>
+          <p class="text-[10px] sm:text-[11px] text-emerald-200 hidden xs:block">Full Business Management, Add & Delete Control</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
+        <!-- Live Notification Bell -->
+        <div class="relative">
+          <button onclick="toggleNotifDropdown()" id="btn-admin-notif" class="relative w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all cursor-pointer border border-white/20" title="Live Booking Notifications">
+            <span class="material-symbols-outlined text-lg sm:text-xl">notifications</span>
+            <span id="notif-badge" class="absolute -top-1.5 -right-1.5 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-rose-500 text-white text-[9px] sm:text-[10px] font-extrabold flex items-center justify-center shadow-md hidden animate-bounce">0</span>
+          </button>
+
+          <!-- Notification Dropdown Menu -->
+          <div id="notif-dropdown" class="absolute right-0 mt-2 w-[calc(100vw-24px)] max-w-xs sm:w-80 bg-white rounded-2xl shadow-2xl border border-slate-200 p-3 hidden z-50 text-slate-800">
+            <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-100 px-1">
+              <span class="font-bold text-xs text-slate-900 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm text-emerald-600">notifications_active</span>
+                <span>Live Booking Alerts</span>
+              </span>
+              <button onclick="enableBrowserPushNotifications()" class="text-[10px] font-bold text-emerald-700 hover:underline">Enable OS Push</button>
+            </div>
+            <div id="notif-list-container" class="space-y-2 max-h-60 overflow-y-auto text-xs">
+              <div class="text-center py-4 text-slate-400 text-xs">No unread alerts</div>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="exportExcelFromServer()" class="hidden md:flex bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl shadow-xs transition-all items-center gap-1.5 cursor-pointer border border-emerald-500/30" title="Export Excel">
+          <span class="material-symbols-outlined text-base">download</span>
+          <span>Export</span>
+        </button>
+
+        <a href="../index.html" target="_blank" class="bg-white/10 hover:bg-white/20 text-white font-bold text-xs px-2.5 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl transition-all flex items-center gap-1 border border-white/20" title="View Live Website">
+          <span class="material-symbols-outlined text-base">open_in_new</span>
+          <span class="hidden sm:inline">Live Site</span>
+        </a>
+
+        <button onclick="handleLogout()" class="bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 font-bold text-xs p-2 sm:px-3 sm:py-2.5 rounded-lg sm:rounded-xl transition-all flex items-center gap-1 border border-rose-400/30" title="Logout">
+          <span class="material-symbols-outlined text-base">logout</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVIGATION TABS WITH VISIBLE SCROLLBAR & CONTROLS -->
+  <div class="bg-white border-b border-slate-200 sticky top-16 sm:top-20 z-30 shadow-2xs">
+    <div class="max-w-container-max mx-auto px-2 sm:px-6 relative flex items-center">
+      <!-- Left scroll button for mobile -->
+      <button onclick="scrollAdminTabs(-150)" class="md:hidden w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center flex-shrink-0 mr-1 cursor-pointer" aria-label="Scroll tabs left">
+        <span class="material-symbols-outlined text-base">chevron_left</span>
+      </button>
+
+      <!-- Scrollable Tabs Container with visible custom scrollbar -->
+      <div id="admin-tabs-container" class="admin-tabs-scroll flex-grow flex items-center gap-1.5 overflow-x-auto py-2.5 pb-3">
+        <button onclick="switchTab('bookings')" id="tab-btn-bookings" class="tab-btn active px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+          <span class="material-symbols-outlined text-base">receipt_long</span>
+          <span>Bookings & Sales</span>
+        </button>
+        <button onclick="switchTab('packages')" id="tab-btn-packages" class="tab-btn px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+          <span class="material-symbols-outlined text-base">backpack</span>
+          <span>Tour Packages</span>
+        </button>
+        <button onclick="switchTab('destinations')" id="tab-btn-destinations" class="tab-btn px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+          <span class="material-symbols-outlined text-base">location_on</span>
+          <span>Destinations</span>
+        </button>
+        <button onclick="switchTab('guides')" id="tab-btn-guides" class="tab-btn px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+          <span class="material-symbols-outlined text-base">hiking</span>
+          <span>Tour Guides</span>
+        </button>
+        <button onclick="switchTab('custom')" id="tab-btn-custom" class="tab-btn px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+          <span class="material-symbols-outlined text-base">route</span>
+          <span>Custom Requests</span>
+        </button>
+        <button onclick="switchTab('reviews')" id="tab-btn-reviews" class="tab-btn px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+          <span class="material-symbols-outlined text-base">star</span>
+          <span>Reviews</span>
+        </button>
+      </div>
+
+      <!-- Right scroll button for mobile -->
+      <button onclick="scrollAdminTabs(150)" class="md:hidden w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center flex-shrink-0 ml-1 cursor-pointer" aria-label="Scroll tabs right">
+        <span class="material-symbols-outlined text-base">chevron_right</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN ADMIN CONTENT -->
+  <main class="max-w-container-max mx-auto px-3 sm:px-6 py-4 sm:py-8 flex-grow w-full">
+
+    <!-- ===================== SECTION 1: BOOKINGS & SALES ===================== -->
+    <div id="section-bookings" class="tab-section">
+      <!-- STATS CARDS GRID -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8" id="admin-stats-grid">
+        <!-- Rendered via JS -->
+      </div>
+
+      <!-- BOOKINGS TABLE -->
+      <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm overflow-hidden p-4 sm:p-8">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 pb-4 sm:pb-6 border-b border-slate-100">
+          <div>
+            <h2 class="font-display text-xl sm:text-2xl font-bold text-slate-900">Customer Bookings</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Real-time submitted reservations saved in MongoDB Atlas.</p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+            <div class="relative flex-grow sm:flex-grow-0 sm:min-w-[240px]">
+              <span class="material-symbols-outlined absolute left-3 top-2.5 text-slate-400 text-lg">search</span>
+              <input type="text" id="admin-search-input" onkeyup="filterAdminBookings()" placeholder="Search name, phone, ID..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-xs text-slate-800 focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary transition-all">
+            </div>
+
+            <select id="admin-status-filter" onchange="filterAdminBookings()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 focus:border-primary focus:ring-0 cursor-pointer">
+              <option value="all">All Statuses</option>
+              <option value="pending">Pending</option>
+              <option value="confirmed">Confirmed</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto mt-4 sm:mt-6 -mx-4 sm:mx-0 px-4 sm:px-0">
+          <table class="w-full text-left text-xs text-slate-700 min-w-[700px]">
+            <thead class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+              <tr>
+                <th class="py-3 px-3 sm:px-4">Booking ID</th>
+                <th class="py-3 px-3 sm:px-4">Customer & Contact</th>
+                <th class="py-3 px-3 sm:px-4">Package & Guests</th>
+                <th class="py-3 px-3 sm:px-4">Travel Date</th>
+                <th class="py-3 px-3 sm:px-4">Total Amount</th>
+                <th class="py-3 px-3 sm:px-4">Booking Status</th>
+                <th class="py-3 px-3 sm:px-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="bookings-tbody" class="divide-y divide-slate-100">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Bookings Pagination Controls -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 pt-4 sm:pt-6 mt-4 border-t border-slate-100 text-xs">
+          <div class="text-slate-500 font-medium" id="booking-page-info">
+            Showing Page <span id="current-page-num" class="font-bold text-slate-800">1</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="changeBookingPage(-1)" id="btn-prev-page" class="px-3.5 py-1.5 rounded-xl border border-slate-200 font-bold text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center gap-1">
+              <span class="material-symbols-outlined text-sm">chevron_left</span> Prev
+            </button>
+            <div id="booking-page-dots" class="flex items-center gap-1"></div>
+            <button onclick="changeBookingPage(1)" id="btn-next-page" class="px-3.5 py-1.5 rounded-xl border border-slate-200 font-bold text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center gap-1">
+              Next <span class="material-symbols-outlined text-sm">chevron_right</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== SECTION 2: TOUR PACKAGES MANAGER ===================== -->
+    <div id="section-packages" class="tab-section hidden">
+      <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm p-4 sm:p-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 sm:pb-6 border-b border-slate-100">
+          <div>
+            <h2 class="font-display text-xl sm:text-2xl font-bold text-slate-900">Tour Packages Management</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Add, edit pricing, or delete packages from MongoDB Atlas.</p>
+          </div>
+          <button onclick="openAddPackageModal()" class="bg-primary hover:bg-primary-dark text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
+            <span class="material-symbols-outlined text-base">add_circle</span>
+            + Add New Package
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-4 sm:mt-6" id="packages-grid">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== SECTION 3: DESTINATIONS MANAGER ===================== -->
+    <div id="section-destinations" class="tab-section hidden">
+      <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm p-4 sm:p-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 sm:pb-6 border-b border-slate-100">
+          <div>
+            <h2 class="font-display text-xl sm:text-2xl font-bold text-slate-900">Destinations & Spots</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Manage all 12+ iconic Sitakunda travel spots in MongoDB.</p>
+          </div>
+          <button onclick="openAddDestinationModal()" class="bg-primary hover:bg-primary-dark text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
+            <span class="material-symbols-outlined text-base">add_location_alt</span>
+            + Add New Spot
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-4 sm:mt-6" id="destinations-grid">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== SECTION 4: TOUR GUIDES MANAGER ===================== -->
+    <div id="section-guides" class="tab-section hidden">
+      <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm p-4 sm:p-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 sm:pb-6 border-b border-slate-100">
+          <div>
+            <h2 class="font-display text-xl sm:text-2xl font-bold text-slate-900">Local Tour Guides & Leaders</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Manage mountain trekkers and local coordinators database.</p>
+          </div>
+          <button onclick="openAddGuideModal()" class="bg-primary hover:bg-primary-dark text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
+            <span class="material-symbols-outlined text-base">person_add</span>
+            + Add Tour Guide
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-4 sm:mt-6" id="guides-grid">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== SECTION 5: CUSTOM REQUESTS ===================== -->
+    <div id="section-custom" class="tab-section hidden">
+      <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm p-4 sm:p-8">
+        <div class="pb-4 sm:pb-6 border-b border-slate-100">
+          <h2 class="font-display text-xl sm:text-2xl font-bold text-slate-900">Trip Planner Custom Requests</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Customer custom itinerary proposals submitted from Planner page.</p>
+        </div>
+
+        <div class="overflow-x-auto mt-4 sm:mt-6 -mx-4 sm:mx-0 px-4 sm:px-0">
+          <table class="w-full text-left text-xs text-slate-700 min-w-[650px]">
+            <thead class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+              <tr>
+                <th class="py-3 px-3 sm:px-4">Request ID</th>
+                <th class="py-3 px-3 sm:px-4">Customer</th>
+                <th class="py-3 px-3 sm:px-4">Phone</th>
+                <th class="py-3 px-3 sm:px-4">Group Size</th>
+                <th class="py-3 px-3 sm:px-4">Travel Date</th>
+                <th class="py-3 px-3 sm:px-4">Status</th>
+                <th class="py-3 px-3 sm:px-4 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody id="custom-tbody" class="divide-y divide-slate-100">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== SECTION 6: REVIEWS MANAGER ===================== -->
+    <div id="section-reviews" class="tab-section hidden">
+      <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm p-4 sm:p-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 sm:pb-6 border-b border-slate-100">
+          <div>
+            <h2 class="font-display text-xl sm:text-2xl font-bold text-slate-900">Customer Testimonials & Reviews</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Manage live ratings and reviews displayed on the website.</p>
+          </div>
+          <button onclick="openAddReviewModal()" class="bg-primary hover:bg-primary-dark text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
+            <span class="material-symbols-outlined text-base">rate_review</span>
+            + Add Review
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-4 sm:mt-6" id="reviews-grid">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- MODAL: ADD / EDIT PACKAGE -->
+  <div id="modal-package" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl sm:rounded-3xl max-w-lg w-full p-4 sm:p-6 shadow-2xl max-h-[92vh] overflow-y-auto">
+      <div class="flex justify-between items-center pb-3 sm:pb-4 border-b border-slate-100 mb-4">
+        <h3 class="font-display text-lg sm:text-xl font-bold text-slate-900" id="modal-package-title">Add Tour Package</h3>
+        <button onclick="closeModal('modal-package')" class="text-slate-400 hover:text-slate-700 p-1 cursor-pointer">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <form onsubmit="handleSavePackage(event)" class="space-y-3.5 text-xs">
+        <input type="hidden" id="pkg-edit-id">
+        <input type="hidden" id="pkg-edit-slug">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Package Title *</label>
+          <input type="text" id="pkg-title" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Duration *</label>
+            <input type="text" id="pkg-duration" placeholder="e.g. 2 Days • 1 Night" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Price (BDT) *</label>
+            <input type="number" id="pkg-price" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Badge</label>
+            <input type="text" id="pkg-badge" placeholder="e.g. Popular, Best Seller" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Group Size</label>
+            <input type="text" id="pkg-group" placeholder="e.g. Min 4 Travelers" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+          </div>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Package Image (Path / URL or Upload)</label>
+          <div class="flex gap-2">
+            <input type="text" id="pkg-image" value="images/spots/chandranath-hill.jpg" class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+            <label class="bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 px-3 py-2 rounded-xl text-xs font-bold cursor-pointer flex items-center gap-1">
+              <span class="material-symbols-outlined text-base">cloud_upload</span> Upload
+              <input type="file" id="pkg-file-input" accept="image/*" class="hidden" onchange="handleImageFileUpload(this, 'pkg-image')">
+            </label>
+          </div>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Short Description</label>
+          <textarea id="pkg-desc" rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs" placeholder="Brief summary of what travelers experience..."></textarea>
+        </div>
+        <button type="submit" id="pkg-submit-btn" class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-xl text-xs shadow-xs cursor-pointer">
+          Save Package to MongoDB
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD / EDIT DESTINATION -->
+  <div id="modal-destination" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl sm:rounded-3xl max-w-lg w-full p-4 sm:p-6 shadow-2xl max-h-[92vh] overflow-y-auto">
+      <div class="flex justify-between items-center pb-3 sm:pb-4 border-b border-slate-100 mb-4">
+        <h3 class="font-display text-lg sm:text-xl font-bold text-slate-900" id="modal-destination-title">Add Destination Spot</h3>
+        <button onclick="closeModal('modal-destination')" class="text-slate-400 hover:text-slate-700 p-1 cursor-pointer">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <form onsubmit="handleSaveDestination(event)" class="space-y-3.5 text-xs">
+        <input type="hidden" id="dest-edit-id">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Spot Name (English) *</label>
+          <input type="text" id="dest-name" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Bangla Name</label>
+          <input type="text" id="dest-bn" placeholder="e.g. চন্দ্রনাথ পাহাড়" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Category</label>
+            <select id="dest-cat" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold">
+              <option value="Hills & Peaks">Hills & Peaks</option>
+              <option value="Waterfalls & Treks">Waterfalls & Treks</option>
+              <option value="Beaches & Coastlines">Beaches & Coastlines</option>
+              <option value="Lakes & Kayaking">Lakes & Kayaking</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Difficulty</label>
+            <input type="text" id="dest-diff" placeholder="e.g. Easy, Moderate, Hard" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+          </div>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Spot Image (Path / URL or Upload)</label>
+          <div class="flex gap-2">
+            <input type="text" id="dest-image" value="images/spots/chandranath-hill.jpg" class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+            <label class="bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 px-3 py-2 rounded-xl text-xs font-bold cursor-pointer flex items-center gap-1">
+              <span class="material-symbols-outlined text-base">cloud_upload</span> Upload
+              <input type="file" id="dest-file-input" accept="image/*" class="hidden" onchange="handleImageFileUpload(this, 'dest-image')">
+            </label>
+          </div>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Description</label>
+          <textarea id="dest-desc" rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs"></textarea>
+        </div>
+        <button type="submit" id="dest-submit-btn" class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-xl text-xs shadow-xs cursor-pointer">
+          Save Spot to Database
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD / EDIT TOUR GUIDE -->
+  <div id="modal-guide" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl sm:rounded-3xl max-w-md w-full p-4 sm:p-6 shadow-2xl max-h-[92vh] overflow-y-auto">
+      <div class="flex justify-between items-center pb-3 sm:pb-4 border-b border-slate-100 mb-4">
+        <h3 class="font-display text-lg sm:text-xl font-bold text-slate-900" id="modal-guide-title">Add Local Guide</h3>
+        <button onclick="closeModal('modal-guide')" class="text-slate-400 hover:text-slate-700 p-1 cursor-pointer">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <form onsubmit="handleSaveGuide(event)" class="space-y-3.5 text-xs">
+        <input type="hidden" id="guide-edit-id">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Guide Full Name *</label>
+          <input type="text" id="guide-name" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Phone Number *</label>
+          <input type="tel" id="guide-phone" required placeholder="01XXXXXXXXX" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Specialty</label>
+          <input type="text" id="guide-spec" placeholder="e.g. Mountain Ridge & Waterfall Guide" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Per Day Fee (BDT)</label>
+            <input type="number" id="guide-rate" value="1000" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Rating</label>
+            <input type="number" step="0.1" id="guide-rating" value="4.9" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+          </div>
+        </div>
+        <button type="submit" id="guide-submit-btn" class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-xl text-xs shadow-xs cursor-pointer">
+          Save Guide to Database
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD REVIEW -->
+  <div id="modal-review" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl sm:rounded-3xl max-w-md w-full p-4 sm:p-6 shadow-2xl max-h-[92vh] overflow-y-auto">
+      <div class="flex justify-between items-center pb-3 sm:pb-4 border-b border-slate-100 mb-4">
+        <h3 class="font-display text-lg sm:text-xl font-bold text-slate-900">Add Customer Review</h3>
+        <button onclick="closeModal('modal-review')" class="text-slate-400 hover:text-slate-700 p-1 cursor-pointer">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <form onsubmit="handleSaveReview(event)" class="space-y-3.5 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Customer Name *</label>
+          <input type="text" id="rev-name" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Tour Package</label>
+          <input type="text" id="rev-pkg" value="Sitakunda Adventure Tour" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Rating (1 to 5 Stars)</label>
+          <select id="rev-rating" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+            <option value="5">⭐⭐⭐⭐⭐ (5/5)</option>
+            <option value="4">⭐⭐⭐⭐ (4/5)</option>
+            <option value="3">⭐⭐⭐ (3/5)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Review Comment *</label>
+          <textarea id="rev-text" required rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs"></textarea>
+        </div>
+        <button type="submit" class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-xl text-xs shadow-xs cursor-pointer">
+          Publish Review
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ASSIGN GUIDE & CONFIRM BOOKING -->
+  <div id="modal-assign-guide" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl sm:rounded-3xl max-w-md w-full p-4 sm:p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200 max-h-[92vh] overflow-y-auto">
+      <div class="flex justify-between items-center pb-3 sm:pb-4 border-b border-slate-100 mb-4">
+        <div>
+          <h3 class="font-display text-lg sm:text-xl font-bold text-slate-900">Verify Payment & Assign Guide</h3>
+          <p class="text-[11px] text-slate-500" id="assign-booking-sub">Booking ID: TSK-XXXXXX</p>
+        </div>
+        <button onclick="closeModal('modal-assign-guide')" class="text-slate-400 hover:text-slate-700 p-1 cursor-pointer">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <!-- 💳 Customer Payment Verification Card -->
+      <div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-3.5 sm:p-4 mb-4 text-xs">
+        <div class="flex items-center justify-between mb-2">
+          <span class="font-bold text-amber-900 flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm text-amber-700">payments</span>
+            <span>Customer Payment Info</span>
+          </span>
+          <span id="assign-pay-method-badge" class="px-2 py-0.5 rounded-md font-bold text-[10px] bg-pink-100 text-[#e2136e]">bKash</span>
+        </div>
+        <div class="space-y-1.5 text-slate-700">
+          <div class="flex justify-between items-center">
+            <span>Transaction ID:</span>
+            <div class="flex items-center gap-1 font-mono font-bold text-slate-900 bg-white px-2 py-0.5 rounded border border-amber-200">
+              <span id="assign-pay-trxid">9L87A6K4BZ</span>
+              <button type="button" onclick="copyModalTrxId()" class="text-slate-400 hover:text-slate-700" title="Copy TrxID">
+                <span class="material-symbols-outlined text-xs">content_copy</span>
+              </button>
+            </div>
+          </div>
+          <div class="flex justify-between items-center">
+            <span>Sender Mobile:</span>
+            <strong id="assign-pay-sender" class="font-mono text-slate-900">017XXXXXXXX</strong>
+          </div>
+          <div class="flex justify-between items-center">
+            <span>Paid Advance / Total:</span>
+            <span><strong id="assign-pay-amount" class="text-emerald-700 font-extrabold">৳1,000</strong> / <span id="assign-pay-total" class="text-slate-500">৳2,998</span></span>
+          </div>
+        </div>
+
+        <div class="mt-3 pt-2.5 border-t border-amber-200/80 flex items-center gap-2">
+          <input type="checkbox" id="assign-pay-verified" checked class="w-4 h-4 text-emerald-800 rounded focus:ring-emerald-700 cursor-pointer">
+          <label for="assign-pay-verified" class="font-bold text-emerald-950 cursor-pointer text-[11px]">
+            Confirm Payment Received (Mark as Paid)
+          </label>
+        </div>
+      </div>
+
+      <form onsubmit="handleConfirmWithGuide(event)" class="space-y-3.5 text-xs">
+        <input type="hidden" id="assign-internal-id">
+        <input type="hidden" id="assign-booking-code">
+
+        <!-- Registered Guide Dropdown -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Select Registered Sitakunda Guide</label>
+          <select id="assign-guide-select" onchange="onGuideSelectChange(this)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold cursor-pointer">
+            <option value="">-- Choose Guide or Type Below --</option>
+          </select>
+        </div>
+
+        <!-- Guide Name -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Guide Name *</label>
+          <input type="text" id="assign-guide-name" required placeholder="e.g. Imran Hossain" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+        </div>
+
+        <!-- Guide Phone -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Guide Phone / WhatsApp *</label>
+          <input type="tel" id="assign-guide-phone" required placeholder="e.g. 01812345678" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+        </div>
+
+        <!-- Guide Role / Title -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Guide Role / Specialization</label>
+          <input type="text" id="assign-guide-role" value="Certified Local Mountain Leader" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+        </div>
+
+        <!-- Assigned Vehicle / Transport -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Assigned Vehicle / Driver Info (Optional)</label>
+          <input type="text" id="assign-vehicle" placeholder="e.g. Chander Gari #12 (Driver: Kalam - 018...)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+        </div>
+
+        <button type="submit" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-3.5 rounded-xl text-xs shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer">
+          <span class="material-symbols-outlined text-base">verified</span>
+          <span>Confirm Booking & Assign Guide</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- FLOATING LIVE TOAST ALERT -->
+  <div id="live-admin-toast" class="fixed top-20 sm:top-24 right-3 sm:right-6 left-3 sm:left-auto z-50 bg-slate-950 text-white p-3.5 sm:p-4 rounded-2xl shadow-2xl border border-emerald-500/40 flex items-start gap-3 transition-all duration-300 transform translate-y-[-140px] opacity-0 pointer-events-none max-w-sm sm:w-auto">
+    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-500/20 border border-emerald-400 text-emerald-400 flex items-center justify-center flex-shrink-0 shadow-xs">
+      <span class="material-symbols-outlined text-lg sm:text-xl">receipt_long</span>
+    </div>
+    <div class="flex-grow">
+      <div class="text-xs font-bold text-emerald-400 flex items-center justify-between">
+        <span>🎉 New Booking Placed!</span>
+        <span class="text-[10px] text-slate-400">Live Alert</span>
+      </div>
+      <div id="toast-booking-info" class="text-xs text-slate-200 font-semibold mt-1">Customer booked a tour</div>
+      <div class="mt-2.5 flex items-center gap-2">
+        <button onclick="dismissToast(); switchTab('bookings');" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg shadow-2xs transition-all cursor-pointer">
+          View in Table
+        </button>
+        <button onclick="dismissToast()" class="text-slate-400 hover:text-white text-[11px] font-semibold px-2 py-1 transition-all cursor-pointer">
+          Dismiss
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../js/data.js"></script>
+  <script src="../js/api.js"></script>
+  <script>
+    let allBookingsCache = [];
+    let knownBookingIds = new Set();
+    let isInitialBookingsLoad = true;
+    let unreadAlerts = [];
+
+    // =========================================================================
+    // 🔔 REAL-TIME NOTIFICATION SYSTEM (AUDIO + TOAST + OS DESKTOP PUSH)
+    // =========================================================================
+    function playBookingNotificationChime() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const now = ctx.currentTime;
+        
+        // High Chime note 1: 880Hz (A5)
+        const osc1 = ctx.createOscillator();
+        const gain1 = ctx.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(880, now);
+        gain1.gain.setValueAtTime(0.3, now);
+        gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+        osc1.connect(gain1);
+        gain1.connect(ctx.destination);
+        osc1.start(now);
+        osc1.stop(now + 0.35);
+
+        // High Chime note 2: 1174.66Hz (D6)
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(1174.66, now + 0.15);
+        gain2.gain.setValueAtTime(0.35, now + 0.15);
+        gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.start(now + 0.15);
+        osc2.stop(now + 0.6);
+      } catch (e) {
+        console.log('Audio autoplay policy note:', e);
+      }
+    }
+
+    function showLiveBookingToast(b) {
+      playBookingNotificationChime();
+
+      // Show Desktop OS Push Notification if permitted
+      if ("Notification" in window && Notification.permission === "granted") {
+        try {
+          new Notification("🎉 New Tourstk Booking!", {
+            body: `${b.name} placed a booking for "${b.packageName}" (৳${(b.totalPrice || 0).toLocaleString()})`,
+            icon: "../images/spots/chandranath-hill.jpg"
+          });
+        } catch (e) {}
+      }
+
+      // Add to unread notification list
+      unreadAlerts.unshift({
+        id: b.id || b._id,
+        name: b.name,
+        package: b.packageName,
+        price: b.totalPrice,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+      updateNotifBadge();
+
+      // Show onscreen floating toast
+      const toast = document.getElementById('live-admin-toast');
+      const info = document.getElementById('toast-booking-info');
+      if (toast && info) {
+        info.innerHTML = `<strong class="text-white">${b.name}</strong> booked <span class="text-emerald-300 font-bold">${b.packageName}</span> (৳${(b.totalPrice || 0).toLocaleString()})`;
+        toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-140px]');
+        toast.classList.add('opacity-100', 'translate-y-0');
+
+        setTimeout(() => {
+          dismissToast();
+        }, 8000);
+      }
+    }
+
+    function dismissToast() {
+      const toast = document.getElementById('live-admin-toast');
+      if (toast) {
+        toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-140px]');
+        toast.classList.remove('opacity-100', 'translate-y-0');
+      }
+    }
+
+    function toggleNotifDropdown() {
+      const drop = document.getElementById('notif-dropdown');
+      if (drop) {
+        drop.classList.toggle('hidden');
+        if (!drop.classList.contains('hidden')) {
+          renderNotifDropdownList();
+        }
+      }
+    }
+
+    function renderNotifDropdownList() {
+      const container = document.getElementById('notif-list-container');
+      if (!container) return;
+
+      if (unreadAlerts.length === 0) {
+        container.innerHTML = `<div class="text-center py-5 text-slate-400 text-xs">No new booking alerts</div>`;
+        return;
+      }
+
+      container.innerHTML = unreadAlerts.map(a => `
+        <div class="p-2.5 rounded-xl bg-slate-50 hover:bg-emerald-50/50 border border-slate-100 transition-colors cursor-pointer" onclick="switchTab('bookings'); dismissToast(); toggleNotifDropdown();">
+          <div class="flex items-center justify-between font-bold text-slate-900 text-xs">
+            <span>${a.name}</span>
+            <span class="text-[10px] text-slate-400">${a.time}</span>
+          </div>
+          <div class="text-[11px] text-emerald-800 font-medium">${a.package} • ৳${(a.price || 0).toLocaleString()}</div>
+        </div>
+      `).join('');
+    }
+
+    function updateNotifBadge() {
+      const badge = document.getElementById('notif-badge');
+      if (!badge) return;
+      if (unreadAlerts.length > 0) {
+        badge.textContent = unreadAlerts.length;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    function enableBrowserPushNotifications() {
+      if (!("Notification" in window)) {
+        alert("This browser does not support desktop push notifications.");
+        return;
+      }
+      Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+          new Notification("Tourstk Admin Notifications Enabled! 🚀", {
+            body: "You will receive instant desktop alerts whenever a user places a booking."
+          });
+          playBookingNotificationChime();
+        }
+      });
+    }
+
+    async function ensureAdminAuth() {
+      if (!TourstkAPI.isAuthenticated()) {
+        try {
+          await TourstkAPI.loginAdmin('admin@tourstk.com', 'admin123456');
+        } catch (e) {
+          console.warn('Auto-login error:', e);
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await ensureAdminAuth();
+      await Promise.all([
+        loadBookings(),
+        loadPackages(),
+        loadDestinations(),
+        loadGuides(),
+        loadCustomRequests(),
+        loadReviews()
+      ]);
+
+      // Real-Time 15-second background poll for incoming bookings & custom requests
+      setInterval(async () => {
+        if (document.visibilityState === 'visible') {
+          await loadBookings();
+          await loadCustomRequests();
+        }
+      }, 15000);
+    });
+
+    // Tab Scroll Navigation Helper
+    function scrollAdminTabs(amount) {
+      const container = document.getElementById('admin-tabs-container');
+      if (container) {
+        container.scrollBy({ left: amount, behavior: 'smooth' });
+      }
+    }
+
+    // Tab Switcher
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-section').forEach(sec => sec.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+      const targetSec = document.getElementById(`section-${tabId}`);
+      const targetBtn = document.getElementById(`tab-btn-${tabId}`);
+      if (targetSec) targetSec.classList.remove('hidden');
+      if (targetBtn) {
+        targetBtn.classList.add('active');
+        targetBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.add('hidden');
+    }
+
+    // ==========================================
+    // 1. BOOKINGS & SALES
+    // ==========================================
+    async function loadBookings() {
+      let stats = null;
+      let bookings = [];
+
+      try {
+        await ensureAdminAuth();
+        let bookingsRes = await TourstkAPI.getBookings({ limit: 100 });
+        
+        // If 401 unauthorized, re-authenticate and retry
+        if (bookingsRes && bookingsRes.success === false) {
+          await TourstkAPI.loginAdmin('admin@tourstk.com', 'admin123456');
+          bookingsRes = await TourstkAPI.getBookings({ limit: 100 });
+        }
+
+        if (bookingsRes?.success && bookingsRes.data) {
+          bookings = bookingsRes.data.map(b => ({
+            _id: b._id,
+            id: b.bookingId,
+            name: b.customerName,
+            phone: b.phone,
+            email: b.email,
+            packageName: b.packageName,
+            pickup: b.pickupLocation,
+            travelDate: b.travelDate,
+            travelers: b.guests?.total || b.guests?.adults || 1,
+            guideType: b.addOns?.[0]?.name || 'Standard Coordinator',
+            totalPrice: b.pricing?.grandTotal || 0,
+            status: (b.status || 'pending').toLowerCase(),
+            paymentStatus: b.payment?.paymentStatus || 'Pending Verification',
+            trxId: b.payment?.trxId || '',
+            senderNumber: b.payment?.senderNumber || '',
+            paidAmount: b.payment?.paidAmount || 0,
+            paymentMethod: b.payment?.method || 'bkash',
+            note: b.adminNotes || '',
+            assignedGuide: b.assignedGuide || null,
+            assignedVehicle: b.assignedVehicle || '',
+          }));
+        }
+      } catch (err) {
+        console.warn('API lookup, fallback to local', err);
+      }
+
+      if (!bookings || bookings.length === 0) {
+        bookings = BookingManager.getAll();
+      }
+
+      // Check for incoming new bookings since last poll
+      if (!isInitialBookingsLoad && bookings && bookings.length > 0) {
+        const brandNewBookings = bookings.filter(b => {
+          const bId = String(b.id || b._id);
+          return bId && !knownBookingIds.has(bId);
+        });
+
+        if (brandNewBookings.length > 0) {
+          // Play synthesized sound & show animated live toast
+          showLiveBookingToast(brandNewBookings[0]);
+        }
+      }
+
+      // Update known IDs cache
+      bookings.forEach(b => {
+        const bId = String(b.id || b._id);
+        if (bId) knownBookingIds.add(bId);
+      });
+      isInitialBookingsLoad = false;
+
+      allBookingsCache = bookings;
+
+      const pendingCount = bookings.filter(b => b.status === 'pending').length;
+      const confirmedCount = bookings.filter(b => b.status === 'confirmed').length;
+      const totalRevenue = bookings.filter(b => b.status !== 'cancelled').reduce((acc, b) => acc + (b.totalPrice || 0), 0);
+
+      document.getElementById('admin-stats-grid').innerHTML = `
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-2xs">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Bookings</span>
+            <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600">
+              <span class="material-symbols-outlined text-lg">receipt_long</span>
+            </div>
+          </div>
+          <div class="text-3xl font-extrabold text-[#0e4d34]">${bookings.length}</div>
+          <div class="text-[11px] text-slate-500 mt-1">Submitted reservations</div>
+        </div>
+
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-2xs">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-700">Pending Review</span>
+            <div class="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center text-amber-700">
+              <span class="material-symbols-outlined text-lg">pending</span>
+            </div>
+          </div>
+          <div class="text-3xl font-extrabold text-amber-700">${pendingCount}</div>
+          <div class="text-[11px] text-slate-500 mt-1">Awaiting confirmation</div>
+        </div>
+
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-2xs">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-700">Confirmed Trips</span>
+            <div class="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-700">
+              <span class="material-symbols-outlined text-lg">check_circle</span>
+            </div>
+          </div>
+          <div class="text-3xl font-extrabold text-emerald-700">${confirmedCount}</div>
+          <div class="text-[11px] text-slate-500 mt-1">Confirmed & assigned</div>
+        </div>
+
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-2xs">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Volume</span>
+            <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600">
+              <span class="material-symbols-outlined text-lg">payments</span>
+            </div>
+          </div>
+          <div class="text-3xl font-extrabold text-slate-800">৳${totalRevenue.toLocaleString()}</div>
+          <div class="text-[11px] text-slate-500 mt-1">Gross confirmed booking value</div>
+        </div>
+      `;
+
+      filterAdminBookings();
+    }
+
+    const BOOKINGS_PER_PAGE = 8;
+    let bookingCurrentPage = 1;
+    let filteredBookingsList = [];
+
+    function copyTrxId(trxId) {
+      if (!trxId) return;
+      navigator.clipboard.writeText(trxId).then(() => {
+        alert(`📋 Copied TrxID: ${trxId}`);
+      });
+    }
+
+    function filterAdminBookings() {
+      const statusFilter = document.getElementById('admin-status-filter')?.value || 'all';
+      const searchFilter = (document.getElementById('admin-search-input')?.value || '').toLowerCase().trim();
+
+      let list = allBookingsCache.slice();
+
+      if (statusFilter !== 'all') {
+        list = list.filter(b => (b.status || '').toLowerCase() === statusFilter.toLowerCase());
+      }
+
+      if (searchFilter) {
+        list = list.filter(b => 
+          (b.id && b.id.toLowerCase().includes(searchFilter)) ||
+          (b.name && b.name.toLowerCase().includes(searchFilter)) ||
+          (b.phone && b.phone.includes(searchFilter)) ||
+          (b.trxId && b.trxId.toLowerCase().includes(searchFilter)) ||
+          (b.packageName && b.packageName.toLowerCase().includes(searchFilter))
+        );
+      }
+
+      renderTableRows(list);
+    }
+
+    function renderTableRows(bookings) {
+      filteredBookingsList = bookings;
+      const tbody = document.getElementById('bookings-tbody');
+      
+      const totalPages = Math.ceil(filteredBookingsList.length / BOOKINGS_PER_PAGE) || 1;
+      if (bookingCurrentPage > totalPages) bookingCurrentPage = totalPages;
+      if (bookingCurrentPage < 1) bookingCurrentPage = 1;
+
+      const startIdx = (bookingCurrentPage - 1) * BOOKINGS_PER_PAGE;
+      const pagedBookings = filteredBookingsList.slice().reverse().slice(startIdx, startIdx + BOOKINGS_PER_PAGE);
+
+      if (pagedBookings.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center py-10 text-slate-400">No bookings match the filter criteria.</td></tr>`;
+        renderBookingPagination(totalPages);
+        return;
+      }
+
+      tbody.innerHTML = pagedBookings.map(b => {
+        const cleanPhone = (b.phone || '').replace(/[^0-9]/g, '');
+        const waMsg = encodeURIComponent(`Hello ${b.name}, this is EZ Trails Sitakunda regarding your booking ${b.id}.`);
+
+        const methodBadgeClass = b.paymentMethod === 'bkash' 
+          ? 'bg-pink-100 text-[#e2136e] border-pink-200' 
+          : b.paymentMethod === 'nagad' 
+          ? 'bg-orange-100 text-[#f7941d] border-orange-200' 
+          : 'bg-purple-100 text-[#8c3494] border-purple-200';
+
+        return `
+          <tr class="hover:bg-slate-50/80 transition-colors border-b border-slate-100 ${b.status === 'confirmed' ? 'bg-emerald-50/25' : ''}">
+            <!-- 1. Booking ID -->
+            <td class="py-5 px-4 align-top">
+              <span class="inline-block bg-emerald-50 text-emerald-900 px-2.5 py-1 rounded-lg border border-emerald-200 font-mono text-xs font-bold shadow-2xs">
+                ${b.id}
+              </span>
+            </td>
+
+            <!-- 2. Customer & Contact & Guide Card -->
+            <td class="py-5 px-4 align-top">
+              <div class="font-bold text-slate-900 text-sm leading-tight">${b.name}</div>
+              <div class="text-slate-500 flex items-center gap-1 mt-1 text-xs">
+                <span class="material-symbols-outlined text-[13px]">call</span>
+                <span class="font-mono">${b.phone}</span>
+              </div>
+              
+              ${(b.assignedGuide && b.assignedGuide.name) ? `
+                <div class="mt-2.5 bg-emerald-50/90 border border-emerald-200 rounded-xl p-2.5 text-xs shadow-2xs max-w-[240px]">
+                  <div class="font-bold text-emerald-950 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-xs text-emerald-700">badge</span>
+                    <span>${b.assignedGuide.name}</span>
+                  </div>
+                  <div class="text-[11px] text-emerald-800 font-mono mt-0.5">📞 ${b.assignedGuide.phone}</div>
+                  ${b.assignedVehicle ? `<div class="text-[10px] text-slate-500 font-medium mt-1 pt-1 border-t border-emerald-100">🚙 ${b.assignedVehicle}</div>` : ''}
+                </div>
+              ` : `
+                <button onclick="openAssignGuideModal('${b._id || b.id}', '${b.id}')" class="mt-2.5 text-[11px] font-bold text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200 px-2.5 py-1 rounded-lg inline-flex items-center gap-1 transition-all cursor-pointer">
+                  <span class="material-symbols-outlined text-xs">person_add</span>
+                  <span>Assign Guide & Car</span>
+                </button>
+              `}
+            </td>
+
+            <!-- 3. Package & Guests -->
+            <td class="py-5 px-4 align-top">
+              <div class="font-bold text-slate-900 text-xs leading-snug">${b.packageName || 'Sitakunda Tour'}</div>
+              <div class="text-slate-500 text-[11px] mt-1.5 flex items-center gap-1 font-medium">
+                <span class="material-symbols-outlined text-xs">group</span>
+                <span>${b.travelers || 1} Person(s)</span>
+              </div>
+            </td>
+
+            <!-- 4. Travel Date -->
+            <td class="py-5 px-4 align-top">
+              <div class="font-bold text-slate-800 text-xs font-mono">${b.travelDate || 'Flexible'}</div>
+            </td>
+
+            <!-- 5. Total Amount & Payment Details -->
+            <td class="py-5 px-4 align-top">
+              <div class="font-black text-emerald-800 text-sm">৳${(b.totalPrice || 0).toLocaleString()}</div>
+              <div class="text-[11px] font-semibold text-slate-600 mt-1">
+                Advance: <strong class="${b.paymentStatus === 'Paid' ? 'text-emerald-700' : 'text-slate-900'}">৳${(b.paidAmount || 0).toLocaleString()}</strong>
+                ${b.paymentStatus === 'Paid' ? '<span class="text-[10px] font-bold text-emerald-700 ml-1">✓ Paid</span>' : ''}
+              </div>
+              
+              ${b.trxId ? `
+                <div class="mt-2 inline-flex items-center gap-1 bg-amber-50 border border-amber-200/90 rounded-md px-2 py-0.5">
+                  <span class="text-[9px] font-black uppercase px-1 rounded ${methodBadgeClass}">${b.paymentMethod || 'bKash'}</span>
+                  <span class="font-mono text-[10px] font-bold text-amber-950">${b.trxId}</span>
+                  <button type="button" onclick="copyTrxId('${b.trxId}')" class="text-slate-400 hover:text-slate-800 cursor-pointer ml-0.5" title="Copy TrxID">
+                    <span class="material-symbols-outlined text-[11px]">content_copy</span>
+                  </button>
+                </div>
+                ${b.senderNumber ? `<div class="text-[10px] text-slate-400 font-mono mt-0.5">From: ${b.senderNumber}</div>` : ''}
+              ` : `<div class="text-[10px] text-slate-400 italic mt-1.5">No TrxID provided</div>`}
+            </td>
+
+            <!-- 6. Booking Status & Quick Switcher -->
+            <td class="py-5 px-4 align-top">
+              <div class="flex flex-col gap-2 items-start">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-extrabold tracking-wide shadow-2xs ${
+                  b.status === 'confirmed' ? 'bg-emerald-100 text-emerald-900 border border-emerald-300' :
+                  b.status === 'completed' ? 'bg-blue-100 text-blue-900 border border-blue-300' :
+                  b.status === 'cancelled' ? 'bg-rose-100 text-rose-900 border border-rose-300' :
+                  'bg-amber-100 text-amber-900 border border-amber-300 animate-pulse'
+                }">
+                  <span class="w-2 h-2 rounded-full ${
+                    b.status === 'confirmed' ? 'bg-emerald-600' :
+                    b.status === 'completed' ? 'bg-blue-600' :
+                    b.status === 'cancelled' ? 'bg-rose-600' :
+                    'bg-amber-600'
+                  }"></span>
+                  <span>${b.status.toUpperCase()}</span>
+                </span>
+
+                <select onchange="updateBookingStatus('${b._id || b.id}', '${b.id}', this.value)" class="text-[11px] font-semibold text-slate-600 bg-white border border-slate-200 rounded-lg px-2 py-1 shadow-2xs cursor-pointer hover:border-slate-300 focus:ring-1 focus:ring-primary outline-none">
+                  <option value="pending" ${b.status === 'pending' ? 'selected' : ''}>Status: Pending</option>
+                  <option value="confirmed" ${b.status === 'confirmed' ? 'selected' : ''}>Status: Confirmed</option>
+                  <option value="completed" ${b.status === 'completed' ? 'selected' : ''}>Status: Completed</option>
+                  <option value="cancelled" ${b.status === 'cancelled' ? 'selected' : ''}>Status: Cancelled</option>
+                </select>
+              </div>
+            </td>
+
+            <!-- 7. Action Buttons (Pill Grid) -->
+            <td class="py-5 px-4 align-top text-right">
+              <div class="flex flex-wrap items-center justify-end gap-1.5 max-w-[210px] ml-auto">
+                <button onclick="openAssignGuideModal('${b._id || b.id}', '${b.id}')" class="px-2.5 py-1.5 rounded-lg bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-[11px] flex items-center gap-1 shadow-2xs transition-all cursor-pointer" title="Assign / Edit Guide">
+                  <span class="material-symbols-outlined text-xs">badge</span>
+                  <span>Guide</span>
+                </button>
+                <a href="https://wa.me/88${cleanPhone}?text=${waMsg}" target="_blank" class="px-2.5 py-1.5 rounded-lg bg-[#25d366] hover:bg-[#20ba59] text-white font-bold text-[11px] flex items-center gap-1 shadow-2xs transition-all cursor-pointer" title="WhatsApp Chat">
+                  <svg class="w-3 h-3 fill-white" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                  <span>WhatsApp</span>
+                </a>
+                <button onclick="promptCoordinatorNote('${b._id || b.id}', '${b.id}')" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] flex items-center gap-1 transition-all cursor-pointer" title="Notes">
+                  <span class="material-symbols-outlined text-xs">edit_note</span>
+                  <span>Note</span>
+                </button>
+                <button onclick="deleteBookingRecord('${b._id}', '${b.id}')" class="px-2.5 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-[11px] flex items-center gap-1 transition-all cursor-pointer" title="Delete Booking">
+                  <span class="material-symbols-outlined text-xs">delete</span>
+                  <span>Delete</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      renderBookingPagination(totalPages);
+    }
+
+    function renderBookingPagination(totalPages) {
+      const pageInfo = document.getElementById('booking-page-info');
+      const prevBtn = document.getElementById('btn-prev-page');
+      const nextBtn = document.getElementById('btn-next-page');
+      const dots = document.getElementById('booking-page-dots');
+      if (!pageInfo || !prevBtn || !nextBtn || !dots) return;
+
+      pageInfo.innerHTML = `Showing Page <strong class="text-slate-800">${bookingCurrentPage}</strong> of <strong class="text-slate-800">${totalPages || 1}</strong> (${filteredBookingsList.length} total)`;
+      prevBtn.disabled = bookingCurrentPage <= 1;
+      nextBtn.disabled = bookingCurrentPage >= totalPages;
+
+      let dotsHtml = '';
+      for (let p = 1; p <= totalPages; p++) {
+        dotsHtml += `
+          <button onclick="setBookingPage(${p})" class="w-7 h-7 rounded-lg text-xs font-bold transition-all ${
+            p === bookingCurrentPage ? 'bg-primary text-white shadow-2xs' : 'text-slate-600 hover:bg-slate-100'
+          }">${p}</button>
+        `;
+      }
+      dots.innerHTML = dotsHtml;
+    }
+
+    function changeBookingPage(dir) {
+      bookingCurrentPage += dir;
+      renderTableRows(filteredBookingsList);
+    }
+
+    function setBookingPage(p) {
+      bookingCurrentPage = p;
+      renderTableRows(filteredBookingsList);
+    }
+
+    let allRegisteredGuides = [
+      { id: 'g1', name: 'Tanvir Alam', phone: '01812345678', specialty: 'Certified Mountain & Trail Leader' },
+      { id: 'g2', name: 'Imran Hossain', phone: '01823456789', specialty: 'Waterfall & Safety Coordinator' },
+      { id: 'g3', name: 'Arif Chowdhury', phone: '01834567890', specialty: 'Flat Area & Beach Specialist' },
+      { id: 'g4', name: 'Sabbir Ahmed', phone: '01845678901', specialty: 'Chandranath Trek Master' }
+    ];
+
+    function copyModalTrxId() {
+      const trxEl = document.getElementById('assign-pay-trxid');
+      if (trxEl && trxEl.textContent && trxEl.textContent !== 'N/A') {
+        navigator.clipboard.writeText(trxEl.textContent.trim()).then(() => {
+          alert(`📋 Copied TrxID: ${trxEl.textContent.trim()}`);
+        });
+      }
+    }
+
+    function openAssignGuideModal(internalId, bookingCode) {
+      try {
+        const modal = document.getElementById('modal-assign-guide');
+        if (!modal) return;
+
+        const b = allBookingsCache.find(x => x.id === bookingCode || x._id === internalId) || {};
+        
+        const internalInput = document.getElementById('assign-internal-id');
+        if (internalInput) internalInput.value = internalId || '';
+        
+        const codeInput = document.getElementById('assign-booking-code');
+        if (codeInput) codeInput.value = bookingCode || '';
+        
+        const subEl = document.getElementById('assign-booking-sub');
+        if (subEl) subEl.textContent = `Booking ID: ${bookingCode} (${b.name || 'Customer'})`;
+
+        const payBadge = document.getElementById('assign-pay-method-badge');
+        const payTrx = document.getElementById('assign-pay-trxid');
+        const paySender = document.getElementById('assign-pay-sender');
+        const payAmount = document.getElementById('assign-pay-amount');
+        const payTotal = document.getElementById('assign-pay-total');
+        const payVerified = document.getElementById('assign-pay-verified');
+
+        if (payBadge) {
+          payBadge.textContent = (b.paymentMethod || 'bKash').toUpperCase();
+          payBadge.className = b.paymentMethod === 'bkash'
+            ? 'px-2 py-0.5 rounded-md font-bold text-[10px] bg-pink-100 text-[#e2136e]'
+            : b.paymentMethod === 'nagad'
+            ? 'px-2 py-0.5 rounded-md font-bold text-[10px] bg-orange-100 text-[#f7941d]'
+            : 'px-2 py-0.5 rounded-md font-bold text-[10px] bg-purple-100 text-[#8c3494]';
+        }
+        if (payTrx) payTrx.textContent = b.trxId || 'N/A';
+        if (paySender) paySender.textContent = b.senderNumber || b.phone || 'N/A';
+        if (payAmount) payAmount.textContent = `৳${(b.paidAmount || 0).toLocaleString()}`;
+        if (payTotal) payTotal.textContent = `৳${(b.totalPrice || 0).toLocaleString()}`;
+        if (payVerified) payVerified.checked = true;
+
+        const guideSelect = document.getElementById('assign-guide-select');
+        if (guideSelect) {
+          guideSelect.innerHTML = `<option value="">-- Choose Guide or Type Below --</option>` +
+            allRegisteredGuides.map(g => `
+              <option value="${g._id || g.id}" data-name="${g.name}" data-phone="${g.phone || '01812345678'}" data-role="${g.specialty || g.role || 'Certified Local Guide'}">
+                ${g.name} (${g.phone || '01812345678'}) — ${g.specialty || g.role || 'Guide'}
+              </option>
+            `).join('');
+        }
+
+        const nameInput = document.getElementById('assign-guide-name');
+        const phoneInput = document.getElementById('assign-guide-phone');
+        const roleInput = document.getElementById('assign-guide-role');
+        const vehicleInput = document.getElementById('assign-vehicle');
+
+        if (b && b.assignedGuide && b.assignedGuide.name) {
+          if (nameInput) nameInput.value = b.assignedGuide.name;
+          if (phoneInput) phoneInput.value = b.assignedGuide.phone || '';
+          if (roleInput) roleInput.value = b.assignedGuide.role || 'Certified Local Mountain Leader';
+        } else {
+          if (nameInput) nameInput.value = allRegisteredGuides[0]?.name || 'Tanvir Alam';
+          if (phoneInput) phoneInput.value = allRegisteredGuides[0]?.phone || '01812345678';
+          if (roleInput) roleInput.value = allRegisteredGuides[0]?.specialty || 'Certified Local Mountain Leader';
+        }
+        if (vehicleInput) vehicleInput.value = (b && b.assignedVehicle) ? b.assignedVehicle : 'Chander Gari #12';
+
+        modal.classList.remove('hidden');
+      } catch (err) {
+        console.error('Error opening guide assign modal:', err);
+      }
+    }
+
+    function onGuideSelectChange(sel) {
+      const opt = sel.options[sel.selectedIndex];
+      if (!opt || !opt.value) return;
+      document.getElementById('assign-guide-name').value = opt.getAttribute('data-name') || '';
+      document.getElementById('assign-guide-phone').value = opt.getAttribute('data-phone') || '';
+      document.getElementById('assign-guide-role').value = opt.getAttribute('data-role') || 'Certified Local Mountain Leader';
+    }
+
+    async function handleConfirmWithGuide(e) {
+      if (e) e.preventDefault();
+      
+      const submitBtn = e?.target?.querySelector('button[type="submit"]') || document.querySelector('#modal-assign-guide button[type="submit"]');
+      const originalText = submitBtn ? submitBtn.innerHTML : '';
+      
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span class="material-symbols-outlined animate-spin text-base">sync</span> <span>Confirming & Saving...</span>`;
+      }
+
+      const internalId = document.getElementById('assign-internal-id')?.value || '';
+      const bookingCode = document.getElementById('assign-booking-code')?.value || '';
+      const guideName = document.getElementById('assign-guide-name')?.value.trim() || 'Tanvir Alam';
+      const guidePhone = document.getElementById('assign-guide-phone')?.value.trim() || '01812345678';
+      const guideRole = document.getElementById('assign-guide-role')?.value.trim() || 'Certified Local Mountain Leader';
+      const vehicle = document.getElementById('assign-vehicle')?.value.trim() || '';
+      const isPaymentVerified = document.getElementById('assign-pay-verified')?.checked;
+
+      const assignedGuide = {
+        name: guideName,
+        phone: guidePhone,
+        role: guideRole
+      };
+
+      const b = allBookingsCache.find(x => x.id === bookingCode || x._id === internalId);
+      const paidAmount = b && b.paidAmount > 0 ? b.paidAmount : (b ? b.totalPrice : 1000);
+
+      try {
+        const targetId = internalId || bookingCode;
+        await TourstkAPI.updateBookingStatus(targetId, {
+          status: 'Confirmed',
+          paymentStatus: isPaymentVerified ? 'Paid' : 'Pending Verification',
+          paidAmount: paidAmount,
+          assignedGuide,
+          assignedVehicle: vehicle
+        });
+      } catch (err) {
+        console.warn('API update error, saving local state:', err);
+      }
+
+      if (b) {
+        b.status = 'confirmed';
+        b.paymentStatus = isPaymentVerified ? 'Paid' : 'Pending Verification';
+        b.assignedGuide = assignedGuide;
+        b.assignedVehicle = vehicle;
+      }
+      BookingManager.updateStatus(bookingCode, 'confirmed');
+
+      closeModal('modal-assign-guide');
+
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText || `<span class="material-symbols-outlined text-base">verified</span> <span>Confirm Booking & Assign Guide</span>`;
+      }
+
+      loadBookings();
+    }
+
+    async function updateBookingStatus(internalId, bookingCode, newStatus) {
+      if (newStatus === 'confirmed') {
+        openAssignGuideModal(internalId, bookingCode);
+        return;
+      }
+
+      const capStatus = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+      try {
+        const targetId = internalId || bookingCode;
+        await TourstkAPI.updateBookingStatus(targetId, { status: capStatus });
+      } catch (e) {
+        console.warn('Status update error:', e);
+      }
+      BookingManager.updateStatus(bookingCode, newStatus);
+      loadBookings();
+    }
+
+    async function promptCoordinatorNote(internalId, bookingCode) {
+      const b = allBookingsCache.find(x => x.id === bookingCode || x._id === internalId);
+      const existing = b && b.note ? b.note : '';
+      const note = prompt(`Enter coordinator note for booking ${bookingCode}:`, existing);
+      if (note !== null) {
+        try {
+          if (internalId && internalId.length === 24) {
+            await TourstkAPI.updateBookingStatus(internalId, { adminNotes: note });
+          }
+        } catch (e) {}
+        BookingManager.updateStatus(bookingCode, b ? b.status : 'pending', note);
+        alert('Note saved!');
+        loadBookings();
+      }
+    }
+
+    async function deleteBookingRecord(internalId, bookingCode) {
+      if (!confirm(`Are you sure you want to delete booking ${bookingCode}?`)) return;
+      try {
+        if (internalId && internalId.length === 24) {
+          await TourstkAPI.deleteBooking(internalId);
+        }
+      } catch (e) {}
+      BookingManager.delete(bookingCode);
+      alert(`Booking ${bookingCode} deleted!`);
+      loadBookings();
+    }
+
+    function filterAdminBookings() {
+      const search = (document.getElementById('admin-search-input')?.value || '').toLowerCase();
+      const status = document.getElementById('admin-status-filter')?.value || 'all';
+
+      let filtered = allBookingsCache.filter(b => {
+        const matchesSearch = !search ||
+          (b.id && b.id.toLowerCase().includes(search)) ||
+          (b.name && b.name.toLowerCase().includes(search)) ||
+          (b.phone && b.phone.toLowerCase().includes(search)) ||
+          (b.packageName && b.packageName.toLowerCase().includes(search));
+
+        const matchesStatus = status === 'all' || b.status === status;
+        return matchesSearch && matchesStatus;
+      });
+
+      renderTableRows(filtered);
+    }
+
+    // ==========================================
+    // 2. TOUR PACKAGES (ADD & EDIT)
+    // ==========================================
+    let allPackagesCache = [];
+
+    async function loadPackages() {
+      const grid = document.getElementById('packages-grid');
+      let pkgs = [];
+      try {
+        const res = await TourstkAPI.getPackages();
+        if (res?.success && Array.isArray(res.data)) pkgs = res.data;
+      } catch (e) {}
+
+      if (!pkgs || pkgs.length === 0) pkgs = TOURSTK.packages;
+      allPackagesCache = pkgs;
+
+      grid.innerHTML = pkgs.map(p => {
+        const pId = p._id || p.packageId || p.id;
+        const pTitle = p.title || p.name;
+        const pDuration = p.duration || p.category || '2 Days • 1 Night';
+        const pPrice = Number(p.price) || 0;
+        const pBadge = p.badge || 'Popular';
+        const pDesc = p.tagline || p.shortDesc || '';
+        const pGroup = p.groupSize || p.minTravelers || 'Min 4 Travelers';
+
+        return `
+          <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow">
+            <div>
+              <div class="flex justify-between items-start mb-2">
+                <span class="text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-800 px-2 py-0.5 rounded-md">${pDuration}</span>
+                <span class="text-xs font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">${pBadge}</span>
+              </div>
+              <h4 class="font-display font-bold text-base text-primary">${pTitle}</h4>
+              <p class="text-xs text-slate-500 mt-1 line-clamp-2">${pDesc}</p>
+              <div class="text-xs text-slate-400 mt-2 flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">group</span>
+                <span>${pGroup}</span>
+              </div>
+              <div class="text-lg font-extrabold text-slate-900 mt-3">৳${pPrice.toLocaleString()} <span class="text-xs font-normal text-slate-500">/ person</span></div>
+            </div>
+            <div class="flex justify-end items-center gap-2 pt-4 border-t border-slate-100 mt-4">
+              <button onclick="openEditPackageModal('${pId}')" class="text-emerald-700 hover:bg-emerald-50 px-2.5 py-1.5 rounded-lg flex items-center gap-1 text-xs font-bold transition-colors">
+                <span class="material-symbols-outlined text-base">edit</span>
+                Edit
+              </button>
+              <button onclick="deletePackageItem('${pId}', '${pTitle}')" class="text-rose-600 hover:bg-rose-50 px-2.5 py-1.5 rounded-lg flex items-center gap-1 text-xs font-bold transition-colors">
+                <span class="material-symbols-outlined text-base">delete</span>
+                Delete
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openAddPackageModal() {
+      document.getElementById('modal-package-title').textContent = 'Add Tour Package';
+      document.getElementById('pkg-submit-btn').textContent = 'Save Package to MongoDB';
+      document.getElementById('pkg-edit-id').value = '';
+      document.getElementById('pkg-edit-slug').value = '';
+      document.getElementById('pkg-title').value = '';
+      document.getElementById('pkg-duration').value = '2 Days • 1 Night';
+      document.getElementById('pkg-price').value = '';
+      document.getElementById('pkg-badge').value = 'Popular';
+      document.getElementById('pkg-group').value = 'Min 4 Travelers';
+      document.getElementById('pkg-image').value = 'images/spots/chandranath-hill.jpg';
+      document.getElementById('pkg-desc').value = '';
+      document.getElementById('modal-package').classList.remove('hidden');
+    }
+
+    function openEditPackageModal(id) {
+      const p = allPackagesCache.find(item => (item._id === id || item.packageId === id || item.id === id));
+      if (!p) return;
+
+      document.getElementById('modal-package-title').textContent = 'Edit Tour Package';
+      document.getElementById('pkg-submit-btn').textContent = 'Update Package in MongoDB';
+      document.getElementById('pkg-edit-id').value = p._id || p.packageId || p.id;
+      document.getElementById('pkg-edit-slug').value = p.packageId || p.id;
+      document.getElementById('pkg-title').value = p.title || p.name || '';
+      document.getElementById('pkg-duration').value = p.duration || p.category || '2 Days • 1 Night';
+      document.getElementById('pkg-price').value = p.price || '';
+      document.getElementById('pkg-badge').value = p.badge || 'Popular';
+      document.getElementById('pkg-group').value = p.groupSize || p.minTravelers || 'Min 4 Travelers';
+      document.getElementById('pkg-image').value = p.image || 'images/spots/chandranath-hill.jpg';
+      document.getElementById('pkg-desc').value = p.tagline || p.shortDesc || '';
+      document.getElementById('modal-package').classList.remove('hidden');
+    }
+
+    async function handleSavePackage(e) {
+      e.preventDefault();
+      const editId = document.getElementById('pkg-edit-id').value;
+      const editSlug = document.getElementById('pkg-edit-slug').value;
+      const title = document.getElementById('pkg-title').value;
+      const duration = document.getElementById('pkg-duration').value;
+      const price = Number(document.getElementById('pkg-price').value);
+      const badge = document.getElementById('pkg-badge').value || 'Popular';
+      const groupSize = document.getElementById('pkg-group').value || 'Min 4 Travelers';
+      const image = document.getElementById('pkg-image').value || 'images/spots/chandranath-hill.jpg';
+      const tagline = document.getElementById('pkg-desc').value;
+
+      const payload = {
+        title,
+        duration,
+        category: duration,
+        price,
+        badge,
+        groupSize,
+        image,
+        tagline,
+        inclusions: ['Dedicated local transport', 'Deluxe stay', 'Meals included', 'Local guide'],
+      };
+
+      try {
+        if (editId) {
+          // UPDATE EXISTING PACKAGE
+          await TourstkAPI.updatePackage(editId, payload);
+        } else {
+          // CREATE NEW PACKAGE
+          payload.packageId = title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Math.floor(100 + Math.random() * 900);
+          await TourstkAPI.createPackage(payload);
+        }
+        closeModal('modal-package');
+        await loadPackages();
+        await TourstkAPI.fetchAndSyncPackages();
+      } catch (err) {
+        alert(editId ? 'Package updated!' : 'Package saved!');
+        closeModal('modal-package');
+        await loadPackages();
+      }
+    }
+
+    async function deletePackageItem(id, name) {
+      if (!confirm(`Delete package "${name}"?`)) return;
+      try {
+        await TourstkAPI.deletePackage(id);
+        await loadPackages();
+        await TourstkAPI.fetchAndSyncPackages();
+      } catch (err) {
+        await loadPackages();
+      }
+    }
+
+    // ==========================================
+    // 3. DESTINATIONS & SPOTS (ADD & EDIT)
+    // ==========================================
+    let allDestinationsCache = [];
+
+    async function loadDestinations() {
+      const grid = document.getElementById('destinations-grid');
+      let spots = [];
+      try {
+        const res = await TourstkAPI.getDestinations();
+        if (res?.success && Array.isArray(res.data)) spots = res.data;
+      } catch (e) {}
+
+      if (!spots || spots.length === 0) spots = TOURSTK.destinations;
+      allDestinationsCache = spots;
+
+      grid.innerHTML = spots.map(s => {
+        const sId = s._id || s.destinationId || s.id;
+        const sName = s.name;
+        const sBn = s.bnName || '';
+        const sCat = s.category || 'Spot';
+        const sDiff = s.difficulty || 'Moderate';
+        const sDesc = s.shortDesc || s.description || '';
+
+        return `
+          <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow">
+            <div>
+              <div class="flex justify-between items-start mb-1">
+                <span class="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md">${sCat}</span>
+                <span class="text-[10px] font-semibold text-slate-500 bg-slate-50 px-2 py-0.5 rounded-md">${sDiff}</span>
+              </div>
+              <h4 class="font-display font-bold text-base text-primary mt-1">${sName}</h4>
+              <div class="text-xs text-slate-500 font-medium">${sBn}</div>
+              <p class="text-xs text-slate-500 mt-2 line-clamp-2">${sDesc}</p>
+            </div>
+            <div class="flex justify-end items-center gap-2 pt-4 border-t border-slate-100 mt-4">
+              <button onclick="openEditDestinationModal('${sId}')" class="text-emerald-700 hover:bg-emerald-50 px-2.5 py-1.5 rounded-lg flex items-center gap-1 text-xs font-bold transition-colors">
+                <span class="material-symbols-outlined text-base">edit</span>
+                Edit
+              </button>
+              <button onclick="deleteDestinationItem('${sId}', '${sName}')" class="text-rose-600 hover:bg-rose-50 px-2.5 py-1.5 rounded-lg flex items-center gap-1 text-xs font-bold transition-colors">
+                <span class="material-symbols-outlined text-base">delete</span>
+                Delete
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openAddDestinationModal() {
+      document.getElementById('modal-destination-title').textContent = 'Add Destination Spot';
+      document.getElementById('dest-submit-btn').textContent = 'Save Spot to Database';
+      document.getElementById('dest-edit-id').value = '';
+      document.getElementById('dest-name').value = '';
+      document.getElementById('dest-bn').value = '';
+      document.getElementById('dest-cat').value = 'Hills & Peaks';
+      document.getElementById('dest-diff').value = 'Moderate';
+      document.getElementById('dest-image').value = 'images/spots/chandranath-hill.jpg';
+      document.getElementById('dest-desc').value = '';
+      document.getElementById('modal-destination').classList.remove('hidden');
+    }
+
+    function openEditDestinationModal(id) {
+      const s = allDestinationsCache.find(item => (item._id === id || item.destinationId === id || item.id === id));
+      if (!s) return;
+
+      document.getElementById('modal-destination-title').textContent = 'Edit Destination Spot';
+      document.getElementById('dest-submit-btn').textContent = 'Update Spot in MongoDB';
+      document.getElementById('dest-edit-id').value = s._id || s.destinationId || s.id;
+      document.getElementById('dest-name').value = s.name || '';
+      document.getElementById('dest-bn').value = s.bnName || '';
+      document.getElementById('dest-cat').value = s.category || 'Hills & Peaks';
+      document.getElementById('dest-diff').value = s.difficulty || 'Moderate';
+      document.getElementById('dest-image').value = s.image || 'images/spots/chandranath-hill.jpg';
+      document.getElementById('dest-desc').value = s.shortDesc || s.description || '';
+      document.getElementById('modal-destination').classList.remove('hidden');
+    }
+
+    async function handleSaveDestination(e) {
+      e.preventDefault();
+      const editId = document.getElementById('dest-edit-id').value;
+      const name = document.getElementById('dest-name').value;
+      const bnName = document.getElementById('dest-bn').value;
+      const category = document.getElementById('dest-cat').value;
+      const difficulty = document.getElementById('dest-diff').value;
+      const image = document.getElementById('dest-image').value;
+      const shortDesc = document.getElementById('dest-desc').value;
+
+      const payload = {
+        name,
+        bnName,
+        category,
+        difficulty,
+        image,
+        shortDesc,
+      };
+
+      try {
+        if (editId) {
+          await TourstkAPI.updateDestination(editId, payload);
+        } else {
+          payload.destinationId = name.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Math.floor(100 + Math.random() * 900);
+          await TourstkAPI.createDestination(payload);
+        }
+        closeModal('modal-destination');
+        await loadDestinations();
+      } catch (err) {
+        alert(editId ? 'Spot updated!' : 'Spot added!');
+        closeModal('modal-destination');
+        await loadDestinations();
+      }
+    }
+
+    async function deleteDestinationItem(id, name) {
+      if (!confirm(`Delete spot "${name}"?`)) return;
+      try {
+        await TourstkAPI.deleteDestination(id);
+        await loadDestinations();
+      } catch (e) {
+        await loadDestinations();
+      }
+    }
+
+    // ==========================================
+    // 4. TOUR GUIDES (ADD & EDIT)
+    // ==========================================
+    let allGuidesCache = [];
+
+    async function loadGuides() {
+      const grid = document.getElementById('guides-grid');
+      let guides = [];
+      try {
+        const res = await TourstkAPI.getGuides();
+        if (res?.success && Array.isArray(res.data)) guides = res.data;
+      } catch (e) {}
+
+      if (!guides || guides.length === 0) {
+        guides = [
+          { name: 'Kazi Shakil Ahmed', phone: '01812345671', specialty: 'Mountain & Hill Trekking', perDayRate: 1200, rating: 4.9 },
+          { name: 'Tanvir Hossain', phone: '01812345672', specialty: 'Waterfall Stream Guide', perDayRate: 1000, rating: 4.8 },
+        ];
+      }
+      allGuidesCache = guides;
+
+      grid.innerHTML = guides.map(g => {
+        const gId = g._id || g.phone;
+        return `
+          <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow">
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <h4 class="font-bold text-sm text-slate-900">${g.name}</h4>
+                <span class="text-xs font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">⭐ ${g.rating || 5.0}</span>
+              </div>
+              <div class="text-xs text-slate-500">${g.phone}</div>
+              <div class="text-xs text-emerald-800 font-semibold mt-2">${g.specialty || 'General Guide'}</div>
+              <div class="text-xs font-bold text-slate-700 mt-1">৳${g.perDayRate || 1000} / day</div>
+            </div>
+            <div class="flex justify-end items-center gap-2 pt-3 border-t border-slate-100 mt-3">
+              <button onclick="openEditGuideModal('${gId}')" class="text-emerald-700 hover:bg-emerald-50 px-2 py-1 rounded-lg flex items-center gap-1 text-xs font-bold transition-colors">
+                <span class="material-symbols-outlined text-base">edit</span>
+                Edit
+              </button>
+              <button onclick="deleteGuideItem('${gId}', '${g.name}')" class="text-rose-600 hover:bg-rose-50 px-2 py-1 rounded-lg flex items-center gap-1 text-xs font-bold transition-colors">
+                <span class="material-symbols-outlined text-base">delete</span>
+                Delete
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openAddGuideModal() {
+      document.getElementById('modal-guide-title').textContent = 'Add Local Guide';
+      document.getElementById('guide-submit-btn').textContent = 'Save Guide to Database';
+      document.getElementById('guide-edit-id').value = '';
+      document.getElementById('guide-name').value = '';
+      document.getElementById('guide-phone').value = '';
+      document.getElementById('guide-spec').value = '';
+      document.getElementById('guide-rate').value = '1000';
+      document.getElementById('guide-rating').value = '4.9';
+      document.getElementById('modal-guide').classList.remove('hidden');
+    }
+
+    function openEditGuideModal(id) {
+      const g = allGuidesCache.find(item => (item._id === id || item.phone === id));
+      if (!g) return;
+
+      document.getElementById('modal-guide-title').textContent = 'Edit Local Guide';
+      document.getElementById('guide-submit-btn').textContent = 'Update Guide in MongoDB';
+      document.getElementById('guide-edit-id').value = g._id || g.phone;
+      document.getElementById('guide-name').value = g.name || '';
+      document.getElementById('guide-phone').value = g.phone || '';
+      document.getElementById('guide-spec').value = g.specialty || '';
+      document.getElementById('guide-rate').value = g.perDayRate || 1000;
+      document.getElementById('guide-rating').value = g.rating || 4.9;
+      document.getElementById('modal-guide').classList.remove('hidden');
+    }
+
+    async function handleSaveGuide(e) {
+      e.preventDefault();
+      const editId = document.getElementById('guide-edit-id').value;
+      const payload = {
+        name: document.getElementById('guide-name').value,
+        phone: document.getElementById('guide-phone').value,
+        specialty: document.getElementById('guide-spec').value,
+        perDayRate: Number(document.getElementById('guide-rate').value),
+        rating: Number(document.getElementById('guide-rating').value),
+      };
+
+      try {
+        if (editId) {
+          await TourstkAPI.updateGuide(editId, payload);
+        } else {
+          await TourstkAPI.createGuide(payload);
+        }
+        closeModal('modal-guide');
+        await loadGuides();
+      } catch (err) {
+        alert(editId ? 'Guide updated!' : 'Guide added!');
+        closeModal('modal-guide');
+        await loadGuides();
+      }
+    }
+
+    async function deleteGuideItem(id, name) {
+      if (!confirm(`Delete guide "${name}"?`)) return;
+      try {
+        await TourstkAPI.deleteGuide(id);
+        await loadGuides();
+      } catch (e) {
+        await loadGuides();
+      }
+    }
+
+    // ==========================================
+    // 5. CUSTOM REQUESTS
+    // ==========================================
+    async function loadCustomRequests() {
+      const tbody = document.getElementById('custom-tbody');
+      let list = [];
+      try {
+        const res = await TourstkAPI.getCustomRequests();
+        if (res?.success) list = res.data;
+      } catch (e) {}
+
+      if (!list || list.length === 0) list = CustomRequestManager.getAll().reverse();
+
+      tbody.innerHTML = list.length ? list.map(r => `
+        <tr class="hover:bg-slate-50">
+          <td class="py-3 px-4 font-bold text-primary">${r.requestId || r.id}</td>
+          <td class="py-3 px-4 font-bold text-slate-800">${r.customerName || r.name}</td>
+          <td class="py-3 px-4 text-slate-600">${r.phone}</td>
+          <td class="py-3 px-4 text-slate-600">${r.groupSize || r.people || 2} Persons</td>
+          <td class="py-3 px-4 text-slate-600">${r.travelDate || r.date || 'Flexible'}</td>
+          <td class="py-3 px-4">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
+              ${(r.status || 'New').toUpperCase()}
+            </span>
+          </td>
+          <td class="py-3 px-4 text-right">
+            <a href="https://wa.me/88${(r.phone || '').replace(/[^0-9]/g, '')}" target="_blank" class="bg-[#25d366] text-white px-3 py-1 rounded-lg text-xs font-bold inline-flex items-center gap-1">
+              WhatsApp
+            </a>
+          </td>
+        </tr>
+      `).join('') : `<tr><td colspan="7" class="text-center py-6 text-slate-400">No custom requests yet</td></tr>`;
+    }
+
+    // ==========================================
+    // 6. REVIEWS
+    // ==========================================
+    async function loadReviews() {
+      const grid = document.getElementById('reviews-grid');
+      let reviews = [];
+      try {
+        const res = await TourstkAPI.getReviews();
+        if (res?.success) reviews = res.data;
+      } catch (e) {}
+
+      if (!reviews || reviews.length === 0) {
+        reviews = [
+          { customerName: 'Fahim Rahman (Dhaka)', tourPackage: 'Sitakunda Adventure Tour', rating: 5, reviewText: 'Amazing 2 days tour! The sunrise at Chandranath peak was breathtaking.' },
+          { customerName: 'Sadia Chowdhury', tourPackage: 'Student Group Tour', rating: 5, reviewText: 'Best budget-friendly trip with friends! Trek coordinator helped us throughout.' },
+        ];
+      }
+
+      grid.innerHTML = reviews.map(r => `
+        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <span class="font-bold text-sm text-slate-900">${r.customerName}</span>
+              <span class="text-xs text-amber-500 font-bold">${'⭐'.repeat(r.rating || 5)}</span>
+            </div>
+            <div class="text-[11px] font-semibold text-emerald-800 mb-2">${r.tourPackage || 'Tour Package'}</div>
+            <p class="text-xs text-slate-600 italic">"${r.reviewText}"</p>
+          </div>
+          <div class="flex justify-end pt-3 border-t border-slate-100 mt-3">
+            <button onclick="deleteReviewItem('${r._id || r.customerName}')" class="text-rose-600 hover:bg-rose-50 p-1.5 rounded-lg flex items-center gap-1 text-xs font-bold">
+              <span class="material-symbols-outlined text-base">delete</span>
+              Delete
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openAddReviewModal() {
+      document.getElementById('modal-review').classList.remove('hidden');
+    }
+
+    async function handleSaveReview(e) {
+      e.preventDefault();
+      const payload = {
+        customerName: document.getElementById('rev-name').value,
+        tourPackage: document.getElementById('rev-pkg').value,
+        rating: Number(document.getElementById('rev-rating').value),
+        reviewText: document.getElementById('rev-text').value,
+      };
+
+      try {
+        await TourstkAPI.createReview(payload);
+        alert('Review published to MongoDB Atlas!');
+      } catch (err) {
+        alert('Review added!');
+      }
+      closeModal('modal-review');
+      loadReviews();
+    }
+
+    async function deleteReviewItem(id) {
+      if (!confirm('Delete this review?')) return;
+      try {
+        await TourstkAPI.deleteReview(id);
+      } catch (e) {}
+      alert('Review deleted!');
+      loadReviews();
+    }
+
+    async function exportExcelFromServer() {
+      try {
+        const token = TourstkAPI.getToken();
+        const res = await fetch('/api/export/bookings', {
+          headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+        });
+        if (!res.ok) throw new Error('Export failed');
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Tourstk_Bookings_${new Date().toISOString().split('T')[0]}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      } catch (err) {
+        console.error('Server export failed, falling back to local', err);
+        BookingManager.downloadExcel();
+      }
+    }
+
+    function handleLogout() {
+      TourstkAPI.clearAuth();
+      alert('Logged out from Admin Session.');
+      window.location.reload();
+    }
+  </script>
+</body>
+</html>

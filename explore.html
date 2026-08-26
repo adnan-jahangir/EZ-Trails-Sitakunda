@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Explore Sitakunda — 12 Iconic Destinations | EZ Trails Sitakunda</title>
+  <meta name="description" content="Discover all 12 iconic tourist spots in Sitakunda. From Chandranath Hill and Guliakhali Beach to Khaiyachora Waterfall and Mohamaya Lake.">
+  <meta name="theme-color" content="#0e4d34">
+
+  <!-- OpenGraph / Facebook / WhatsApp Rich Link Preview -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tourstk.com/explore.html">
+  <meta property="og:title" content="Explore Sitakunda — 12 Iconic Destinations & Trails">
+  <meta property="og:description" content="From misty mountain summits to tidal grass beaches and 9-tier waterfalls. Find complete guide & safety tips.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&h=630&q=85">
+  <meta property="og:site_name" content="EZ Trails Sitakunda (Tourstk)">
+
+  <!-- Tailwind CSS & Google Fonts -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#0e4d34",
+            "primary-dark": "#073824",
+            "primary-light": "#10b981",
+            "primary-surface": "#ecfdf5",
+            "on-surface": "#0f172a",
+            "muted": "#64748b"
+          },
+          fontFamily: {
+            "sans": ["Plus Jakarta Sans", "system-ui", "-apple-system", "sans-serif"],
+            "display": ["Playfair Display", "Georgia", "serif"]
+          },
+          maxWidth: {
+            "container-max": "1280px"
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body class="bg-white text-slate-900 font-sans antialiased selection:bg-emerald-100 selection:text-emerald-900 min-h-screen flex flex-col justify-between">
+
+  <!-- UNIFIED NAVBAR -->
+  <nav class="w-full bg-white border-b border-slate-100 sticky top-0 z-50">
+    <div class="max-w-container-max mx-auto px-4 sm:px-6 md:px-10 h-16 sm:h-20 flex justify-between items-center">
+      <!-- Logo Lockup (EZ Trails + Subtitle Sitakunda) -->
+      <a href="index.html" class="flex items-center gap-2 text-primary flex-shrink-0 group">
+        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-50 text-primary flex items-center justify-center border border-emerald-100 shadow-2xs group-hover:scale-105 transition-transform flex-shrink-0">
+          <svg class="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m8 3 4 8 5-5 5 15H2L8 3z"/>
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-display font-extrabold text-base sm:text-lg text-primary leading-none tracking-tight">EZ Trails</span>
+          <span class="text-[10.5px] sm:text-[11.5px] font-bold tracking-wider text-emerald-700 uppercase leading-none mt-1">Sitakunda</span>
+        </div>
+      </a>
+
+      <!-- Center Links -->
+      <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
+        <a href="index.html" class="hover:text-primary transition-colors">Home</a>
+        <a href="packages.html" class="hover:text-primary transition-colors">Packages</a>
+        <a href="explore.html" class="text-primary font-bold border-b-2 border-primary pb-1">Explore</a>
+        <a href="my-booking.html" class="hover:text-primary transition-colors">My Booking</a>
+      </div>
+
+      <!-- Right Action Button & Weather Pill -->
+      <div class="flex items-center gap-2">
+        <div id="sitakunda-weather-pill" class="hidden lg:block"></div>
+        <a href="planner.html" class="flex bg-primary hover:bg-primary-dark text-white font-bold text-[11px] sm:text-xs md:text-sm px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full shadow-xs transition-all items-center gap-1 flex-shrink-0">
+          <span class="material-symbols-outlined text-sm sm:text-base">explore</span>
+          <span>Plan Trip</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <header class="max-w-container-max mx-auto px-6 md:px-10 pt-12 pb-6 text-center">
+    <span class="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-emerald-50 text-primary text-xs font-bold uppercase tracking-wider mb-3">
+      <span class="material-symbols-outlined text-sm">explore</span>
+      Complete Sitakunda Travel Directory
+    </span>
+    <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4 font-display">
+      Explore Sitakunda's Hidden Gems
+    </h1>
+    <p class="text-base md:text-lg text-slate-500 max-w-2xl mx-auto leading-relaxed">
+      From misty mountain peaks and 9-tier forest waterfalls to tidal green grass beaches and serene hill lakes.
+    </p>
+
+    <!-- SEARCH & FILTER BAR -->
+    <div class="mt-10 max-w-4xl mx-auto flex flex-col gap-6">
+      
+      <!-- Search Input -->
+      <div class="relative w-full max-w-xl mx-auto">
+        <span class="material-symbols-outlined absolute left-4 top-3.5 text-slate-400">search</span>
+        <input type="text" id="spot-search" oninput="filterDestinations()" placeholder="Search places (e.g. Chandranath, Guliakhali, Waterfall, Kayaking)..." class="w-full bg-slate-50 border border-slate-200 rounded-full pl-12 pr-4 py-3 text-sm focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary shadow-xs">
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="flex flex-wrap gap-2.5 justify-center" id="category-pills">
+        <button type="button" class="cat-pill active px-4 py-2 rounded-full text-xs font-bold bg-primary text-white shadow-xs transition-all" data-cat="all" onclick="selectCategory(this)">
+          All Destinations (12)
+        </button>
+        <button type="button" class="cat-pill px-4 py-2 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-cat="Hills & Peaks" onclick="selectCategory(this)">
+          ⛰️ Hills & Peaks
+        </button>
+        <button type="button" class="cat-pill px-4 py-2 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-cat="Waterfalls & Treks" onclick="selectCategory(this)">
+          🌊 Waterfalls & Treks
+        </button>
+        <button type="button" class="cat-pill px-4 py-2 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-cat="Beaches & Coastlines" onclick="selectCategory(this)">
+          🏖️ Beaches & Coastlines
+        </button>
+        <button type="button" class="cat-pill px-4 py-2 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-cat="Lakes & Kayaking" onclick="selectCategory(this)">
+          🛶 Lakes & Kayaking
+        </button>
+        <button type="button" class="cat-pill px-4 py-2 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-cat="Heritage & Springs" onclick="selectCategory(this)">
+          🏛️ Heritage & Springs
+        </button>
+      </div>
+
+    </div>
+    <hr class="border-slate-200 mt-10">
+  </header>
+
+  <!-- MAIN SPOTS GRID -->
+  <main class="max-w-container-max mx-auto px-6 md:px-10 py-10 flex-grow">
+    
+    <div class="flex justify-between items-center mb-8">
+      <div class="text-sm font-semibold text-slate-600">
+        Showing <strong class="text-slate-900" id="spots-count">12</strong> destinations in Sitakunda
+      </div>
+      <a href="packages.html" class="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+        <span>View All Tour Packages</span>
+        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+      </a>
+    </div>
+
+    <!-- Grid Container -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="destinations-grid">
+      <!-- Dynamically generated via JS -->
+    </div>
+
+  </main>
+
+  <!-- CALL TO ACTION BANNER -->
+  <section class="bg-primary text-white py-16 text-center">
+    <div class="max-w-2xl mx-auto px-6">
+      <h2 class="font-display text-3xl md:text-4xl font-bold mb-3">Want to Visit These Places?</h2>
+      <p class="text-emerald-100/90 text-sm md:text-base mb-8">
+        Tourstk organizes all-inclusive day and weekend trips with dedicated vehicles, certified local guides, and authentic meals.
+      </p>
+      <div class="flex items-center justify-center gap-4 flex-wrap">
+        <a href="packages.html" class="bg-emerald-400 text-primary hover:bg-emerald-300 font-bold px-8 py-3.5 rounded-full transition-all text-sm shadow-md">
+          Browse Tour Packages
+        </a>
+        <a href="planner.html" class="bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-3.5 rounded-full backdrop-blur-md border border-white/30 transition-all text-sm">
+          Plan Custom Group Tour
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-slate-100 py-12 text-center text-xs text-slate-500">
+    <div class="max-w-container-max mx-auto px-6">
+      © 2026 Tourstk (EZ Trails Sitakunda) • Email: <a href="mailto:eztrailsbd@gmail.com" class="font-bold text-emerald-800 hover:underline">eztrailsbd@gmail.com</a> • Hotline: <a href="tel:+8801812345678" class="font-bold text-slate-700 hover:underline">+880 1812-345678</a>
+    </div>
+  </footer>
+
+  <!-- COMPACT FLOATING QUICK ACTION DOCK (Call + Facebook + WhatsApp) -->
+  <div class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col gap-2 items-center">
+    <!-- Call Button -->
+    <a href="tel:+8801812345678" class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-emerald-800 hover:bg-emerald-900 text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Call Hotline: +880 1812-345678">
+      <span class="material-symbols-outlined text-lg sm:text-xl">call</span>
+    </a>
+    <!-- Facebook Button -->
+    <a href="https://facebook.com" target="_blank" class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#1877f2] hover:bg-[#166fe5] text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Facebook Page">
+      <svg class="w-4 h-4 sm:w-5 sm:h-5 fill-current" viewBox="0 0 24 24">
+        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+      </svg>
+    </a>
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/8801812345678?text=Hello%20Tourstk,%20I%20want%20to%20plan%20a%20Sitakunda%20trip." target="_blank" class="relative w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#25d366] hover:bg-[#20ba59] text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Chat on WhatsApp">
+      <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-300 rounded-full animate-ping"></span>
+      <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border border-white"></span>
+      <svg class="w-4 h-4 sm:w-5 sm:h-5 fill-white" viewBox="0 0 24 24">
+        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+      </svg>
+    </a>
+  </div>
+
+  <!-- 4K THEATRE / LIGHTBOX MODAL -->
+  <div id="media-lightbox-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden items-center justify-center p-4 sm:p-6 transition-all duration-300">
+    <div class="relative w-full max-w-5xl bg-slate-950 rounded-3xl overflow-hidden border border-white/10 shadow-2xl flex flex-col max-h-[90vh]">
+      
+      <!-- Modal Top Bar -->
+      <div class="p-4 sm:p-5 flex items-center justify-between border-b border-white/10 bg-slate-900/60">
+        <div class="flex items-center gap-3">
+          <span class="w-3 h-3 rounded-full bg-emerald-500 animate-ping"></span>
+          <div>
+            <h3 id="modal-spot-name" class="text-white font-display font-bold text-base sm:text-lg">Spot Media</h3>
+            <p id="modal-spot-subtitle" class="text-xs text-emerald-400 font-medium">4K Cinematic Preview & Photos</p>
+          </div>
+        </div>
+        <button onclick="closeMediaModal()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all cursor-pointer">
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+
+      <!-- Modal Main Media Screen -->
+      <div class="relative flex-grow flex items-center justify-center bg-black min-h-[300px] sm:min-h-[480px] p-2">
+        <img id="modal-active-img" src="" alt="Fullscreen preview" class="max-w-full max-h-[70vh] object-contain rounded-xl">
+        <video id="modal-active-video" class="max-w-full max-h-[70vh] rounded-xl hidden" controls playsinline>
+          <source id="modal-active-video-src" src="" type="video/mp4">
+        </video>
+      </div>
+
+      <!-- Modal Bottom Thumbnail Navigation Strip -->
+      <div class="p-4 bg-slate-900/80 border-t border-white/10 flex items-center justify-center gap-3 overflow-x-auto" id="modal-thumbs-bar">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/weather.js"></script>
+  <script>
+    let activeCategory = 'all';
+    let currentModalGallery = [];
+    let currentModalIndex = 0;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const query = urlParams.get('q');
+      const searchInput = document.getElementById('explore-search') || document.getElementById('spot-search');
+      if (query && searchInput) {
+        searchInput.value = query;
+      }
+      renderExploreGrid();
+    });
+
+    function setExploreCategory(category, btnEl) {
+      activeCategory = category;
+      document.querySelectorAll('.cat-pill').forEach(p => {
+        p.className = 'cat-pill px-5 py-2.5 rounded-full text-xs font-bold bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer';
+      });
+      if (btnEl) {
+        btnEl.className = 'cat-pill px-5 py-2.5 rounded-full text-xs font-bold bg-primary text-white shadow-xs transition-all flex items-center gap-1.5 cursor-pointer';
+      }
+      renderExploreGrid();
+      if (window.TourstkAnimations) setTimeout(window.TourstkAnimations.refresh, 100);
+    }
+
+    function selectCategory(btn) {
+      const cat = btn.getAttribute('data-cat') || 'all';
+      setExploreCategory(cat, btn);
+    }
+
+    function renderExploreGrid() {
+      const container = document.getElementById('destinations-grid');
+      const countEl = document.getElementById('spots-count');
+      if (!container || !TOURSTK.destinations) return;
+
+      const searchInput = (document.getElementById('explore-search')?.value || '').toLowerCase();
+
+      const list = TOURSTK.destinations.filter(d => {
+        const matchesCategory = activeCategory === 'all' || d.category === activeCategory;
+        const matchesSearch = !searchInput || 
+          d.name.toLowerCase().includes(searchInput) || 
+          d.bnName.toLowerCase().includes(searchInput) ||
+          d.shortDesc.toLowerCase().includes(searchInput) ||
+          (d.tags && d.tags.some(t => t.toLowerCase().includes(searchInput)));
+
+        return matchesCategory && matchesSearch;
+      });
+
+      if (countEl) countEl.textContent = list.length;
+
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-16 text-center text-slate-400">
+            <span class="material-symbols-outlined text-4xl mb-2 text-slate-300">location_off</span>
+            <p class="font-bold text-base text-slate-700">No destinations match your search or filter.</p>
+            <p class="text-xs text-slate-500 mt-1">Try searching for waterfalls, beaches, or trails.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = list.map(spot => {
+        const gallery = spot.gallery && spot.gallery.length >= 4 ? spot.gallery : [
+          { type: 'image', src: spot.image, thumb: spot.image, label: 'Main View' },
+          { type: 'image', src: spot.fallbackImage || spot.image, thumb: spot.fallbackImage || spot.image, label: 'Scenic Landscape' },
+          { type: 'image', src: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80', thumb: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=300&q=80', label: 'Valley View' },
+          { type: 'video', src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4', thumb: spot.image, label: '4K Drone Tour' }
+        ];
+
+        // Difficulty Color Pill
+        const diffColor = spot.difficulty && spot.difficulty.includes('Hard') || (spot.difficulty || '').includes('Challenging')
+          ? 'bg-rose-50 text-rose-700 border-rose-200'
+          : (spot.difficulty || '').includes('Moderate')
+          ? 'bg-amber-50 text-amber-700 border-amber-200'
+          : 'bg-emerald-50 text-emerald-700 border-emerald-200';
+
+        const diffDot = spot.difficulty && spot.difficulty.includes('Hard') || (spot.difficulty || '').includes('Challenging')
+          ? 'bg-rose-500'
+          : (spot.difficulty || '').includes('Moderate')
+          ? 'bg-amber-500'
+          : 'bg-emerald-500';
+
+        return `
+          <div class="bg-white rounded-3xl border border-slate-200 p-4 shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1">
+            
+            <!-- TOP MEDIA CONTAINER (Exact Match to User Reference Screenshot + Ultra Explorer Accents) -->
+            <div>
+              <!-- Main Feature Screen -->
+              <div class="relative h-60 sm:h-64 rounded-2xl overflow-hidden bg-slate-950 shadow-inner group/screen" id="main-media-box-${spot.id}">
+                
+                <!-- Duration Badge on Top Left (Matching User Reference) -->
+                <div class="absolute top-3.5 left-3.5 bg-black/65 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1 rounded-lg shadow-md z-10 flex items-center gap-1.5 border border-white/10">
+                  <span class="material-symbols-outlined text-xs text-emerald-400">schedule</span>
+                  <span>${spot.duration || '2 Days • 1 Night'}</span>
+                </div>
+
+                <!-- Top Right Badges: Elevation & Fullscreen 4K Expand -->
+                <div class="absolute top-3.5 right-3.5 z-10 flex items-center gap-2">
+                  <span class="bg-white/90 backdrop-blur-md text-primary font-bold text-[10px] px-2.5 py-1 rounded-md shadow-xs flex items-center gap-1">
+                    <span class="material-symbols-outlined text-xs">terrain</span>
+                    <span>${spot.elevation || spot.category}</span>
+                  </span>
+                  
+                  <button type="button" onclick="openMediaModal('${spot.id}')" title="Open 4K HD Lightbox" class="w-8 h-8 rounded-lg bg-black/60 hover:bg-black/80 backdrop-blur-md text-white flex items-center justify-center transition-all cursor-pointer border border-white/15">
+                    <span class="material-symbols-outlined text-sm">fullscreen</span>
+                  </button>
+                </div>
+
+                <!-- Media Counter Pill at Bottom Right -->
+                <div class="absolute bottom-3 right-3 bg-black/70 backdrop-blur-md text-white text-[10px] font-semibold px-2 py-0.5 rounded-md z-10 flex items-center gap-1 border border-white/10 pointer-events-none">
+                  <span class="material-symbols-outlined text-xs text-amber-300">photo_library</span>
+                  <span>3 Photos + 1 Video</span>
+                </div>
+
+                <!-- Main Active Image -->
+                <img id="main-img-${spot.id}" src="${gallery[0].src}" alt="${spot.name}" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+
+                <!-- Main Active Video (Loaded on Click) -->
+                <video id="main-video-${spot.id}" class="w-full h-full object-cover hidden" controls playsinline>
+                  <source id="main-video-src-${spot.id}" src="" type="video/mp4">
+                </video>
+
+                <!-- Video Floating Play Trigger Overlay (If Video is Active) -->
+                <button id="video-overlay-btn-${spot.id}" onclick="playCurrentCardVideo('${spot.id}')" class="absolute inset-0 bg-black/30 hover:bg-black/20 flex items-center justify-center z-10 hidden transition-all group-hover:scale-105">
+                  <span class="w-14 h-14 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-2xl ring-4 ring-white/40">
+                    <span class="material-symbols-outlined text-3xl ml-0.5">play_arrow</span>
+                  </span>
+                </button>
+              </div>
+
+              <!-- 4-THUMBNAIL STRIP (Matching User Reference Image) -->
+              <div class="grid grid-cols-4 gap-2.5 mt-3" id="thumbs-${spot.id}">
+                ${gallery.slice(0, 4).map((item, idx) => {
+                  if (item.type === 'video') {
+                    return `
+                      <button type="button" onclick="switchCardMedia('${spot.id}', ${idx})" title="${item.label || 'Watch 4K Video'}" class="thumb-item-${spot.id} relative h-14 sm:h-16 rounded-xl overflow-hidden border-2 border-transparent opacity-85 hover:opacity-100 hover:border-emerald-400 transition-all cursor-pointer bg-slate-900 group/vid">
+                        <img src="${item.thumb || spot.image}" alt="Video preview" class="w-full h-full object-cover brightness-75 group-hover/vid:scale-110 transition-transform">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                          <span class="w-6 h-6 rounded-full bg-[#0e4d34] text-white flex items-center justify-center shadow-md">
+                            <span class="material-symbols-outlined text-sm">play_arrow</span>
+                          </span>
+                        </div>
+                        <span class="absolute bottom-1 right-1 bg-black/85 text-[8px] font-extrabold text-emerald-400 px-1 py-0.2 rounded leading-none">4K Reel</span>
+                      </button>
+                    `;
+                  }
+
+                  return `
+                    <button type="button" onclick="switchCardMedia('${spot.id}', ${idx})" title="${item.label || 'View Image'}" class="thumb-item-${spot.id} relative h-14 sm:h-16 rounded-xl overflow-hidden border-2 ${idx === 0 ? 'border-primary ring-2 ring-emerald-400/50' : 'border-transparent opacity-75 hover:opacity-100 hover:border-slate-300'} transition-all cursor-pointer">
+                      <img src="${item.thumb || item.src}" alt="${item.label || spot.name}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                    </button>
+                  `;
+                }).join('')}
+              </div>
+
+              <!-- Spot Header & Bangla Title -->
+              <div class="mt-4">
+                <div class="flex items-center justify-between gap-2 mb-1">
+                  <span class="text-[11px] font-extrabold text-emerald-800 tracking-wide">${spot.bnName || ''}</span>
+                  <span class="text-[11px] font-bold text-slate-700 bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-full flex items-center gap-1 shadow-2xs">
+                    <span class="material-symbols-outlined text-xs text-amber-500">star</span> 4.9 <span class="text-slate-400 font-normal">(120+)</span>
+                  </span>
+                </div>
+                <h3 class="font-display font-bold text-xl text-slate-900 mb-1.5 group-hover:text-primary transition-colors">${spot.name}</h3>
+                <p class="text-xs text-slate-600 leading-relaxed line-clamp-2">${spot.shortDesc}</p>
+                
+                <!-- DISCOVERY METRICS BAR (Difficulty + Best Time) -->
+                <div class="grid grid-cols-2 gap-2 mt-3.5 pt-3 border-t border-slate-100">
+                  <div class="flex items-center gap-1.5 text-[11px] font-semibold text-slate-700 bg-slate-50 p-2 rounded-xl border border-slate-100">
+                    <span class="w-2 h-2 rounded-full ${diffDot}"></span>
+                    <span class="truncate">${spot.difficulty || 'Easy Walk'}</span>
+                  </div>
+
+                  <div class="flex items-center gap-1.5 text-[11px] font-semibold text-slate-700 bg-slate-50 p-2 rounded-xl border border-slate-100">
+                    <span class="material-symbols-outlined text-xs text-amber-500">wb_twilight</span>
+                    <span class="truncate">${spot.bestTime || 'Morning / Sunset'}</span>
+                  </div>
+                </div>
+
+                <!-- KEY THINGS TO EXPERIENCE (Highlights Pills) -->
+                <div class="flex flex-wrap gap-1.5 mt-3">
+                  ${(spot.thingsToDo || spot.tags || []).slice(0, 3).map(act => `
+                    <span class="bg-emerald-50/70 text-emerald-900 text-[10px] font-bold px-2.5 py-1 rounded-lg border border-emerald-200/60 flex items-center gap-1">
+                      <span class="material-symbols-outlined text-[11px] text-emerald-600">check_circle</span>
+                      <span>${act}</span>
+                    </span>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+
+            <!-- Bottom Action Buttons -->
+            <div class="pt-4 border-t border-slate-100 flex items-center justify-between gap-2.5 mt-5">
+              <a href="destination-detail.html?id=${spot.id}" class="flex-1 text-center bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs py-2.5 rounded-xl transition-colors flex items-center justify-center gap-1">
+                <span>View Details</span>
+                <span class="material-symbols-outlined text-xs">arrow_forward</span>
+              </a>
+              <a href="booking.html?spot=${spot.id}" class="flex-1 text-center bg-primary hover:bg-primary-dark text-white font-bold text-xs py-2.5 rounded-xl transition-colors shadow-xs flex items-center justify-center gap-1">
+                <span>Book Trip</span>
+                <span class="material-symbols-outlined text-sm">travel_explore</span>
+              </a>
+            </div>
+
+          </div>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // INTERACTIVE MEDIA SWITCHER (PHOTOS & VIDEOS)
+    // =========================================================================
+    function switchCardMedia(spotId, itemIndex) {
+      const spot = (TOURSTK.destinations || []).find(d => d.id === spotId);
+      if (!spot || !spot.gallery || !spot.gallery[itemIndex]) return;
+
+      const item = spot.gallery[itemIndex];
+      const mainImg = document.getElementById(`main-img-${spotId}`);
+      const mainVideo = document.getElementById(`main-video-${spotId}`);
+      const videoSrc = document.getElementById(`main-video-src-${spotId}`);
+      const overlayBtn = document.getElementById(`video-overlay-btn-${spotId}`);
+
+      // Update thumbnail active ring states
+      document.querySelectorAll(`.thumb-item-${spotId}`).forEach((btn, idx) => {
+        if (idx === itemIndex) {
+          btn.className = btn.className.replace(/border-transparent|opacity-75/g, '') + ' border-primary ring-2 ring-emerald-400/50 opacity-100';
+        } else {
+          btn.className = btn.className.replace(/border-primary|ring-2 ring-emerald-400\/50/g, '') + ' border-transparent opacity-75';
+        }
+      });
+
+      if (item.type === 'video') {
+        if (mainImg) mainImg.classList.add('hidden');
+        if (mainVideo && videoSrc) {
+          videoSrc.src = item.src;
+          mainVideo.load();
+          mainVideo.classList.remove('hidden');
+          mainVideo.play().catch(() => {});
+        }
+        if (overlayBtn) overlayBtn.classList.add('hidden');
+      } else {
+        if (mainVideo) {
+          mainVideo.pause();
+          mainVideo.classList.add('hidden');
+        }
+        if (overlayBtn) overlayBtn.classList.add('hidden');
+        if (mainImg) {
+          mainImg.src = item.src;
+          mainImg.classList.remove('hidden');
+        }
+      }
+    }
+
+    function playCurrentCardVideo(spotId) {
+      const mainVideo = document.getElementById(`main-video-${spotId}`);
+      const overlayBtn = document.getElementById(`video-overlay-btn-${spotId}`);
+      if (mainVideo) {
+        mainVideo.play();
+        if (overlayBtn) overlayBtn.classList.add('hidden');
+      }
+    }
+
+    // =========================================================================
+    // 4K THEATRE & FULLSCREEN LIGHTBOX MODAL
+    // =========================================================================
+    function openMediaModal(spotId, startIndex = 0) {
+      const spot = (TOURSTK.destinations || []).find(d => d.id === spotId);
+      if (!spot) return;
+
+      currentModalGallery = spot.gallery || [
+        { type: 'image', src: spot.image, thumb: spot.image, label: 'Main View' }
+      ];
+      currentModalIndex = startIndex;
+
+      document.getElementById('modal-spot-name').textContent = spot.name;
+      document.getElementById('modal-spot-subtitle').textContent = `${spot.bnName} • ${spot.category}`;
+
+      const thumbsContainer = document.getElementById('modal-thumbs-bar');
+      if (thumbsContainer) {
+        thumbsContainer.innerHTML = currentModalGallery.map((m, idx) => `
+          <button onclick="setModalMedia(${idx})" class="modal-thumb-btn relative w-16 h-12 rounded-lg overflow-hidden border-2 ${idx === startIndex ? 'border-emerald-400 ring-2 ring-emerald-500/40' : 'border-transparent opacity-60 hover:opacity-100'} transition-all cursor-pointer flex-shrink-0">
+            <img src="${m.thumb || m.src}" class="w-full h-full object-cover">
+            ${m.type === 'video' ? `<span class="absolute inset-0 flex items-center justify-center bg-black/40 text-emerald-400 text-xs">▶</span>` : ''}
+          </button>
+        `).join('');
+      }
+
+      setModalMedia(startIndex);
+
+      const modal = document.getElementById('media-lightbox-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function setModalMedia(index) {
+      currentModalIndex = index;
+      const item = currentModalGallery[index];
+      if (!item) return;
+
+      const img = document.getElementById('modal-active-img');
+      const video = document.getElementById('modal-active-video');
+      const videoSrc = document.getElementById('modal-active-video-src');
+
+      // Update active thumbnail borders
+      document.querySelectorAll('.modal-thumb-btn').forEach((btn, idx) => {
+        if (idx === index) {
+          btn.className = 'modal-thumb-btn relative w-16 h-12 rounded-lg overflow-hidden border-2 border-emerald-400 ring-2 ring-emerald-500/40 opacity-100 transition-all cursor-pointer flex-shrink-0';
+        } else {
+          btn.className = 'modal-thumb-btn relative w-16 h-12 rounded-lg overflow-hidden border-2 border-transparent opacity-60 hover:opacity-100 transition-all cursor-pointer flex-shrink-0';
+        }
+      });
+
+      if (item.type === 'video') {
+        img.classList.add('hidden');
+        if (video && videoSrc) {
+          videoSrc.src = item.src;
+          video.load();
+          video.classList.remove('hidden');
+          video.play().catch(() => {});
+        }
+      } else {
+        if (video) {
+          video.pause();
+          video.classList.add('hidden');
+        }
+        img.src = item.src;
+        img.classList.remove('hidden');
+      }
+    }
+
+    function closeMediaModal() {
+      const modal = document.getElementById('media-lightbox-modal');
+      const video = document.getElementById('modal-active-video');
+      if (video) video.pause();
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    // Keyboard support for Lightbox
+    window.addEventListener('keydown', (e) => {
+      const modal = document.getElementById('media-lightbox-modal');
+      if (modal && !modal.classList.contains('hidden')) {
+        if (e.key === 'Escape') closeMediaModal();
+        if (e.key === 'ArrowRight') {
+          const next = (currentModalIndex + 1) % currentModalGallery.length;
+          setModalMedia(next);
+        }
+        if (e.key === 'ArrowLeft') {
+          const prev = (currentModalIndex - 1 + currentModalGallery.length) % currentModalGallery.length;
+          setModalMedia(prev);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

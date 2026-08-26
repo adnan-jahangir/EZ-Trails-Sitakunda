@@ -1,0 +1,106 @@
+/* ============================================================
+   TOURSTK — Modern Bangladeshi Travel Startup Design System
+   Tailored for EZ Trill Sitakunda (Real Startup Aesthetic)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Brand Colors - Fresh Emerald, Slate & Warm Amber */
+  --brand-primary: #064e3b;        /* Deep Emerald */
+  --brand-primary-light: #059669;  /* Vibrant Emerald */
+  --brand-primary-soft: #ecfdf5;   /* Mint Soft */
+  --brand-accent: #f59e0b;         /* Warm Sun Gold */
+  --brand-accent-soft: #fef3c7;
+  --brand-dark: #0f172a;           /* Deep Slate Navy */
+  --brand-dark-soft: #1e293b;
+  --brand-surface: #ffffff;
+  --brand-bg: #f8fafc;
+  --brand-sand: #f1f5f9;
+  --brand-border: #e2e8f0;
+  --brand-border-subtle: #f1f5f9;
+  
+  /* Text Colors */
+  --text-main: #0f172a;
+  --text-body: #334155;
+  --text-muted: #64748b;
+  --text-white: #ffffff;
+
+  /* Typography */
+  --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-bangla: 'Hind Siliguri', sans-serif;
+
+  /* Elevation */
+  --shadow-subtle: 0 1px 3px rgba(15, 23, 42, 0.05);
+  --shadow-sm: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 10px 25px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 20px 35px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.05);
+  --shadow-glow: 0 0 25px rgba(5, 150, 105, 0.18);
+
+  /* Radius */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 18px;
+  --r-xl: 24px;
+  --r-full: 9999px;
+
+  /* Layout */
+  --container-w: 1240px;
+  --nav-h: 72px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--brand-bg);
+  color: var(--text-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s ease;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-w);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* Common Typography */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-main);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+.text-bangla {
+  font-family: var(--font-bangla);
+}
