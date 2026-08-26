@@ -88,27 +88,23 @@ The server will start at `http://localhost:5000`.
 
 ```text
 EZ-Trails-Sitakunda/
-├── index.html               # Main Landing Page
-├── explore.html             # Destination & Spot Catalog with Map
-├── packages.html            # Curated Tour Packages Listing
-├── package-detail.html      # Package Overview & Inclusions
-├── destination-detail.html  # Spot Guide, Trek Difficulty & Location
-├── planner.html             # Dynamic Cost Estimator & Custom Planner
-├── booking.html             # Multi-step Booking & Payment Checkout
-├── my-booking.html          # Public Customer Booking Tracker
-├── contact.html             # Support & Contact Information
-├── admin/
-│   ├── index.html           # Full Admin Management Dashboard
-│   ├── bookings.html        # Booking Table View
-│   ├── packages.html        # Package Manager
-│   └── custom-requests.html # Custom Inquiry Manager
-├── js/
-│   ├── api.js               # Centralized REST API Client
-│   ├── data.js              # Mock Data & Client-side Helpers
-│   ├── animations.js        # Mobile Drawer & Smooth Transitions
-│   └── weather.js           # Live Sitakunda Weather Widget
-└── server/
-    ├── server.js            # Express Entrypoint
+├── public/                  # Static Frontend & Web Pages
+│   ├── index.html           # Main Landing Page
+│   ├── explore.html         # Destination & Spot Catalog with Map
+│   ├── packages.html        # Curated Tour Packages Listing
+│   ├── package-detail.html  # Package Overview & Inclusions
+│   ├── destination-detail.html # Spot Guide, Trek Difficulty & Location
+│   ├── planner.html         # Dynamic Cost Estimator & Custom Planner
+│   ├── booking.html         # Multi-step Booking & Payment Checkout
+│   ├── my-booking.html      # Public Customer Booking Tracker
+│   ├── contact.html         # Support & Contact Information
+│   ├── 404.html             # Custom 404 Error Page
+│   ├── admin/               # Full Admin Management Dashboard
+│   ├── css/                 # Custom Design System & CSS Styling
+│   ├── js/                  # Client API Client, Animations & Helpers
+│   └── images/              # Optimized Spot Images & Banners
+└── server/                  # Node.js & Express REST Backend
+    ├── server.js            # Express Entrypoint & Static Server
     ├── models/              # Mongoose Models (Booking, Package, Spot, Guide, Review)
     ├── routes/              # Express API Routes
     ├── controllers/         # Business Logic Controllers

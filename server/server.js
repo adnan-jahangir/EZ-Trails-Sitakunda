@@ -69,9 +69,11 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
 }
 
-// Serve Frontend Static files from the parent directory
-const clientPath = path.join(__dirname, '..');
-app.use(express.static(clientPath));
+// Serve Frontend Static files from 'public' directory (or fallback to root)
+const publicPath = path.join(__dirname, '../public');
+const fallbackPath = path.join(__dirname, '..');
+const staticPath = require('fs').existsSync(publicPath) ? publicPath : fallbackPath;
+app.use(express.static(staticPath));
 
 // =================== API ROUTES ===================
 app.use('/api/auth', authLimiter, authRoutes);
@@ -106,7 +108,12 @@ app.get('/api/health', (req, res) => {
 // 404 Fallback Handler
 app.use((req, res) => {
   if (req.accepts('html')) {
-    res.status(404).sendFile(path.join(clientPath, '404.html'));
+    const notFoundFile = path.join(staticPath, '404.html');
+    if (require('fs').existsSync(notFoundFile)) {
+      res.status(404).sendFile(notFoundFile);
+    } else {
+      res.status(404).send('<h1>404 - Page Not Found</h1>');
+    }
   } else {
     res.status(404).json({ success: false, message: 'Resource not found' });
   }
