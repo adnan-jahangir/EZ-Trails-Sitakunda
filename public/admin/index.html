@@ -136,8 +136,14 @@
           <span class="hidden sm:inline">Live Site</span>
         </a>
 
-        <button onclick="handleLogout()" class="bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 font-bold text-xs p-2 sm:px-3 sm:py-2.5 rounded-lg sm:rounded-xl transition-all flex items-center gap-1 border border-rose-400/30" title="Logout">
-          <span class="material-symbols-outlined text-base">logout</span>
+        <div id="admin-user-badge" class="hidden sm:flex items-center gap-1.5 bg-white/10 px-2.5 py-1.5 rounded-xl border border-white/20 text-xs">
+          <span class="w-2 h-2 rounded-full bg-emerald-400" id="admin-status-dot"></span>
+          <span id="admin-user-name" class="font-medium text-emerald-100 text-[11px]">admin@tourstk.com</span>
+        </div>
+
+        <button onclick="handleAuthButtonClick()" id="btn-auth-toggle" class="bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 font-bold text-xs p-2 sm:px-3 sm:py-2.5 rounded-lg sm:rounded-xl transition-all flex items-center gap-1 border border-rose-400/30 cursor-pointer" title="Admin Session">
+          <span class="material-symbols-outlined text-base" id="auth-icon">logout</span>
+          <span id="auth-text" class="hidden sm:inline">Logout</span>
         </button>
       </div>
     </div>
@@ -651,6 +657,55 @@
     </div>
   </div>
 
+  <!-- ADMIN LOGIN MODAL -->
+  <div id="modal-admin-login" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-md rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 relative animate-scale-up text-slate-800">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-800 flex items-center justify-center border border-emerald-200 flex-shrink-0">
+          <span class="material-symbols-outlined text-2xl">admin_panel_settings</span>
+        </div>
+        <div>
+          <h3 class="font-display font-bold text-xl text-slate-900">Admin Authentication</h3>
+          <p class="text-xs text-slate-500">Sign in to manage bookings, packages & settings</p>
+        </div>
+      </div>
+
+      <div id="login-error-box" class="hidden mb-4 p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-xl flex items-center gap-2">
+        <span class="material-symbols-outlined text-base flex-shrink-0">error</span>
+        <span id="login-error-msg">Invalid email or password</span>
+      </div>
+
+      <form onsubmit="handleAdminLoginForm(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1.5">Admin Email</label>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3.5 top-2.5 text-slate-400 text-lg">mail</span>
+            <input type="email" id="login-email" required value="admin@tourstk.com" placeholder="admin@tourstk.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-3.5 py-2.5 text-xs text-slate-900 font-medium focus:bg-white">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1.5">Admin Password</label>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3.5 top-2.5 text-slate-400 text-lg">lock</span>
+            <input type="password" id="login-password" required value="admin123456" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-3.5 py-2.5 text-xs text-slate-900 font-medium focus:bg-white">
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-1">
+          <button type="button" onclick="fillDefaultCredentials()" class="text-[11px] font-bold text-emerald-800 hover:underline cursor-pointer">
+            Fill Demo Credentials
+          </button>
+        </div>
+
+        <button type="submit" id="btn-login-submit" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-3.5 rounded-xl text-xs sm:text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer mt-2">
+          <span class="material-symbols-outlined text-lg">login</span>
+          <span id="login-btn-text">Sign In to Admin Hub</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
   <!-- FLOATING LIVE TOAST ALERT -->
   <div id="live-admin-toast" class="fixed top-20 sm:top-24 right-3 sm:right-6 left-3 sm:left-auto z-50 bg-slate-950 text-white p-3.5 sm:p-4 rounded-2xl shadow-2xl border border-emerald-500/40 flex items-start gap-3 transition-all duration-300 transform translate-y-[-140px] opacity-0 pointer-events-none max-w-sm sm:w-auto">
     <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-500/20 border border-emerald-400 text-emerald-400 flex items-center justify-center flex-shrink-0 shadow-xs">
@@ -819,14 +874,125 @@
       });
     }
 
+    function updateAuthUI() {
+      const badge = document.getElementById('admin-user-badge');
+      const nameEl = document.getElementById('admin-user-name');
+      const dotEl = document.getElementById('admin-status-dot');
+      const authBtn = document.getElementById('btn-auth-toggle');
+      const authIcon = document.getElementById('auth-icon');
+      const authText = document.getElementById('auth-text');
+
+      const isAuth = TourstkAPI.isAuthenticated();
+      const user = TourstkAPI.getAdminUser();
+
+      if (badge) badge.classList.remove('hidden');
+      if (isAuth) {
+        if (nameEl) nameEl.textContent = user?.email || 'admin@tourstk.com';
+        if (dotEl) dotEl.className = 'w-2 h-2 rounded-full bg-emerald-400';
+        if (authBtn) {
+          authBtn.className = 'bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 font-bold text-xs p-2 sm:px-3 sm:py-2.5 rounded-lg sm:rounded-xl transition-all flex items-center gap-1 border border-rose-400/30 cursor-pointer';
+          authBtn.title = 'Logout from Session';
+        }
+        if (authIcon) authIcon.textContent = 'logout';
+        if (authText) authText.textContent = 'Logout';
+      } else {
+        if (nameEl) nameEl.textContent = 'Guest (Not Logged In)';
+        if (dotEl) dotEl.className = 'w-2 h-2 rounded-full bg-amber-400 animate-pulse';
+        if (authBtn) {
+          authBtn.className = 'bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs p-2 sm:px-3 sm:py-2.5 rounded-lg sm:rounded-xl transition-all flex items-center gap-1 border border-emerald-400/30 cursor-pointer shadow-xs';
+          authBtn.title = 'Login to Admin Hub';
+        }
+        if (authIcon) authIcon.textContent = 'login';
+        if (authText) authText.textContent = 'Sign In';
+      }
+    }
+
+    function openLoginModal() {
+      const modal = document.getElementById('modal-admin-login');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeLoginModal() {
+      const modal = document.getElementById('modal-admin-login');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function fillDefaultCredentials() {
+      const emailInput = document.getElementById('login-email');
+      const passInput = document.getElementById('login-password');
+      if (emailInput) emailInput.value = 'admin@tourstk.com';
+      if (passInput) passInput.value = 'admin123456';
+    }
+
+    async function handleAdminLoginForm(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const submitBtn = document.getElementById('btn-login-submit');
+      const btnText = document.getElementById('login-btn-text');
+      const errBox = document.getElementById('login-error-box');
+      const errMsg = document.getElementById('login-error-msg');
+
+      if (errBox) errBox.classList.add('hidden');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        btnText.textContent = 'Verifying Credentials...';
+      }
+
+      try {
+        const res = await TourstkAPI.loginAdmin(email, password);
+        if (res.success) {
+          closeLoginModal();
+          updateAuthUI();
+          await Promise.all([
+            loadBookings(),
+            loadPackages(),
+            loadDestinations(),
+            loadGuides(),
+            loadCustomRequests(),
+            loadReviews()
+          ]);
+        } else {
+          throw new Error(res.message || 'Login failed');
+        }
+      } catch (err) {
+        if (errBox && errMsg) {
+          errMsg.textContent = err.message || 'Invalid credentials or MongoDB offline. Please verify Atlas IP whitelist (0.0.0.0/0).';
+          errBox.classList.remove('hidden');
+        }
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          btnText.textContent = 'Sign In to Admin Hub';
+        }
+      }
+    }
+
+    function handleAuthButtonClick() {
+      if (TourstkAPI.isAuthenticated()) {
+        if (confirm('Do you want to log out from the Admin session?')) {
+          TourstkAPI.clearAuth();
+          updateAuthUI();
+          openLoginModal();
+        }
+      } else {
+        openLoginModal();
+      }
+    }
+
     async function ensureAdminAuth() {
       if (!TourstkAPI.isAuthenticated()) {
         try {
-          await TourstkAPI.loginAdmin('admin@tourstk.com', 'admin123456');
+          const res = await TourstkAPI.loginAdmin('admin@tourstk.com', 'admin123456');
+          if (!res.success) {
+            openLoginModal();
+          }
         } catch (e) {
           console.warn('Auto-login error:', e);
+          openLoginModal();
         }
       }
+      updateAuthUI();
     }
 
     document.addEventListener('DOMContentLoaded', async () => {
@@ -842,7 +1008,7 @@
 
       // Real-Time 15-second background poll for incoming bookings & custom requests
       setInterval(async () => {
-        if (document.visibilityState === 'visible') {
+        if (document.visibilityState === 'visible' && TourstkAPI.isAuthenticated()) {
           await loadBookings();
           await loadCustomRequests();
         }
@@ -1935,9 +2101,7 @@
     }
 
     function handleLogout() {
-      TourstkAPI.clearAuth();
-      alert('Logged out from Admin Session.');
-      window.location.reload();
+      handleAuthButtonClick();
     }
   </script>
 </body>
