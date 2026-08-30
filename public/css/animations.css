@@ -414,18 +414,33 @@ html, body {
   display: inline-block;
 }
 
-/* 11. Mobile App Bottom Navigation Bar & Touch Enhancements */
+/* 11. Zero-Delay Mobile App Touch Optimization & Bottom Nav */
+* {
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+html, body, a, button, input, select, textarea, [role="button"], .mobile-nav-item, .touch-action-btn, nav a {
+  touch-action: manipulation !important;
+}
+
 .mobile-bottom-nav {
   box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.08);
   padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .mobile-nav-item {
-  transition: all 0.15s ease-in-out;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform 0.08s cubic-bezier(0.16, 1, 0.3, 1), color 0.1s ease;
+  will-change: transform;
 }
 
 .mobile-nav-item:active {
-  transform: scale(0.88);
+  transform: scale(0.88) !important;
+  opacity: 0.75;
 }
 
 .mobile-nav-item.is-active {
@@ -438,8 +453,16 @@ html, body {
   transform: translateY(-2px);
 }
 
+.touch-action-btn {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform 0.08s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
 .touch-action-btn:active {
-  transform: scale(0.96);
+  transform: scale(0.90) !important;
 }
 
 @media (max-width: 768px) {

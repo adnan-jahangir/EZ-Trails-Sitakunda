@@ -87,14 +87,27 @@
   window.openMobileNav = openMobileNav;
   window.closeMobileNav = closeMobileNav;
 
+  // Instant Touch Preload & Zero-Lag Mobile Navigation
+  document.addEventListener('touchstart', (e) => {
+    const link = e.target.closest('a');
+    if (!link || !link.href) return;
+    
+    const href = link.getAttribute('href');
+    if (href && !href.startsWith('http') && !href.startsWith('tel') && !href.startsWith('mailto') && !href.startsWith('#') && !href.startsWith('javascript:')) {
+      // Preload next page in memory immediately when finger touches
+      if (!document.querySelector(`link[rel="prefetch"][href="${link.href}"]`)) {
+        const prefetchTag = document.createElement('link');
+        prefetchTag.rel = 'prefetch';
+        prefetchTag.href = link.href;
+        document.head.appendChild(prefetchTag);
+      }
+    }
+  }, { passive: true });
+
   // Run on load and observe dynamic insertions
   document.addEventListener('DOMContentLoaded', () => {
     initScrollAnimations();
-    initMobileNav();
-    setTimeout(() => {
-      initScrollAnimations();
-      initMobileNav();
-    }, 300);
+    setTimeout(initScrollAnimations, 300);
     setTimeout(initScrollAnimations, 800);
   });
 
@@ -102,9 +115,6 @@
   window.TourstkAnimations = {
     refresh: () => {
       initScrollAnimations();
-      initMobileNav();
-    },
-    openMobileNav,
-    closeMobileNav,
+    }
   };
 })();
