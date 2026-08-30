@@ -14,24 +14,30 @@ const TourstkAPI = {
   tokenKey: 'tourstk_admin_jwt',
   userKey: 'tourstk_admin_user',
 
-  // Auth Helpers
+  // Auth Helpers (Tab-Session Based Authentication)
   getToken() {
-    return localStorage.getItem(this.tokenKey);
+    return sessionStorage.getItem(this.tokenKey) || localStorage.getItem(this.tokenKey);
   },
 
   setAuth(token, user) {
-    localStorage.setItem(this.tokenKey, token);
-    localStorage.setItem(this.userKey, JSON.stringify(user));
+    sessionStorage.setItem(this.tokenKey, token);
+    sessionStorage.setItem(this.userKey, JSON.stringify(user));
+    // Clear localStorage to avoid permanent cross-tab leaks
+    localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(this.userKey);
   },
 
   clearAuth() {
+    sessionStorage.removeItem(this.tokenKey);
+    sessionStorage.removeItem(this.userKey);
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.userKey);
   },
 
   getAdminUser() {
     try {
-      return JSON.parse(localStorage.getItem(this.userKey));
+      const data = sessionStorage.getItem(this.userKey) || localStorage.getItem(this.userKey);
+      return data ? JSON.parse(data) : null;
     } catch (e) {
       return null;
     }

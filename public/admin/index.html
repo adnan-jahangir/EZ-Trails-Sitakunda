@@ -1004,21 +1004,15 @@
 
     document.addEventListener('DOMContentLoaded', async () => {
       if (TourstkAPI.isAuthenticated()) {
-        const isValid = await TourstkAPI.verifyAuth();
-        if (isValid) {
-          hideLoginGateway();
-          await Promise.all([
-            loadBookings(),
-            loadPackages(),
-            loadDestinations(),
-            loadGuides(),
-            loadCustomRequests(),
-            loadReviews()
-          ]);
-        } else {
-          TourstkAPI.clearAuth();
-          showLoginGateway();
-        }
+        hideLoginGateway();
+        await Promise.all([
+          loadBookings(),
+          loadPackages(),
+          loadDestinations(),
+          loadGuides(),
+          loadCustomRequests(),
+          loadReviews()
+        ]);
       } else {
         showLoginGateway();
       }
