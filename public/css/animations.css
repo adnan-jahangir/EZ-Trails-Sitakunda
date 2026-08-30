@@ -228,7 +228,19 @@ html, body {
   animation: heroFadeUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards;
 }
 
-/* 8. 4K Cinematic Crossfade Hero Slideshow */
+/* 8. 4K Cinematic Crossfade & Continuous Ken Burns Hero Slideshow */
+@keyframes heroKenBurns {
+  0% {
+    transform: scale(1.0) translate(0, 0);
+  }
+  50% {
+    transform: scale(1.08) translate(-0.6%, -0.4%);
+  }
+  100% {
+    transform: scale(1.0) translate(0, 0);
+  }
+}
+
 .hero-slide {
   position: absolute;
   inset: 0;
@@ -236,14 +248,14 @@ html, body {
   background-repeat: no-repeat;
   opacity: 0;
   transform: scale(1.0);
-  transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1), transform 8.5s ease-out;
+  transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
   filter: contrast(1.05) saturate(1.08);
 }
 
 .hero-slide.is-active {
   opacity: 0.95;
-  transform: scale(1.06);
+  animation: heroKenBurns 18s ease-in-out infinite alternate;
 }
 
 /* 9. All-Time Continuous Navbar Logo & Brand Name Animation */
