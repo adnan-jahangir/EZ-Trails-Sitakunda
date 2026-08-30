@@ -60,26 +60,20 @@
 </head>
 <body class="bg-white text-slate-900 font-sans antialiased selection:bg-emerald-100 selection:text-emerald-900 min-h-screen flex flex-col justify-between">
 
-  <!-- 1. TOP NAVBAR (Exact match to screenshot) -->
-  <nav class="w-full bg-white border-b border-slate-100 sticky top-0 z-50">
-    <div class="max-w-container-max mx-auto px-4 sm:px-6 md:px-10 h-16 sm:h-20 flex justify-between items-center">
-      <!-- Logo Lockup (EZ Trails + Subtitle Sitakunda) -->
-      <a href="index.html" class="flex items-center gap-2 text-primary flex-shrink-0 group">
-        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-50 text-primary flex items-center justify-center border border-emerald-100 shadow-2xs group-hover:scale-105 transition-transform flex-shrink-0">
-          <svg class="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m8 3 4 8 5-5 5 15H2L8 3z"/>
-          </svg>
-        </div>
-        <div class="flex flex-col">
-          <span class="font-display font-extrabold text-base sm:text-lg text-primary leading-none tracking-tight">EZ Trails</span>
-          <span class="text-[10.5px] sm:text-[11.5px] font-bold tracking-wider text-emerald-700 uppercase leading-none mt-1">Sitakunda</span>
+  <!-- 1. SLIM & SLEEK TOP NAVBAR -->
+  <nav class="w-full bg-white/95 backdrop-blur-md border-b border-slate-100 sticky top-0 z-50 shadow-2xs transition-all">
+    <div class="max-w-container-max mx-auto px-4 sm:px-6 md:px-10 h-14 sm:h-16 flex justify-between items-center">
+      <!-- Authentic Official Brand Logo from Banner (with continuous live float & glow) -->
+      <a href="index.html" class="flex items-center flex-shrink-0 group py-1" title="EZ Trails Sitakunda">
+        <div class="official-brand-logo-wrapper relative flex items-center">
+          <img src="images/ez_trails_official_logo.png" alt="EZ Trails Sitakunda" class="h-9 sm:h-11 w-auto object-contain transition-transform group-hover:scale-105" />
         </div>
       </a>
 
       <!-- Center Links -->
-      <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
+      <div class="hidden md:flex items-center gap-7 text-xs sm:text-[13.5px] font-semibold text-slate-600">
         <a href="index.html" class="hover:text-primary transition-colors">Home</a>
-        <a href="packages.html" class="text-primary font-bold border-b-2 border-primary pb-1">Packages</a>
+        <a href="packages.html" class="text-primary font-bold border-b-2 border-primary pb-0.5">Packages</a>
         <a href="explore.html" class="hover:text-primary transition-colors">Explore</a>
         <a href="my-booking.html" class="hover:text-primary transition-colors">My Booking</a>
       </div>
@@ -87,7 +81,7 @@
       <!-- Right Action Button & Weather Pill -->
       <div class="flex items-center gap-2">
         <div id="sitakunda-weather-pill" class="hidden lg:block"></div>
-        <a href="planner.html" class="flex bg-primary hover:bg-primary-dark text-white font-bold text-[11px] sm:text-xs md:text-sm px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full shadow-xs transition-all items-center gap-1 flex-shrink-0">
+        <a href="planner.html" class="flex bg-primary hover:bg-primary-dark text-white font-bold text-[11px] sm:text-xs px-3 sm:px-4 py-1.5 rounded-full shadow-xs transition-all items-center gap-1 flex-shrink-0">
           <span class="material-symbols-outlined text-sm sm:text-base">explore</span>
           <span>Plan Trip</span>
         </a>
@@ -241,24 +235,24 @@
   <!-- FOOTER -->
   <footer class="bg-white border-t border-slate-100 py-12 text-center text-xs text-slate-500">
     <div class="max-w-container-max mx-auto px-6">
-      © 2026 Tourstk (EZ Trails Sitakunda) • Email: <a href="mailto:eztrailsbd@gmail.com" class="font-bold text-emerald-800 hover:underline">eztrailsbd@gmail.com</a> • Hotline: <a href="tel:+8801812345678" class="font-bold text-slate-700 hover:underline">+880 1812-345678</a>
+      © 2026 EZ Trails Sitakunda • Email: <a href="mailto:eztrailsbd@gmail.com" class="font-bold text-emerald-800 hover:underline">eztrailsbd@gmail.com</a> • Hotline: <a href="tel:01939627110" class="font-bold text-slate-700 hover:underline">01939627110</a> | <a href="tel:01876418411" class="font-bold text-slate-700 hover:underline">01876418411</a> • Office: Sitakund Bus Station
     </div>
   </footer>
 
   <!-- COMPACT FLOATING QUICK ACTION DOCK (Call + Facebook + WhatsApp) -->
   <div class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col gap-2 items-center">
     <!-- Call Button -->
-    <a href="tel:+8801812345678" class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-emerald-800 hover:bg-emerald-900 text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Call Hotline: +880 1812-345678">
+    <a href="tel:01939627110" class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-emerald-800 hover:bg-emerald-900 text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Call Hotline: 01939627110">
       <span class="material-symbols-outlined text-lg sm:text-xl">call</span>
     </a>
     <!-- Facebook Button -->
-    <a href="https://facebook.com" target="_blank" class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#1877f2] hover:bg-[#166fe5] text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Facebook Page">
+    <a href="https://www.facebook.com/share/1LiQruQVah/" target="_blank" class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#1877f2] hover:bg-[#166fe5] text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="EZ Trails Facebook Page">
       <svg class="w-4 h-4 sm:w-5 sm:h-5 fill-current" viewBox="0 0 24 24">
         <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
       </svg>
     </a>
     <!-- WhatsApp Button -->
-    <a href="https://wa.me/8801812345678?text=Hello%20Tourstk,%20I%20want%20to%20plan%20a%20Sitakunda%20trip." target="_blank" class="relative w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#25d366] hover:bg-[#20ba59] text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Chat on WhatsApp">
+    <a href="https://wa.me/8801939627110?text=Hello%20EZ%20Trails%20Sitakunda,%20I%20want%20to%20know%20about%20your%20tour%20packages." target="_blank" class="relative w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#25d366] hover:bg-[#20ba59] text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Chat on WhatsApp (01939627110)">
       <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-300 rounded-full animate-ping"></span>
       <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border border-white"></span>
       <svg class="w-4 h-4 sm:w-5 sm:h-5 fill-white" viewBox="0 0 24 24">

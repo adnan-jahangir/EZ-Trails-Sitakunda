@@ -74,49 +74,53 @@ function injectFooter() {
                 <span class="material-symbols-outlined">terrain</span>
               </div>
               <div>
-                <div class="nav-brand-title" style="color:#fff;">Tourstk</div>
-                <div class="nav-brand-sub" style="color:#a7f3d0;">EZ Trails Sitakunda</div>
+                <div class="nav-brand-title" style="color:#fff;">EZ Trails</div>
+                <div class="nav-brand-sub" style="color:#a7f3d0;">Sitakunda</div>
               </div>
             </div>
-            <p style="color:rgba(255,255,255,0.7);font-size:13.5px;line-height:1.6;max-width:280px;">
-              “Explore Sitakunda with thoughtfully planned trips, local experiences, and hassle-free travel.”
+            <p style="color:rgba(255,255,255,0.7);font-size:13px;line-height:1.6;max-width:280px;margin-bottom:10px;">
+              “Explore. Experience. Enjoy. Guided tours, hotel bookings & transport in Sitakunda.”
+            </p>
+            <p style="color:rgba(255,255,255,0.85);font-size:12.5px;line-height:1.6;">
+              📍 Sitakund Bus Station<br>
+              📞 <a href="tel:01939627110" style="color:#6ee7b7;font-weight:bold;">01939627110</a> | <a href="tel:01876418411" style="color:#6ee7b7;font-weight:bold;">01876418411</a>
             </p>
           </div>
 
           <div>
-            <div class="footer-col-title">Explore</div>
+            <div class="footer-col-title">Our Services</div>
             <ul class="footer-links">
-              <li><a href="explore.html">Explore Destinations</a></li>
-              <li><a href="packages.html">Curated Packages</a></li>
+              <li><a href="packages.html">Hotel Room Booking</a></li>
+              <li><a href="packages.html">Transport & Local Jeeps</a></li>
+              <li><a href="packages.html">Verified Trail Guides</a></li>
               <li><a href="planner.html">Trip Planner</a></li>
-              <li><a href="index.html#guide">Sitakunda Travel Guide</a></li>
             </ul>
           </div>
 
           <div>
-            <div class="footer-col-title">Support</div>
+            <div class="footer-col-title">Support & Hotline</div>
             <ul class="footer-links">
+              <li><a href="tel:01939627110">Hotline: 01939627110</a></li>
+              <li><a href="tel:01876418411">Support: 01876418411</a></li>
               <li><a href="my-booking.html">My Booking</a></li>
-              <li><a href="index.html#faq">FAQ</a></li>
               <li><a href="contact.html">Contact Us</a></li>
-              <li><a href="my-booking.html">Booking Help</a></li>
             </ul>
           </div>
 
           <div>
             <div class="footer-col-title">Company</div>
             <ul class="footer-links">
-              <li><a href="contact.html">About Tourstk</a></li>
+              <li><a href="contact.html">About EZ Trails</a></li>
               <li><a href="contact.html">Partner With Us</a></li>
-              <li><a href="#">Terms & Conditions</a></li>
-              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="contact.html">Office Location</a></li>
+              <li><a href="explore.html">Sitakunda Spots</a></li>
             </ul>
           </div>
         </div>
 
         <div class="footer-bottom">
-          <div>© 2026 Tourstk. All rights reserved.</div>
-          <div>Discover Sitakunda. We Plan the Journey.</div>
+          <div>© 2026 EZ Trails Sitakunda • Sitakund Bus Station</div>
+          <div>Explore. Experience. Enjoy.</div>
         </div>
       </div>
     </footer>

@@ -180,3 +180,224 @@ html, body {
   animation: shimmerPass 3.5s infinite;
   pointer-events: none;
 }
+
+/* 7. Luxury Cinematic Hero Animations */
+@keyframes heroBackgroundZoom {
+  0% { transform: scale(1.0); }
+  50% { transform: scale(1.06); }
+  100% { transform: scale(1.0); }
+}
+
+.animate-hero-zoom {
+  animation: heroBackgroundZoom 24s ease-in-out infinite;
+}
+
+@keyframes heroFadeUp {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.hero-fade-in-1 {
+  opacity: 0;
+  animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+}
+
+.hero-fade-in-2 {
+  opacity: 0;
+  animation: heroFadeUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards;
+}
+
+.hero-fade-in-3 {
+  opacity: 0;
+  animation: heroFadeUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+}
+
+.hero-fade-in-4 {
+  opacity: 0;
+  animation: heroFadeUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.55s forwards;
+}
+
+.hero-fade-in-5 {
+  opacity: 0;
+  animation: heroFadeUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards;
+}
+
+/* 8. 4K Cinematic Crossfade Hero Slideshow */
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transform: scale(1.0);
+  transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1), transform 8.5s ease-out;
+  pointer-events: none;
+  filter: contrast(1.05) saturate(1.08);
+}
+
+.hero-slide.is-active {
+  opacity: 0.95;
+  transform: scale(1.06);
+}
+
+/* 9. All-Time Continuous Navbar Logo & Brand Name Animation */
+@keyframes brandFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-2px) rotate(-1.5deg);
+  }
+}
+
+@keyframes brandPulseGlow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.35);
+    border-color: rgba(16, 185, 129, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+    border-color: rgba(5, 150, 105, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    border-color: rgba(16, 185, 129, 0.4);
+  }
+}
+
+.animated-brand-icon {
+  animation: brandFloat 3.5s ease-in-out infinite, brandPulseGlow 3s infinite;
+}
+
+@keyframes officialLogoFloat {
+  0%, 100% {
+    transform: translateY(0px);
+    filter: drop-shadow(0 1px 3px rgba(6, 78, 59, 0.1));
+  }
+  50% {
+    transform: translateY(-2.5px);
+    filter: drop-shadow(0 4px 12px rgba(16, 185, 129, 0.3));
+  }
+}
+
+.official-brand-logo-wrapper {
+  animation: officialLogoFloat 3.8s ease-in-out infinite;
+  display: inline-flex;
+  align-items: center;
+}
+
+@keyframes brandTextShimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.brand-gradient-text {
+  background: linear-gradient(135deg, #0e4d34 0%, #059669 30%, #10b981 50%, #059669 70%, #0e4d34 100%);
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: brandTextShimmer 4s ease infinite;
+}
+
+@keyframes brandDotPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 1;
+  }
+}
+
+.brand-live-dot {
+  animation: brandDotPulse 2s ease-in-out infinite;
+}
+
+/* 10. Ultra-Unique Liquid Water Wave & Mountain Fog/Glow Text Effect */
+@keyframes liquidWaterWave {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes liquidCausticGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 4px rgba(52, 211, 153, 0.45));
+    transform: translateY(0);
+  }
+  50% {
+    filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.75));
+    transform: translateY(-0.5px);
+  }
+}
+
+/* Water wave ripple effect moving continuously through the letters */
+.liquid-wave-text {
+  background: linear-gradient(
+    110deg,
+    #10b981 0%,
+    #059669 15%,
+    #34d399 28%,
+    #38bdf8 42%,
+    #67e8f9 50%,
+    #0284c7 62%,
+    #10b981 78%,
+    #34d399 100%
+  );
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: liquidWaterWave 4.5s ease-in-out infinite, liquidCausticGlow 3s ease-in-out infinite;
+  display: inline-block;
+  font-weight: inherit;
+}
+
+/* Mountain ridge misty fog animation rising gently across words */
+@keyframes mountainMistRise {
+  0% {
+    background-position: 0% 100%;
+  }
+  50% {
+    background-position: 100% 0%;
+  }
+  100% {
+    background-position: 0% 100%;
+  }
+}
+
+.mountain-water-brand {
+  background: linear-gradient(
+    120deg,
+    #064e3b 0%,
+    #059669 22%,
+    #38bdf8 45%,
+    #a7f3d0 55%,
+    #0284c7 70%,
+    #064e3b 100%
+  );
+  background-size: 280% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: liquidWaterWave 5s linear infinite;
+  display: inline-block;
+}

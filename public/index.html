@@ -6,6 +6,8 @@
   <title>EZ Trails — Discover Sitakunda | Curated Tour Packages & Verified Guides</title>
   <meta name="description" content="Discover Sitakunda with Tourstk. Complete all-inclusive travel packages, local guides, transport and stress-free journeys.">
   <meta name="theme-color" content="#0e4d34">
+  <link rel="icon" type="image/jpeg" href="images/favicon.jpg">
+  <link rel="apple-touch-icon" href="images/favicon.jpg">
 
   <!-- OpenGraph / Facebook / WhatsApp Rich Link Preview -->
   <meta property="og:type" content="website">
@@ -69,25 +71,19 @@
 </head>
 <body class="bg-white text-slate-800 font-body antialiased selection:bg-emerald-100 selection:text-emerald-900">
 
-  <!-- 1. UNIFIED TOP NAVBAR (Exact match to all pages) -->
-  <nav class="w-full bg-white border-b border-slate-100 sticky top-0 z-50">
-    <div class="max-w-container-max mx-auto px-4 sm:px-6 md:px-10 h-16 sm:h-20 flex justify-between items-center">
-      <!-- Logo Lockup (EZ Trails + Subtitle Sitakunda) -->
-      <a href="index.html" class="flex items-center gap-2 text-primary flex-shrink-0 group">
-        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-50 text-primary flex items-center justify-center border border-emerald-100 shadow-2xs group-hover:scale-105 transition-transform flex-shrink-0">
-          <svg class="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m8 3 4 8 5-5 5 15H2L8 3z"/>
-          </svg>
-        </div>
-        <div class="flex flex-col">
-          <span class="font-display font-extrabold text-base sm:text-lg text-primary leading-none tracking-tight">EZ Trails</span>
-          <span class="text-[10.5px] sm:text-[11.5px] font-bold tracking-wider text-emerald-700 uppercase leading-none mt-1">Sitakunda</span>
+  <!-- 1. SLIM & SLEEK TOP NAVBAR -->
+  <nav class="w-full bg-white/95 backdrop-blur-md border-b border-slate-100 sticky top-0 z-50 shadow-2xs transition-all">
+    <div class="max-w-container-max mx-auto px-4 sm:px-6 md:px-10 h-14 sm:h-16 flex justify-between items-center">
+      <!-- Authentic Official Brand Logo from Banner (with continuous live float & glow) -->
+      <a href="index.html" class="flex items-center flex-shrink-0 group py-1" title="EZ Trails Sitakunda">
+        <div class="official-brand-logo-wrapper relative flex items-center">
+          <img src="images/ez_trails_official_logo.png" alt="EZ Trails Sitakunda" class="h-9 sm:h-11 w-auto object-contain transition-transform group-hover:scale-105" />
         </div>
       </a>
 
       <!-- Center Links -->
-      <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
-        <a href="index.html" class="text-primary font-bold border-b-2 border-primary pb-1">Home</a>
+      <div class="hidden md:flex items-center gap-7 text-xs sm:text-[13.5px] font-semibold text-slate-600">
+        <a href="index.html" class="text-primary font-bold border-b-2 border-primary pb-0.5">Home</a>
         <a href="packages.html" class="hover:text-primary transition-colors">Packages</a>
         <a href="explore.html" class="hover:text-primary transition-colors">Explore</a>
         <a href="my-booking.html" class="hover:text-primary transition-colors">My Booking</a>
@@ -96,7 +92,7 @@
       <!-- Right Action Button & Weather Pill -->
       <div class="flex items-center gap-2">
         <div id="sitakunda-weather-pill" class="hidden lg:block"></div>
-        <a href="planner.html" class="flex bg-primary hover:bg-primary-dark text-white font-bold text-[11px] sm:text-xs md:text-sm px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full shadow-xs transition-all items-center gap-1 flex-shrink-0">
+        <a href="planner.html" class="flex bg-primary hover:bg-primary-dark text-white font-bold text-[11px] sm:text-xs px-3 sm:px-4 py-1.5 rounded-full shadow-xs transition-all items-center gap-1 flex-shrink-0">
           <span class="material-symbols-outlined text-sm sm:text-base">explore</span>
           <span>Plan Trip</span>
         </a>
@@ -104,33 +100,51 @@
     </div>
   </nav>
 
-  <!-- 2. STUNNING HERO SECTION -->
-  <header class="relative min-h-[580px] md:min-h-[660px] flex items-center justify-center py-20 px-6 overflow-visible bg-primary z-20">
-    <div class="absolute inset-0 z-0 overflow-hidden">
-      <div class="absolute inset-0 bg-cover bg-center w-full h-full" style="background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1800&q=80');"></div>
-      <div class="absolute inset-0 bg-gradient-to-b from-primary/85 via-primary/65 to-primary/95"></div>
+  <!-- 2. STUNNING EDITORIAL CINEMATIC HERO (4K MULTI-SPOT SLIDER) -->
+  <header class="relative min-h-[500px] md:min-h-[570px] flex items-center justify-center py-12 md:py-18 px-4 sm:px-6 overflow-visible bg-slate-950 z-20">
+    
+    <!-- 4K Multi-Slide Cinematic Auto-Rotating Background -->
+    <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none" id="hero-slider-wrapper">
+      <!-- Slide 1: Chandranath Peak -->
+      <div class="hero-slide is-active" style="background-image: url('images/hero-slide-1.jpg'); background-position: center 30%;" data-spot="Chandranath Peak"></div>
+      <!-- Slide 2: Guliakhali Green Beach -->
+      <div class="hero-slide" style="background-image: url('images/hero-slide-2.jpg'); background-position: center 42%;" data-spot="Guliakhali Green Beach"></div>
+      <!-- Slide 3: Banshbaria Sea Pier -->
+      <div class="hero-slide" style="background-image: url('images/hero-slide-3.jpg'); background-position: center 50%;" data-spot="Banshbaria Sea Pier"></div>
+      <!-- Slide 4: Khaiyachora Waterfall -->
+      <div class="hero-slide" style="background-image: url('images/hero-slide-4.jpg'); background-position: center 40%;" data-spot="Khaiyachora Waterfall"></div>
+
+      <!-- Ultra-Light Neutral Gradient for Perfect Readability & 4K Photo Details -->
+      <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-black/30 to-black/40"></div>
     </div>
 
     <div class="relative z-10 w-full max-w-4xl mx-auto text-center flex flex-col items-center">
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-emerald-200 border border-white/20 text-xs font-bold uppercase tracking-wider mb-6">
-        <span class="material-symbols-outlined text-base">verified</span>
-        Discover Sitakunda. We Plan the Journey.
+        <!-- Staggered 1: Luxury Pill Tag -->
+      <div class="hero-fade-in-1 inline-flex items-center gap-3 px-5 py-1.5 rounded-full bg-white/10 backdrop-blur-lg text-white/90 border border-white/15 text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.2em] mb-5 sm:mb-6 shadow-lg">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+        <span class="text-emerald-300">Explore</span>
+        <span class="w-[3px] h-[3px] rounded-full bg-white/40"></span>
+        <span class="text-amber-200">Experience</span>
+        <span class="w-[3px] h-[3px] rounded-full bg-white/40"></span>
+        <span class="text-sky-300">Enjoy</span>
       </div>
 
-      <h1 class="font-display text-4xl sm:text-6xl md:text-7xl font-bold text-white tracking-tight leading-[1.1] mb-6">
-        Experience Sitakunda Like Never Before
+      <!-- Staggered 2: Editorial Headline -->
+      <h1 class="hero-fade-in-2 font-display text-3xl sm:text-4xl md:text-5xl lg:text-[46px] font-bold text-white tracking-tight leading-[1.18] mb-4 max-w-3xl drop-shadow-[0_2px_12px_rgba(0,0,0,0.7)]">
+        Discover <span class="text-emerald-300 italic font-normal">Sitakunda</span> Where Green Hills Meet the Coastal Sea
       </h1>
 
-      <p class="text-emerald-100/90 text-base sm:text-xl max-w-2xl font-normal leading-relaxed mb-10">
-        From Chandranath Peak's mystical sunrise to Guliakhali's green swamp beach. Curated all-inclusive journeys with local experts.
+      <!-- Staggered 3: Sitakunda Highlights Description -->
+      <p class="hero-fade-in-3 text-white/90 text-xs sm:text-sm md:text-[15px] max-w-xl font-medium leading-relaxed mb-7 sm:mb-8 text-balance drop-shadow-[0_1px_6px_rgba(0,0,0,0.8)]">
+        From Chandranath Peak's sunrise to Khaiyachora 9-tier cascades & Guliakhali green beach. All-inclusive guided tours with local Sitakunda experts.
       </p>
 
-      <!-- SLIM & ELEGANT SPOT SEARCH DOCK -->
-      <div class="w-full max-w-2xl relative">
-        <form action="explore.html" method="GET" onsubmit="handleHeroSearchSubmit(event)" class="w-full bg-white rounded-full p-1.5 shadow-[0_15px_40px_rgba(0,0,0,0.22)] border border-white/80 flex items-center gap-2.5 text-left transition-all focus-within:ring-3 focus-within:ring-emerald-500/20">
+      <!-- Staggered 4: Slim Glassmorphic Search Dock -->
+      <div class="hero-fade-in-4 w-full max-w-xl relative">
+        <form action="explore.html" method="GET" onsubmit="handleHeroSearchSubmit(event)" class="w-full bg-white/95 backdrop-blur-md rounded-full p-1.5 shadow-[0_15px_40px_rgba(0,0,0,0.25)] border border-white/80 flex items-center gap-2 text-left transition-all focus-within:ring-3 focus-within:ring-emerald-400/30 focus-within:bg-white">
           
           <!-- Search Icon Badge -->
-          <div class="w-9 h-9 rounded-full bg-emerald-50 text-emerald-800 flex items-center justify-center flex-shrink-0 ml-1">
+          <div class="w-9 h-9 rounded-full bg-emerald-50 text-primary flex items-center justify-center flex-shrink-0 ml-1 border border-emerald-100 shadow-2xs">
             <span class="material-symbols-outlined text-lg">search</span>
           </div>
 
@@ -141,7 +155,7 @@
               id="hero-spot-search" 
               name="q"
               autocomplete="off" 
-              placeholder="Search spots (e.g. Chandranath, Guliakhali, Khaiyachora)..." 
+              placeholder="Search spots (Chandranath, Guliakhali, Khaiyachora)..." 
               class="w-full bg-transparent border-0 p-0 text-xs sm:text-sm font-semibold text-slate-800 placeholder:text-slate-400 focus:ring-0 outline-none"
               oninput="handleHeroSpotLiveSearch(this.value)"
               onfocus="handleHeroSpotLiveSearch(this.value)"
@@ -154,7 +168,7 @@
           </button>
 
           <!-- Search / Explore CTA Button -->
-          <button type="submit" class="bg-primary hover:bg-primary-dark text-white font-bold text-xs px-5 py-2.5 rounded-full flex items-center justify-center gap-1.5 shadow-sm hover:shadow-md transition-all flex-shrink-0 cursor-pointer">
+          <button type="submit" class="bg-primary hover:bg-primary-dark text-white font-bold text-xs sm:text-sm px-6 py-2.5 sm:py-3 rounded-full flex items-center justify-center gap-1.5 shadow-md hover:shadow-lg transition-all flex-shrink-0 cursor-pointer">
             <span>Explore</span>
             <span class="material-symbols-outlined text-base">arrow_forward</span>
           </button>
@@ -165,14 +179,24 @@
           <!-- Dynamically populated by JS -->
         </div>
 
-        <!-- Quick Trending Spot Badges -->
-        <div class="flex flex-wrap items-center justify-center gap-2 mt-4 text-[11px] text-white/95">
-          <span class="font-bold text-emerald-300">🔥 Popular Spots:</span>
-          <a href="destination-detail.html?id=chandranath-hill" class="px-3 py-1 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-xs transition-colors border border-white/20 font-semibold">⛰️ Chandranath Hill</a>
-          <a href="destination-detail.html?id=guliakhali-sea-beach" class="px-3 py-1 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-xs transition-colors border border-white/20 font-semibold">🌊 Guliakhali Beach</a>
-          <a href="destination-detail.html?id=khaiyachora-waterfall" class="px-3 py-1 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-xs transition-colors border border-white/20 font-semibold">💧 Khaiyachora Fall</a>
-          <a href="destination-detail.html?id=mohamaya-lake" class="px-3 py-1 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-xs transition-colors border border-white/20 font-semibold">🛶 Mohamaya Lake</a>
-          <a href="destination-detail.html?id=sitakunda-eco-park" class="px-3 py-1 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-xs transition-colors border border-white/20 font-semibold">🌲 Eco Park</a>
+        <!-- Staggered 5: Interactive 4K Spot Switcher Pills -->
+        <div class="hero-fade-in-5 flex flex-wrap items-center justify-center gap-2 mt-5 text-[11px] text-white/90">
+          <button type="button" onclick="setHeroSlide(0)" id="hero-dot-0" class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/25 text-white font-bold backdrop-blur-md border border-white/40 shadow-xs transition-all cursor-pointer">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            <span>⛰️ Chandranath Peak</span>
+          </button>
+          <button type="button" onclick="setHeroSlide(1)" id="hero-dot-1" class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/35 text-white/70 hover:text-white font-medium backdrop-blur-md border border-white/10 hover:border-white/25 transition-all cursor-pointer">
+            <span class="w-1.5 h-1.5 rounded-full bg-white/40"></span>
+            <span>🌊 Guliakhali Beach</span>
+          </button>
+          <button type="button" onclick="setHeroSlide(2)" id="hero-dot-2" class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/35 text-white/70 hover:text-white font-medium backdrop-blur-md border border-white/10 hover:border-white/25 transition-all cursor-pointer">
+            <span class="w-1.5 h-1.5 rounded-full bg-white/40"></span>
+            <span>🌅 Banshbaria Pier</span>
+          </button>
+          <button type="button" onclick="setHeroSlide(3)" id="hero-dot-3" class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/35 text-white/70 hover:text-white font-medium backdrop-blur-md border border-white/10 hover:border-white/25 transition-all cursor-pointer">
+            <span class="w-1.5 h-1.5 rounded-full bg-white/40"></span>
+            <span>💧 Khaiyachora Fall</span>
+          </button>
         </div>
       </div>
     </div>
@@ -381,40 +405,50 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 mb-12">
         <div>
           <div class="flex items-center gap-2.5 mb-3">
-            <svg class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m8 3 4 8 5-5 5 15H2L8 3z"/>
-            </svg>
-            <span class="font-display font-bold text-xl text-primary">Tourstk</span>
+            <div class="w-8 h-8 rounded-lg overflow-hidden border border-emerald-100 flex items-center justify-center bg-white flex-shrink-0 p-0.5 shadow-xs">
+              <img src="images/logo.jpg" alt="EZ Trails Logo" class="w-full h-full object-contain mix-blend-multiply" />
+            </div>
+            <span class="font-display font-bold text-lg text-primary">EZ Trails</span>
           </div>
           <p class="text-xs leading-relaxed text-slate-400 mb-3">
-            “Explore Sitakunda with thoughtfully planned trips, local experiences, and hassle-free travel.”
+            “Explore. Experience. Enjoy. Guided eco-tours, verified guides, transport & hotel bookings in Sitakunda.”
           </p>
-          <div class="space-y-1.5 mb-2">
+          <div class="space-y-2 mb-2">
+            <div class="flex items-start gap-1.5 text-xs text-slate-600">
+              <span class="material-symbols-outlined text-sm text-emerald-700 mt-0.5 flex-shrink-0">location_on</span>
+              <span><strong>Office:</strong> Sitakund Bus Station, Sitakunda</span>
+            </div>
+            <div class="flex items-center gap-2 text-xs font-bold text-slate-700">
+              <span class="material-symbols-outlined text-sm text-emerald-700 flex-shrink-0">call</span>
+              <div class="flex flex-wrap gap-x-2">
+                <a href="tel:01939627110" class="hover:text-primary hover:underline">01939627110</a>
+                <span>|</span>
+                <a href="tel:01876418411" class="hover:text-primary hover:underline">01876418411</a>
+              </div>
+            </div>
             <a href="mailto:eztrailsbd@gmail.com" class="flex items-center gap-1.5 text-xs font-bold text-emerald-800 hover:text-emerald-900 transition-colors">
               <span class="material-symbols-outlined text-sm">mail</span>
               <span>eztrailsbd@gmail.com</span>
-            </a>
-            <a href="tel:+8801812345678" class="flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-primary transition-colors">
-              <span class="material-symbols-outlined text-sm">call</span>
-              <span>+880 1812-345678</span>
             </a>
           </div>
         </div>
 
         <div>
-          <h4 class="font-bold text-xs uppercase tracking-wider text-primary mb-4">Explore</h4>
+          <h4 class="font-bold text-xs uppercase tracking-wider text-primary mb-4">Our Services</h4>
           <ul class="space-y-2.5 text-xs">
-            <li><a href="explore.html" class="hover:text-primary transition-colors">All 12 Destinations</a></li>
-            <li><a href="packages.html" class="hover:text-primary transition-colors">Tour Packages</a></li>
-            <li><a href="planner.html" class="hover:text-primary transition-colors">Trip Planner</a></li>
+            <li><a href="packages.html" class="hover:text-primary transition-colors flex items-center gap-1.5"><span class="material-symbols-outlined text-sm text-emerald-600">hotel</span>Hotel Room Booking</a></li>
+            <li><a href="packages.html" class="hover:text-primary transition-colors flex items-center gap-1.5"><span class="material-symbols-outlined text-sm text-emerald-600">directions_bus</span>Local Transport & Jeeps</a></li>
+            <li><a href="packages.html" class="hover:text-primary transition-colors flex items-center gap-1.5"><span class="material-symbols-outlined text-sm text-emerald-600">hiking</span>Certified Trail Guides</a></li>
+            <li><a href="planner.html" class="hover:text-primary transition-colors flex items-center gap-1.5"><span class="material-symbols-outlined text-sm text-emerald-600">route</span>Custom Trip Planning</a></li>
           </ul>
         </div>
 
         <div>
           <h4 class="font-bold text-xs uppercase tracking-wider text-primary mb-4">Support & Contact</h4>
           <ul class="space-y-2.5 text-xs">
-            <li><a href="mailto:eztrailsbd@gmail.com" class="hover:text-primary transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-xs">mail</span>eztrailsbd@gmail.com</a></li>
-            <li><a href="contact.html" class="hover:text-primary transition-colors">Contact Support</a></li>
+            <li><a href="tel:01939627110" class="hover:text-primary transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-xs">call</span>Hotline: 01939627110</a></li>
+            <li><a href="tel:01876418411" class="hover:text-primary transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-xs">call</span>Support: 01876418411</a></li>
+            <li><a href="https://wa.me/8801939627110" target="_blank" class="hover:text-primary transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-xs text-emerald-600">chat</span>WhatsApp Chat</a></li>
             <li><a href="my-booking.html" class="hover:text-primary transition-colors">My Booking</a></li>
           </ul>
         </div>
@@ -422,16 +456,17 @@
         <div>
           <h4 class="font-bold text-xs uppercase tracking-wider text-primary mb-4">Company</h4>
           <ul class="space-y-2.5 text-xs">
-            <li><a href="contact.html" class="hover:text-primary transition-colors">About Tourstk</a></li>
+            <li><a href="contact.html" class="hover:text-primary transition-colors">About EZ Trails</a></li>
             <li><a href="contact.html" class="hover:text-primary transition-colors">Partner With Us</a></li>
-            <li><a href="#" class="hover:text-primary transition-colors">Privacy Policy</a></li>
+            <li><a href="contact.html" class="hover:text-primary transition-colors">Office Location</a></li>
+            <li><a href="explore.html" class="hover:text-primary transition-colors">Sitakunda Spots</a></li>
           </ul>
         </div>
       </div>
 
       <div class="border-t border-slate-100 pt-6 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-400 gap-3">
-        <div>© 2026 Tourstk (EZ Trails Sitakunda) • <a href="mailto:eztrailsbd@gmail.com" class="hover:underline text-emerald-800 font-semibold">eztrailsbd@gmail.com</a></div>
-        <div>Discover Sitakunda. We Plan the Journey.</div>
+        <div>© 2026 EZ Trails Sitakunda • Hotline: <a href="tel:01939627110" class="font-bold text-slate-600 hover:underline">01939627110</a> | <a href="tel:01876418411" class="font-bold text-slate-600 hover:underline">01876418411</a></div>
+        <div>Explore. Experience. Enjoy. Sitakund Bus Station.</div>
       </div>
     </div>
   </footer>
@@ -439,17 +474,17 @@
   <!-- COMPACT FLOATING QUICK ACTION DOCK (Call + Facebook + WhatsApp) -->
   <div class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col gap-2 items-center">
     <!-- Call Button -->
-    <a href="tel:+8801812345678" class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-emerald-800 hover:bg-emerald-900 text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Call Hotline: +880 1812-345678">
+    <a href="tel:01939627110" class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-emerald-800 hover:bg-emerald-900 text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Call Hotline: 01939627110">
       <span class="material-symbols-outlined text-lg sm:text-xl">call</span>
     </a>
     <!-- Facebook Button -->
-    <a href="https://facebook.com" target="_blank" class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#1877f2] hover:bg-[#166fe5] text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Facebook Page">
+    <a href="https://www.facebook.com/share/1LiQruQVah/" target="_blank" class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#1877f2] hover:bg-[#166fe5] text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="EZ Trails Facebook Page">
       <svg class="w-4 h-4 sm:w-5 sm:h-5 fill-current" viewBox="0 0 24 24">
         <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
       </svg>
     </a>
     <!-- WhatsApp Button -->
-    <a href="https://wa.me/8801812345678?text=Hello%20Tourstk,%20I%20want%20to%20plan%20a%20Sitakunda%20trip." target="_blank" class="relative w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#25d366] hover:bg-[#20ba59] text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Chat on WhatsApp">
+    <a href="https://wa.me/8801939627110?text=Hello%20EZ%20Trails%20Sitakunda,%20I%20want%20to%20know%20about%20your%20tour%20packages%20and%20booking." target="_blank" class="relative w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#25d366] hover:bg-[#20ba59] text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform" title="Chat on WhatsApp (01939627110)">
       <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-300 rounded-full animate-ping"></span>
       <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border border-white"></span>
       <svg class="w-4 h-4 sm:w-5 sm:h-5 fill-white" viewBox="0 0 24 24">
@@ -1012,6 +1047,55 @@
           showToast();
         });
       }
+    });
+
+    // 4K Hero Background Crossfade Controller
+    let currentHeroSlide = 0;
+    let heroSlideTimer = null;
+
+    function showHeroSlide(index) {
+      const slides = document.querySelectorAll('.hero-slide');
+      if (!slides || slides.length === 0) return;
+      
+      currentHeroSlide = (index + slides.length) % slides.length;
+      slides.forEach((slide, idx) => {
+        if (idx === currentHeroSlide) {
+          slide.classList.add('is-active');
+        } else {
+          slide.classList.remove('is-active');
+        }
+      });
+
+      for (let i = 0; i < slides.length; i++) {
+        const dot = document.getElementById(`hero-dot-${i}`);
+        if (dot) {
+          const dotIndicator = dot.querySelector('span:first-child');
+          if (i === currentHeroSlide) {
+            dot.className = 'flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/25 text-white font-bold backdrop-blur-md border border-white/40 shadow-xs transition-all cursor-pointer';
+            if (dotIndicator) dotIndicator.className = 'w-1.5 h-1.5 rounded-full bg-emerald-400';
+          } else {
+            dot.className = 'flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/35 text-white/70 hover:text-white font-medium backdrop-blur-md border border-white/10 hover:border-white/25 transition-all cursor-pointer';
+            if (dotIndicator) dotIndicator.className = 'w-1.5 h-1.5 rounded-full bg-white/40';
+          }
+        }
+      }
+    }
+
+    function setHeroSlide(index) {
+      if (heroSlideTimer) clearInterval(heroSlideTimer);
+      showHeroSlide(index);
+      startHeroSlideTimer();
+    }
+
+    function startHeroSlideTimer() {
+      if (heroSlideTimer) clearInterval(heroSlideTimer);
+      heroSlideTimer = setInterval(() => {
+        showHeroSlide(currentHeroSlide + 1);
+      }, 5500);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      startHeroSlideTimer();
     });
   </script>
 </body>
