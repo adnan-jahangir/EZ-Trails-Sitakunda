@@ -75,6 +75,14 @@ const fallbackPath = path.join(__dirname, '..');
 const staticPath = require('fs').existsSync(publicPath) ? publicPath : fallbackPath;
 app.use(express.static(staticPath));
 
+// Database auto-reconnect middleware (ensures DB is active for serverless/Vercel)
+app.use(async (req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    await connectDB();
+  }
+  next();
+});
+
 // =================== API ROUTES ===================
 app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/bookings', bookingRoutes);
@@ -124,7 +132,7 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
-// Start server after connecting to MongoDB
+// Start server after connecting to MongoDB (local dev / standalone)
 const startServer = async () => {
   await connectDB();
   app.listen(PORT, () => {
@@ -138,6 +146,8 @@ const startServer = async () => {
   });
 };
 
-startServer();
+if (!process.env.VERCEL) {
+  startServer();
+}
 
 module.exports = app;

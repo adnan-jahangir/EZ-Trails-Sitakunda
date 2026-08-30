@@ -245,6 +245,10 @@ const TourstkAPI = {
     });
   },
 
+  async createCustomRequest(planData) {
+    return await this.submitCustomRequest(planData);
+  },
+
   async getCustomRequests(params = {}) {
     const query = new URLSearchParams(params).toString();
     return await this.request(`/custom-requests?${query}`, { method: 'GET', authRequired: true });

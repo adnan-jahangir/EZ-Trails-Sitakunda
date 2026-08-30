@@ -10,45 +10,47 @@ const bookingSchema = z.object({
 
   phone: z
     .string({ required_error: 'Phone number is required' })
-    .min(10, 'Phone number must be at least 10 digits')
-    .max(15, 'Phone number is too long')
-    .regex(/^[0-9+\-\s()]+$/, 'Invalid phone number format'),
+    .min(8, 'Phone number must be at least 8 digits')
+    .max(20, 'Phone number is too long'),
 
   email: z
     .string()
-    .email('Invalid email address')
     .optional()
+    .nullable()
     .or(z.literal('')),
 
-  packageId: z.string().min(1, 'Package ID is required'),
-  packageName: z.string().min(1, 'Package name is required'),
+  packageId: z.string().optional().default('sitakunda-adventure-tour'),
+  packageName: z.string().optional().default('Sitakunda Tour'),
 
   travelDate: z
     .string({ required_error: 'Travel date is required' })
     .min(1, 'Travel date is required'),
 
   guests: z.object({
-    adults: z.number().int().min(1, 'At least 1 adult required').max(50).default(1),
-    children: z.number().int().min(0).max(20).default(0),
-    total: z.number().int().min(1).max(70).default(1),
-  }).optional(),
+    adults: z.number().int().min(1).default(1),
+    children: z.number().int().min(0).default(0),
+    total: z.number().int().min(1).default(1),
+  }).passthrough().optional(),
 
-  pickupLocation: z.string().max(200).optional(),
-  specialRequests: z.string().max(1000).optional(),
+  pickupLocation: z.string().max(300).optional().nullable(),
+  specialRequests: z.string().max(2000).optional().nullable(),
+  addOns: z.array(z.any()).optional(),
 
   pricing: z.object({
-    basePrice: z.number().min(0, 'Base price must be positive'),
+    basePrice: z.number().min(0).default(0),
     addOnsTotal: z.number().min(0).default(0),
     discount: z.number().min(0).default(0),
-    grandTotal: z.number().min(0, 'Grand total must be positive'),
-  }),
+    grandTotal: z.number().min(0).default(0),
+  }).passthrough().optional(),
 
   payment: z.object({
-    method: z.enum(['bkash', 'nagad', 'rocket', 'bank_transfer', 'cash_on_arrival']).default('bkash'),
-    trxId: z.string().max(100).optional(),
-    senderNumber: z.string().max(15).optional(),
-  }).optional(),
-});
+    method: z.string().default('bkash'),
+    trxId: z.string().max(100).optional().nullable(),
+    senderNumber: z.string().max(30).optional().nullable(),
+    paidAmount: z.number().optional().default(0),
+    paymentStatus: z.string().optional().default('Pending Verification'),
+  }).passthrough().optional(),
+}).passthrough();
 
 // =================== CONTACT VALIDATION ===================
 const contactSchema = z.object({

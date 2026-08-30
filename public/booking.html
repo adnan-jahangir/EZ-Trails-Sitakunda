@@ -724,11 +724,33 @@
 
       try {
         const response = await TourstkAPI.createBooking(bookingPayload);
-        if (response.success && response.data) {
+        if (response && response.success && response.data) {
           assignedId = response.data.bookingId;
         }
       } catch (err) {
-        console.warn('API submission offline, fallback to local ID', err);
+        console.warn('API submission failed, using offline fallback', err);
+      }
+
+      // Also persist to local BookingManager as fallback
+      if (typeof BookingManager !== 'undefined') {
+        BookingManager.save({
+          id: assignedId,
+          name: bookingPayload.customerName,
+          phone: bookingPayload.phone,
+          email: bookingPayload.email,
+          packageId: bookingPayload.packageId,
+          packageName: bookingPayload.packageName,
+          travelDate: bookingPayload.travelDate,
+          travelers: count,
+          pickup: bookingPayload.pickupLocation,
+          totalPrice: total,
+          status: 'pending',
+          paymentStatus: 'Pending Verification',
+          trxId: trxId,
+          senderNumber: senderPhone,
+          paidAmount: paidAmount,
+          specialRequests: bookingPayload.specialRequests,
+        });
       }
 
       document.getElementById('book-form').style.display = 'none';

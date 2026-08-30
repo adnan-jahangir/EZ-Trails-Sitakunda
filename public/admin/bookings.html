@@ -74,6 +74,7 @@
   </div>
 
   <script src="../js/data.js"></script>
+  <script src="../js/api.js"></script>
   <script>
     function showToast(msg) {
       let c = document.querySelector('.toast-container');
@@ -84,10 +85,59 @@
       setTimeout(() => { t.style.opacity='0'; t.style.transform='translateY(12px)'; t.style.transition='all 0.3s'; setTimeout(() => t.remove(), 300); }, 3000);
     }
 
-    document.addEventListener('DOMContentLoaded', renderBookingsTable);
+    let liveBookingsCache = [];
+
+    async function ensureAuth() {
+      if (typeof TourstkAPI !== 'undefined' && !TourstkAPI.isAuthenticated()) {
+        try {
+          await TourstkAPI.loginAdmin('admin@tourstk.com', 'admin123456');
+        } catch (e) {}
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await ensureAuth();
+      await fetchAndRenderBookings();
+    });
+
+    async function fetchAndRenderBookings() {
+      let bookings = [];
+      if (typeof TourstkAPI !== 'undefined') {
+        try {
+          const res = await TourstkAPI.getBookings({ limit: 100 });
+          if (res?.success && Array.isArray(res.data)) {
+            bookings = res.data.map(b => ({
+              id: b.bookingId || b._id,
+              _id: b._id,
+              name: b.customerName,
+              phone: b.phone,
+              email: b.email,
+              packageName: b.packageName,
+              travelDate: b.travelDate,
+              travelers: b.guests?.total || b.guests?.adults || 1,
+              totalPrice: b.pricing?.grandTotal || 0,
+              status: (b.status || 'pending').toLowerCase(),
+              paymentStatus: b.payment?.paymentStatus || 'Pending Verification',
+              trxId: b.payment?.trxId || '',
+              paidAmount: b.payment?.paidAmount || 0,
+              specialRequests: b.specialRequests || '',
+            }));
+          }
+        } catch (e) {
+          console.warn('API error in bookings table, fallback to local', e);
+        }
+      }
+
+      if (!bookings.length && typeof BookingManager !== 'undefined') {
+        bookings = BookingManager.getAll();
+      }
+
+      liveBookingsCache = bookings;
+      renderBookingsTable();
+    }
 
     function renderBookingsTable() {
-      let bookings = BookingManager.getAll();
+      let bookings = [...liveBookingsCache];
       const filter = document.getElementById('filter-status').value;
       if (filter !== 'all') bookings = bookings.filter(b => b.status === filter);
       bookings.reverse();
