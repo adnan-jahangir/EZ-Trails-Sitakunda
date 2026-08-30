@@ -51,9 +51,6 @@ function injectNavbar() {
             <span class="material-symbols-outlined" style="font-size:17px">route</span>
             Plan Your Trip
           </a>
-          <button class="btn btn-ghost btn-sm" style="display:none;" id="mobile-menu-btn" onclick="toggleMobileMenu()">
-            <span class="material-symbols-outlined">menu</span>
-          </button>
         </div>
       </div>
     </nav>

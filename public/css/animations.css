@@ -413,3 +413,37 @@ html, body {
   animation: liquidWaterWave 5s linear infinite;
   display: inline-block;
 }
+
+/* 11. Mobile App Bottom Navigation Bar & Touch Enhancements */
+.mobile-bottom-nav {
+  box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.08);
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+}
+
+.mobile-nav-item {
+  transition: all 0.15s ease-in-out;
+}
+
+.mobile-nav-item:active {
+  transform: scale(0.88);
+}
+
+.mobile-nav-item.is-active {
+  color: #0e4d34;
+}
+
+.mobile-nav-item.is-active .mobile-nav-icon {
+  background-color: #ecfdf5;
+  color: #0e4d34;
+  transform: translateY(-2px);
+}
+
+.touch-action-btn:active {
+  transform: scale(0.96);
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-bottom: 74px; /* Space for bottom nav bar so footer is never obscured */
+  }
+}
