@@ -1,4 +1,5 @@
 const TourGuide = require('../models/TourGuide');
+const { isValidObjectId } = require('../utils/securityUtils');
 
 const getGuides = async (req, res, next) => {
   try {
@@ -16,7 +17,10 @@ const createGuide = async (req, res, next) => {
 
 const updateGuide = async (req, res, next) => {
   try {
-    const guide = await TourGuide.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ success: false, message: 'Invalid guide ID format' });
+    }
+    const guide = await TourGuide.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!guide) return res.status(404).json({ success: false, message: 'Guide not found' });
     res.json({ success: true, message: 'Guide updated successfully', data: guide });
   } catch (error) { next(error); }
@@ -24,6 +28,9 @@ const updateGuide = async (req, res, next) => {
 
 const deleteGuide = async (req, res, next) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ success: false, message: 'Invalid guide ID format' });
+    }
     const guide = await TourGuide.findByIdAndDelete(req.params.id);
     if (!guide) return res.status(404).json({ success: false, message: 'Guide not found' });
     res.json({ success: true, message: 'Guide deleted successfully' });

@@ -25,7 +25,7 @@ function injectNavbar() {
   navContainer.innerHTML = `
     <nav class="site-nav">
       <div class="container nav-inner">
-        <a href="index.html" class="nav-brand">
+        <a href="/" class="nav-brand">
           <div class="nav-logo-icon">
             <span class="material-symbols-outlined" style="font-size:24px">terrain</span>
           </div>
@@ -36,7 +36,7 @@ function injectNavbar() {
         </a>
 
         <ul class="nav-links">
-          <li><a href="index.html" class="nav-link ${current === 'index' ? 'active' : ''}">Home</a></li>
+          <li><a href="/" class="nav-link ${current === 'index' || current === '' ? 'active' : ''}">Home</a></li>
           <li><a href="explore.html" class="nav-link ${current === 'explore' || current === 'destination-detail' ? 'active' : ''}">Explore</a></li>
           <li><a href="packages.html" class="nav-link ${current === 'packages' || current === 'package-detail' ? 'active' : ''}">Packages</a></li>
           <li><a href="planner.html" class="nav-link ${current === 'planner' ? 'active' : ''}">Planner</a></li>

@@ -8,6 +8,7 @@ require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const connectDB = require('./config/db');
 const errorHandler = require('./middleware/errorHandler');
+const { mongoSanitize } = require('./middleware/mongoSanitize');
 
 // Route Handlers
 const authRoutes = require('./routes/authRoutes');
@@ -21,6 +22,7 @@ const contactRoutes = require('./routes/contactRoutes');
 const statsRoutes = require('./routes/statsRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const exportRoutes = require('./routes/exportRoutes');
+const auditRoutes = require('./routes/auditRoutes');
 
 const app = express();
 
@@ -62,9 +64,13 @@ const authLimiter = rateLimit({
   },
 });
 
-// =================== BODY PARSING ===================
+// =================== BODY PARSING & SANITIZATION ===================
 app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// 5. NoSQL / MongoDB Operator Injection Sanitizer (Strips '$' and '.' from body, query, params)
+app.use(mongoSanitize);
+
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
 }
@@ -93,6 +99,7 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/custom-requests', customReqRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/admin/stats', statsRoutes);
+app.use('/api/admin/audit-logs', auditRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/export', exportRoutes);
 
@@ -102,10 +109,14 @@ app.get('/api/health', (req, res) => {
     status: 'online',
     system: 'EZ Trails Sitakunda (Tourstk) API Server',
     security: {
-      helmet: '✅ Active',
+      helmet: '✅ Active (11+ HTTP Headers)',
       rateLimiting: '✅ Active (200 req/15min, Login: 10/15min)',
       cors: '✅ Active',
       zodValidation: '✅ Active on all POST/PUT routes',
+      noSqlSanitizer: '✅ Active (Strips $ and . operators globally)',
+      regexSanitizer: '✅ Active (ReDoS & special char escaping)',
+      rbacControl: '✅ Active (superadmin, manager, support)',
+      auditLogging: '✅ Active (Immutable Administrative Trail)',
       cloudinary: require('./config/cloudinary').isCloudinaryConfigured() ? '✅ Connected' : '⚠️ Not configured',
     },
     database: require('mongoose').connection.readyState === 1 ? 'connected' : 'disconnected',

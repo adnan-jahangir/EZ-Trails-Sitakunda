@@ -1,5 +1,7 @@
 const Booking = require('../models/Booking');
 const emailQueue = require('../services/emailQueue');
+const { escapeRegex, isValidObjectId } = require('../utils/securityUtils');
+const { logAction } = require('../services/auditService');
 
 // @desc    Create a new booking (Customer)
 // @route   POST /api/bookings
@@ -90,16 +92,24 @@ const trackBooking = async (req, res, next) => {
   try {
     const { identifier } = req.params;
     const cleanId = (identifier || '').trim();
+    if (!cleanId || cleanId.length > 50) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid search identifier',
+      });
+    }
+
+    const safeCleanId = escapeRegex(cleanId);
     const phoneDigits = cleanId.replace(/[^0-9]/g, '');
     const last8Digits = phoneDigits.length >= 8 ? phoneDigits.slice(-8) : phoneDigits;
 
     const queryOr = [
-      { bookingId: { $regex: new RegExp(`^${cleanId}$`, 'i') } },
-      { phone: { $regex: new RegExp(cleanId, 'i') } },
+      { bookingId: { $regex: new RegExp(`^${safeCleanId}$`, 'i') } },
+      { phone: { $regex: new RegExp(safeCleanId, 'i') } },
     ];
 
     if (last8Digits && last8Digits.length >= 6) {
-      queryOr.push({ phone: { $regex: new RegExp(last8Digits, 'i') } });
+      queryOr.push({ phone: { $regex: new RegExp(escapeRegex(last8Digits), 'i') } });
     }
 
     // Search by exact Booking ID or Phone Number
@@ -131,35 +141,38 @@ const getBookings = async (req, res, next) => {
 
     const query = {};
 
-    if (status && status !== 'all') {
+    if (status && status !== 'all' && typeof status === 'string') {
       query.status = status;
     }
 
-    if (paymentStatus && paymentStatus !== 'all') {
+    if (paymentStatus && paymentStatus !== 'all' && typeof paymentStatus === 'string') {
       query['payment.paymentStatus'] = paymentStatus;
     }
 
-    if (search) {
+    if (search && typeof search === 'string') {
+      const safeSearch = escapeRegex(search.trim().slice(0, 100));
       query.$or = [
-        { bookingId: { $regex: search, $options: 'i' } },
-        { customerName: { $regex: search, $options: 'i' } },
-        { phone: { $regex: search, $options: 'i' } },
-        { packageName: { $regex: search, $options: 'i' } },
+        { bookingId: { $regex: safeSearch, $options: 'i' } },
+        { customerName: { $regex: safeSearch, $options: 'i' } },
+        { phone: { $regex: safeSearch, $options: 'i' } },
+        { packageName: { $regex: safeSearch, $options: 'i' } },
       ];
     }
 
-    const skip = (Number(page) - 1) * Number(limit);
+    const safeLimit = Math.min(Math.max(Number(limit) || 50, 1), 200);
+    const safePage = Math.max(Number(page) || 1, 1);
+    const skip = (safePage - 1) * safeLimit;
 
     const [bookings, total] = await Promise.all([
-      Booking.find(query).sort({ createdAt: -1 }).skip(skip).limit(Number(limit)),
+      Booking.find(query).sort({ createdAt: -1 }).skip(skip).limit(safeLimit),
       Booking.countDocuments(query),
     ]);
 
     res.json({
       success: true,
       total,
-      page: Number(page),
-      pages: Math.ceil(total / Number(limit)),
+      page: safePage,
+      pages: Math.ceil(total / safeLimit),
       data: bookings,
     });
   } catch (error) {
@@ -169,12 +182,12 @@ const getBookings = async (req, res, next) => {
 
 // Helper to find booking by MongoDB _id or business bookingId (e.g. STK-2026-9779)
 const findBookingFlexible = async (identifier) => {
-  const mongoose = require('mongoose');
-  if (mongoose.Types.ObjectId.isValid(identifier)) {
+  if (!identifier || typeof identifier !== 'string') return null;
+  if (isValidObjectId(identifier)) {
     const byId = await Booking.findById(identifier);
     if (byId) return byId;
   }
-  return await Booking.findOne({ bookingId: identifier });
+  return await Booking.findOne({ bookingId: identifier.trim() });
 };
 
 // @desc    Get single booking by internal ID or booking code (Admin)
@@ -205,6 +218,15 @@ const updateBookingStatus = async (req, res, next) => {
       return res.status(404).json({ success: false, message: `Booking "${req.params.id}" not found` });
     }
 
+    const previousSnapshot = {
+      status: booking.status,
+      paymentStatus: booking.payment?.paymentStatus,
+      paidAmount: booking.payment?.paidAmount,
+      trxId: booking.payment?.trxId,
+      assignedGuide: booking.assignedGuide,
+      assignedVehicle: booking.assignedVehicle,
+    };
+
     if (status) booking.status = status;
     if (paymentStatus) booking.payment.paymentStatus = paymentStatus;
     if (paidAmount !== undefined) booking.payment.paidAmount = Number(paidAmount);
@@ -214,6 +236,26 @@ const updateBookingStatus = async (req, res, next) => {
     if (assignedVehicle !== undefined) booking.assignedVehicle = assignedVehicle;
 
     const updated = await booking.save();
+
+    // Record audit log
+    logAction({
+      req,
+      action: 'UPDATE_BOOKING_STATUS',
+      targetModel: 'Booking',
+      targetId: updated.bookingId,
+      description: `Updated booking ${updated.bookingId}: Status -> ${updated.status}, Payment -> ${updated.payment.paymentStatus}`,
+      changes: {
+        before: previousSnapshot,
+        after: {
+          status: updated.status,
+          paymentStatus: updated.payment?.paymentStatus,
+          paidAmount: updated.payment?.paidAmount,
+          trxId: updated.payment?.trxId,
+          assignedGuide: updated.assignedGuide,
+          assignedVehicle: updated.assignedVehicle,
+        },
+      },
+    });
 
     res.json({
       success: true,
@@ -227,14 +269,33 @@ const updateBookingStatus = async (req, res, next) => {
 
 // @desc    Delete booking (Admin)
 // @route   DELETE /api/bookings/:id
-// @access  Private (Admin)
+// @access  Private (SuperAdmin)
 const deleteBooking = async (req, res, next) => {
   try {
     const booking = await findBookingFlexible(req.params.id);
     if (!booking) {
       return res.status(404).json({ success: false, message: 'Booking not found' });
     }
+
     await Booking.findByIdAndDelete(booking._id);
+
+    // Record audit log
+    logAction({
+      req,
+      action: 'DELETE_BOOKING',
+      targetModel: 'Booking',
+      targetId: booking.bookingId,
+      description: `Deleted booking ${booking.bookingId} (${booking.customerName})`,
+      changes: {
+        deletedData: {
+          bookingId: booking.bookingId,
+          customerName: booking.customerName,
+          phone: booking.phone,
+          grandTotal: booking.pricing?.grandTotal,
+        },
+      },
+    });
+
     res.json({ success: true, message: `Booking ${booking.bookingId} deleted successfully` });
   } catch (error) {
     next(error);

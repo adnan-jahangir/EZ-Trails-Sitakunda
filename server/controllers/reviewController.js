@@ -1,4 +1,5 @@
 const Review = require('../models/Review');
+const { isValidObjectId } = require('../utils/securityUtils');
 
 const getReviews = async (req, res, next) => {
   try {
@@ -16,6 +17,9 @@ const createReview = async (req, res, next) => {
 
 const deleteReview = async (req, res, next) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ success: false, message: 'Invalid review ID format' });
+    }
     const review = await Review.findByIdAndDelete(req.params.id);
     if (!review) return res.status(404).json({ success: false, message: 'Review not found' });
     res.json({ success: true, message: 'Review deleted successfully' });

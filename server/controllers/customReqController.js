@@ -1,4 +1,5 @@
 const CustomRequest = require('../models/CustomRequest');
+const { escapeRegex, isValidObjectId } = require('../utils/securityUtils');
 
 // @desc    Submit a custom trip planning request (Customer)
 // @route   POST /api/custom-requests
@@ -67,15 +68,16 @@ const getCustomRequests = async (req, res, next) => {
     const { status, search } = req.query;
     const query = {};
 
-    if (status && status !== 'all') {
+    if (status && status !== 'all' && typeof status === 'string') {
       query.status = status;
     }
 
-    if (search) {
+    if (search && typeof search === 'string') {
+      const safeSearch = escapeRegex(search.trim().slice(0, 100));
       query.$or = [
-        { requestId: { $regex: search, $options: 'i' } },
-        { customerName: { $regex: search, $options: 'i' } },
-        { phone: { $regex: search, $options: 'i' } },
+        { requestId: { $regex: safeSearch, $options: 'i' } },
+        { customerName: { $regex: safeSearch, $options: 'i' } },
+        { phone: { $regex: safeSearch, $options: 'i' } },
       ];
     }
 
@@ -92,7 +94,13 @@ const getCustomRequests = async (req, res, next) => {
 const updateCustomRequest = async (req, res, next) => {
   try {
     const { status, adminNotes } = req.body;
-    const reqItem = await CustomRequest.findById(req.params.id);
+    const idParam = req.params.id;
+
+    if (!idParam || !isValidObjectId(idParam)) {
+      return res.status(400).json({ success: false, message: 'Invalid request ID format' });
+    }
+
+    const reqItem = await CustomRequest.findById(idParam);
 
     if (!reqItem) {
       return res.status(404).json({ success: false, message: 'Request not found' });

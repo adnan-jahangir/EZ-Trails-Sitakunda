@@ -8,7 +8,7 @@ const {
   updateBookingStatus,
   deleteBooking,
 } = require('../controllers/bookingController');
-const { protect } = require('../middleware/authMiddleware');
+const { protect, authorize } = require('../middleware/authMiddleware');
 const { validate, bookingSchema } = require('../middleware/validate');
 
 // Public Customer endpoints
@@ -18,7 +18,7 @@ router.get('/track/:identifier', trackBooking);
 // Protected Admin endpoints
 router.get('/', protect, getBookings);
 router.get('/:id', protect, getBookingById);
-router.patch('/:id/status', protect, updateBookingStatus);
-router.delete('/:id', protect, deleteBooking);
+router.patch('/:id/status', protect, authorize('superadmin', 'manager'), updateBookingStatus);
+router.delete('/:id', protect, authorize('superadmin'), deleteBooking);
 
 module.exports = router;

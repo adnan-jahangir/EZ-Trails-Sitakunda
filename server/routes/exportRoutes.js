@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const XLSX = require('xlsx');
-const { protect } = require('../middleware/authMiddleware');
+const { protect, authorize } = require('../middleware/authMiddleware');
+const { logAction } = require('../services/auditService');
 const Booking = require('../models/Booking');
 
 // @desc    Export all bookings as Excel (.xlsx) file
 // @route   GET /api/export/bookings
-// @access  Private (Admin)
-router.get('/bookings', protect, async (req, res, next) => {
+// @access  Private (SuperAdmin, Manager)
+router.get('/bookings', protect, authorize('superadmin', 'manager'), async (req, res, next) => {
   try {
     const bookings = await Booking.find().sort({ createdAt: -1 }).lean();
 
@@ -49,6 +50,14 @@ router.get('/bookings', protect, async (req, res, next) => {
     const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
 
     const filename = `Tourstk_Bookings_${new Date().toISOString().split('T')[0]}.xlsx`;
+
+    // Record audit log for data export
+    logAction({
+      req,
+      action: 'EXPORT_BOOKINGS_EXCEL',
+      targetModel: 'Booking',
+      description: `Exported ${bookings.length} booking records to Excel (${filename})`,
+    });
 
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

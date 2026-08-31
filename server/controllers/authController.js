@@ -1,5 +1,6 @@
 const AdminUser = require('../models/AdminUser');
 const jwt = require('jsonwebtoken');
+const { logAction } = require('../services/auditService');
 
 // Generate JWT token helper
 const generateToken = (id) => {
@@ -17,22 +18,53 @@ const loginAdmin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    if (!email || !password) {
-      return res.status(400).json({ success: false, message: 'Please provide both email and password' });
+    if (!email || !password || typeof email !== 'string' || typeof password !== 'string') {
+      return res.status(400).json({ success: false, message: 'Please provide valid email and password' });
     }
 
-    const admin = await AdminUser.findOne({ email: email.toLowerCase().trim() });
+    const cleanEmail = email.toLowerCase().trim();
+    if (!cleanEmail || cleanEmail.length > 100 || password.length > 200) {
+      return res.status(400).json({ success: false, message: 'Invalid credentials format' });
+    }
+
+    const admin = await AdminUser.findOne({ email: cleanEmail });
 
     if (!admin || !(await admin.matchPassword(password))) {
+      // Record failed login in audit log
+      logAction({
+        req,
+        action: 'LOGIN_FAILED',
+        targetModel: 'AdminUser',
+        targetId: cleanEmail,
+        description: `Failed login attempt for email: ${cleanEmail}`,
+      });
       return res.status(401).json({ success: false, message: 'Invalid email or password' });
     }
 
     if (!admin.isActive) {
+      logAction({
+        req,
+        admin,
+        action: 'LOGIN_BLOCKED',
+        targetModel: 'AdminUser',
+        targetId: admin._id,
+        description: `Deactivated admin attempted login: ${admin.email}`,
+      });
       return res.status(403).json({ success: false, message: 'Your admin account has been deactivated' });
     }
 
     admin.lastLogin = new Date();
     await admin.save();
+
+    // Record successful login in audit log
+    logAction({
+      req,
+      admin,
+      action: 'LOGIN_SUCCESS',
+      targetModel: 'AdminUser',
+      targetId: admin._id,
+      description: `Admin ${admin.name} (${admin.role}) logged in successfully`,
+    });
 
     res.json({
       success: true,

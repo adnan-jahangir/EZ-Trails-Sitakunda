@@ -32,4 +32,28 @@ const protect = async (req, res, next) => {
   }
 };
 
-module.exports = { protect };
+/**
+ * Role-Based Access Control (RBAC) middleware
+ * Restricts access to specified roles (e.g., 'superadmin', 'manager', 'support')
+ */
+const authorize = (...roles) => {
+  return (req, res, next) => {
+    if (!req.admin) {
+      return res.status(401).json({
+        success: false,
+        message: 'Authentication required before permission check',
+      });
+    }
+
+    if (!roles.includes(req.admin.role)) {
+      return res.status(403).json({
+        success: false,
+        message: `Forbidden: User role "${req.admin.role}" does not have permission for this resource. Required role(s): [${roles.join(', ')}]`,
+      });
+    }
+
+    next();
+  };
+};
+
+module.exports = { protect, authorize };
