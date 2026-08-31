@@ -635,6 +635,39 @@
         </button>
       </div>
 
+      <!-- 🏨 Room & Accommodation Card -->
+      <div id="assign-room-card" class="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-3.5 sm:p-4 mb-4 text-xs">
+        <div class="flex items-center justify-between mb-2">
+          <span class="font-bold text-emerald-950 flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-sm text-emerald-700">hotel</span>
+            <span>Room & Bed Selection</span>
+          </span>
+          <span id="assign-room-badge" class="px-2 py-0.5 rounded-md font-bold text-[10px] bg-emerald-100 text-emerald-900 border border-emerald-300">
+            Standard Cottage
+          </span>
+        </div>
+        <div class="space-y-1.5 text-slate-700">
+          <div class="flex justify-between items-center">
+            <span>Room Category:</span>
+            <strong id="assign-room-title" class="text-slate-900 font-bold">Standard Eco Cottage (1 Room)</strong>
+          </div>
+          <div class="flex justify-between items-center">
+            <span>Bed Setup:</span>
+            <strong id="assign-room-bed" class="text-slate-900 font-semibold">1 Queen Double Bed</strong>
+          </div>
+          <div class="flex justify-between items-center" id="assign-room-fee-row">
+            <span>Upgrade Fee:</span>
+            <strong id="assign-room-fee" class="text-emerald-700 font-bold">৳0 (Included in Package)</strong>
+          </div>
+          <div class="pt-1.5 border-t border-emerald-200/60">
+            <span class="text-[10px] font-bold text-slate-500 uppercase block mb-1">Selected Features & Amenities:</span>
+            <div id="assign-room-features" class="flex flex-wrap gap-1">
+              <!-- Features injected dynamically -->
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- 💳 Customer Payment Verification Card -->
       <div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-3.5 sm:p-4 mb-4 text-xs">
         <div class="flex items-center justify-between mb-2">
@@ -1102,6 +1135,13 @@
             paidAmount: b.payment?.paidAmount || 0,
             paymentMethod: b.payment?.method || 'bkash',
             note: b.adminNotes || '',
+            roomPreference: b.roomPreference || {
+              roomType: 'Standard Eco Cottage',
+              bedType: '1 Queen Double Bed',
+              roomCount: 1,
+              upgradeFee: 0,
+              features: ['Attached Bath', 'Nature Breeze', '24/7 Water'],
+            },
             assignedGuide: b.assignedGuide || null,
             assignedVehicle: b.assignedVehicle || '',
           }));
@@ -1141,6 +1181,13 @@
             paidAmount: b.paidAmount || 0,
             paymentMethod: b.paymentMethod || 'bkash',
             note: b.note || b.adminNotes || '',
+            roomPreference: b.roomPreference || {
+              roomType: 'Standard Eco Cottage',
+              bedType: '1 Queen Double Bed',
+              roomCount: 1,
+              upgradeFee: 0,
+              features: ['Attached Bath', 'Nature Breeze', '24/7 Water'],
+            },
             assignedGuide: b.assignedGuide || null,
             assignedVehicle: b.assignedVehicle || '',
           });
@@ -1251,7 +1298,8 @@
           (b.name && b.name.toLowerCase().includes(searchFilter)) ||
           (b.phone && b.phone.includes(searchFilter)) ||
           (b.trxId && b.trxId.toLowerCase().includes(searchFilter)) ||
-          (b.packageName && b.packageName.toLowerCase().includes(searchFilter))
+          (b.packageName && b.packageName.toLowerCase().includes(searchFilter)) ||
+          (b.roomPreference?.roomType && b.roomPreference.roomType.toLowerCase().includes(searchFilter))
         );
       }
 
@@ -1284,6 +1332,13 @@
           : b.paymentMethod === 'nagad' 
           ? 'bg-orange-100 text-[#f7941d] border-orange-200' 
           : 'bg-purple-100 text-[#8c3494] border-purple-200';
+
+        const roomPref = b.roomPreference || {};
+        const roomName = roomPref.roomType || 'Standard Eco Cottage';
+        const bedTitle = roomPref.bedType || '1 Queen Double Bed';
+        const roomCount = roomPref.roomCount || 1;
+        const roomFee = roomPref.upgradeFee || 0;
+        const featuresList = Array.isArray(roomPref.features) ? roomPref.features : [];
 
         return `
           <tr class="hover:bg-slate-50/80 transition-colors border-b border-slate-100 ${b.status === 'confirmed' ? 'bg-emerald-50/25' : ''}">
@@ -1319,12 +1374,36 @@
               `}
             </td>
 
-            <!-- 3. Package & Guests -->
+            <!-- 3. Package, Room & Features Selected -->
             <td class="py-5 px-4 align-top">
               <div class="font-bold text-slate-900 text-xs leading-snug">${b.packageName || 'Sitakunda Tour'}</div>
-              <div class="text-slate-500 text-[11px] mt-1.5 flex items-center gap-1 font-medium">
+              <div class="text-slate-500 text-[11px] mt-1 flex items-center gap-1 font-medium">
                 <span class="material-symbols-outlined text-xs">group</span>
                 <span>${b.travelers || 1} Person(s)</span>
+              </div>
+              
+              <!-- 🏨 Room & Feature Card -->
+              <div class="mt-2 bg-slate-50 border border-slate-200/90 rounded-xl p-2.5 text-xs shadow-2xs max-w-[280px]">
+                <div class="flex items-center justify-between gap-1 mb-1">
+                  <span class="font-bold text-emerald-950 flex items-center gap-1 text-[11px]">
+                    <span class="material-symbols-outlined text-xs text-emerald-700">hotel</span>
+                    <span>${roomName}</span>
+                  </span>
+                  <span class="text-[9px] font-bold bg-emerald-100 text-emerald-900 px-1.5 py-0.5 rounded border border-emerald-200">${roomCount} Room(s)</span>
+                </div>
+                <div class="text-[10.5px] text-slate-600 font-medium flex items-center gap-1">
+                  <span class="material-symbols-outlined text-xs text-slate-400">bed</span>
+                  <span>${bedTitle}</span>
+                </div>
+                ${roomFee > 0 ? `
+                  <div class="text-[10px] text-emerald-700 font-bold mt-0.5">Upgrade: +৳${roomFee.toLocaleString()}</div>
+                ` : ''}
+                
+                ${featuresList.length > 0 ? `
+                  <div class="mt-1.5 pt-1.5 border-t border-slate-200/80 flex flex-wrap gap-1">
+                    ${featuresList.map(f => `<span class="inline-flex items-center text-[9px] font-semibold bg-white border border-slate-200 text-slate-700 px-1.5 py-0.5 rounded shadow-3xs">✓ ${f}</span>`).join('')}
+                  </div>
+                ` : ''}
               </div>
             </td>
 
@@ -1469,8 +1548,32 @@
         const codeInput = document.getElementById('assign-booking-code');
         if (codeInput) codeInput.value = bookingCode || '';
         
-        const subEl = document.getElementById('assign-booking-sub');
-        if (subEl) subEl.textContent = `Booking ID: ${bookingCode} (${b.name || 'Customer'})`;
+        const roomTitle = document.getElementById('assign-room-title');
+        const roomBed = document.getElementById('assign-room-bed');
+        const roomFee = document.getElementById('assign-room-fee');
+        const roomBadge = document.getElementById('assign-room-badge');
+        const roomFeatures = document.getElementById('assign-room-features');
+
+        const roomPref = b.roomPreference || {};
+        if (roomTitle) roomTitle.textContent = `${roomPref.roomType || 'Standard Eco Cottage'} (${roomPref.roomCount || 1} Room)`;
+        if (roomBed) roomBed.textContent = roomPref.bedType || '1 Queen Double Bed';
+        if (roomFee) {
+          const fee = roomPref.upgradeFee || 0;
+          roomFee.textContent = fee > 0 ? `+৳${fee.toLocaleString()} (Upgrade / Extra)` : '৳0 (Included in Package)';
+        }
+        if (roomBadge) {
+          roomBadge.textContent = roomPref.roomType || 'Standard Cottage';
+        }
+        if (roomFeatures) {
+          const feats = (roomPref.features && roomPref.features.length > 0) 
+            ? roomPref.features 
+            : ['Attached Bathroom', 'Natural Cross Ventilation', '24/7 Running Water', 'Clean Linens & Towels'];
+          roomFeatures.innerHTML = feats.map(f => `
+            <span class="inline-flex items-center text-[10px] font-semibold bg-white border border-emerald-200 text-emerald-950 px-2 py-0.5 rounded-md shadow-3xs">
+              ✓ ${f}
+            </span>
+          `).join('');
+        }
 
         const payBadge = document.getElementById('assign-pay-method-badge');
         const payTrx = document.getElementById('assign-pay-trxid');

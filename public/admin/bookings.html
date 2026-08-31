@@ -120,6 +120,13 @@
               paymentStatus: b.payment?.paymentStatus || 'Pending Verification',
               trxId: b.payment?.trxId || '',
               paidAmount: b.payment?.paidAmount || 0,
+              roomPreference: b.roomPreference || {
+                roomType: 'Standard Eco Cottage',
+                bedType: '1 Queen Double Bed',
+                roomCount: 1,
+                upgradeFee: 0,
+                features: ['Attached Bath', 'Nature Breeze', '24/7 Water'],
+              },
               specialRequests: b.specialRequests || '',
             }));
           }
@@ -151,6 +158,13 @@
             paymentStatus: b.paymentStatus || 'Pending Verification',
             trxId: b.trxId || '',
             paidAmount: b.paidAmount || 0,
+            roomPreference: b.roomPreference || {
+              roomType: 'Standard Eco Cottage',
+              bedType: '1 Queen Double Bed',
+              roomCount: 1,
+              upgradeFee: 0,
+              features: ['Attached Bath', 'Nature Breeze', '24/7 Water'],
+            },
             specialRequests: b.specialRequests || '',
           });
         }
@@ -170,14 +184,18 @@
       const table = document.getElementById('bookings-table');
       table.innerHTML = bookings.length ? `
         <table class="admin-table">
-          <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Package</th><th>Date</th><th>Travelers</th><th>Price</th><th>Status</th><th>Action</th></tr></thead>
+          <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Package & Room</th><th>Date</th><th>Travelers</th><th>Price</th><th>Status</th><th>Action</th></tr></thead>
           <tbody>
             ${bookings.map(b => `
               <tr>
                 <td style="font-weight:var(--weight-semibold);color:var(--color-primary)">${b.id}</td>
                 <td>${b.name}</td>
                 <td style="font-size:var(--text-xs)">${b.phone}</td>
-                <td style="font-size:var(--text-xs)">${b.packageName || 'N/A'}</td>
+                <td style="font-size:var(--text-xs)">
+                  <div style="font-weight:600">${b.packageName || 'N/A'}</div>
+                  <div style="color:var(--color-primary);font-size:11px;margin-top:2px">🏨 ${b.roomPreference?.roomType || 'Standard Cottage'} (${b.roomPreference?.roomCount || 1} Room)</div>
+                  <div style="color:#64748b;font-size:10.5px">🛏️ ${b.roomPreference?.bedType || '1 Queen Double Bed'}</div>
+                </td>
                 <td style="font-size:var(--text-xs)">${b.travelDate || 'N/A'}</td>
                 <td>${b.travelers || '-'}</td>
                 <td style="font-weight:var(--weight-semibold)">৳${(b.totalPrice||0).toLocaleString()}</td>
@@ -195,9 +213,14 @@
     }
 
     function openBookingDetail(id) {
-      const b = BookingManager.getAll().find(x => x.id === id);
+      const b = liveBookingsCache.find(x => x.id === id || x._id === id) || BookingManager.getAll().find(x => x.id === id);
       if (!b) return;
       document.getElementById('modal-title').textContent = `Booking: ${b.id}`;
+      
+      const feats = (b.roomPreference?.features && b.roomPreference.features.length > 0)
+        ? b.roomPreference.features
+        : ['Attached Bath', 'Mountain Air', '24/7 Water', 'Clean Linens'];
+
       document.getElementById('modal-body').innerHTML = `
         <div style="display:grid;gap:var(--space-3);margin-bottom:var(--space-6)">
           <div class="flex justify-between text-sm"><span class="text-muted">Name</span><span class="font-semibold">${b.name}</span></div>
@@ -208,9 +231,33 @@
           <div class="flex justify-between text-sm"><span class="text-muted">Package</span><span class="font-semibold">${b.packageName || 'N/A'}</span></div>
           <div class="flex justify-between text-sm"><span class="text-muted">Travel Date</span><span>${b.travelDate || 'N/A'}</span></div>
           <div class="flex justify-between text-sm"><span class="text-muted">Travelers</span><span>${b.travelers || '-'}</span></div>
-          ${b.roomPreference && b.roomPreference.roomType ? `<div class="flex justify-between text-sm"><span class="text-muted">Room & Bed</span><span class="font-semibold text-primary">${b.roomPreference.roomType} (${b.roomPreference.bedType || '1 Queen Bed'}, ${b.roomPreference.roomCount || 1} Room)</span></div>` : ''}
+          
+          <!-- Room & Bed Selection Section -->
+          <div style="background:#f8fafc;padding:10px 12px;border-radius:10px;border:1px solid #e2e8f0;margin-top:4px">
+            <div class="flex justify-between text-xs" style="margin-bottom:4px">
+              <span class="text-muted" style="font-weight:600">🏨 Room Category:</span>
+              <span class="font-semibold text-primary">${b.roomPreference?.roomType || 'Standard Eco Cottage'} (${b.roomPreference?.roomCount || 1} Room)</span>
+            </div>
+            <div class="flex justify-between text-xs" style="margin-bottom:4px">
+              <span class="text-muted" style="font-weight:600">🛏️ Bed Setup:</span>
+              <span class="font-semibold">${b.roomPreference?.bedType || '1 Queen Double Bed'}</span>
+            </div>
+            ${(b.roomPreference?.upgradeFee && b.roomPreference.upgradeFee > 0) ? `
+              <div class="flex justify-between text-xs" style="margin-bottom:6px">
+                <span class="text-muted" style="font-weight:600">💰 Upgrade Fee:</span>
+                <span style="color:#047857;font-weight:700">+৳${b.roomPreference.upgradeFee.toLocaleString()}</span>
+              </div>
+            ` : ''}
+            <div style="margin-top:6px;padding-top:6px;border-top:1px solid #e2e8f0">
+              <span style="font-size:10px;font-weight:700;color:#64748b;display:block;margin-bottom:4px;text-transform:uppercase">Room Features & Amenities:</span>
+              <div style="display:flex;flex-wrap:wrap;gap:4px">
+                ${feats.map(f => `<span style="font-size:10px;background:#fff;border:1px solid #cbd5e1;padding:2px 6px;border-radius:4px;color:#334155">✓ ${f}</span>`).join('')}
+              </div>
+            </div>
+          </div>
+
           ${b.pickup ? `<div class="flex justify-between text-sm"><span class="text-muted">Pickup</span><span>${b.pickup}</span></div>` : ''}
-          ${b.special ? `<div class="flex justify-between text-sm"><span class="text-muted">Special</span><span>${b.special}</span></div>` : ''}
+          ${b.specialRequests ? `<div class="flex justify-between text-sm"><span class="text-muted">Special Requests</span><span>${b.specialRequests}</span></div>` : ''}
           <div class="flex justify-between text-sm font-bold"><span>Total Price</span><span class="text-primary">৳${(b.totalPrice||0).toLocaleString()}</span></div>
         </div>
         <div class="form-group">

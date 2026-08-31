@@ -1589,10 +1589,16 @@
         guests: { adults: count, children: 0, total: count },
         addOns: addOnsList,
         roomPreference: {
+          roomKey: room.key,
           roomType: room.name,
+          bnRoomType: room.bnName,
+          bedKey: selectedBedSetup,
           bedType: selectedBedTitle,
           roomCount: bookingRoomCount,
           upgradeFee: roomFee,
+          features: room.amenities || [],
+          bnFeatures: room.bnAmenities || [],
+          photos: room.photos || [room.image],
         },
         pricing: {
           basePrice: pkg ? pkg.price * count : 0,

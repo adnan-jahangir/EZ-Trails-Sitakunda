@@ -334,12 +334,20 @@
           ${booking.roomPreference && booking.roomPreference.roomType ? `
             <div class="flex justify-between">
               <span>Accommodation:</span>
-              <strong class="text-purple-900 font-bold">${booking.roomPreference.roomType} (${booking.roomPreference.roomCount || 1} Room)</strong>
+              <strong class="text-emerald-950 font-bold">${booking.roomPreference.roomType} (${booking.roomPreference.roomCount || 1} Room)</strong>
             </div>
             <div class="flex justify-between">
               <span>Bed Setup:</span>
               <strong class="text-slate-900 font-bold">${booking.roomPreference.bedType || '1 Queen Double Bed'}</strong>
             </div>
+            ${(booking.roomPreference.features && booking.roomPreference.features.length > 0) ? `
+              <div class="pt-1.5 border-t border-slate-200">
+                <span class="text-[10px] text-slate-500 font-bold block mb-1 uppercase">Selected Room Amenities & Features:</span>
+                <div class="flex flex-wrap gap-1">
+                  ${booking.roomPreference.features.map(f => `<span class="bg-white border border-emerald-200 text-emerald-950 text-[10px] px-2 py-0.5 rounded-md font-semibold">✓ ${f}</span>`).join('')}
+                </div>
+              </div>
+            ` : ''}
           ` : ''}
           <div class="flex justify-between"><span>Included Perks:</span><strong class="text-emerald-800 font-bold">✓ Guide + Transport + Tickets (Included)</strong></div>
           <div class="flex justify-between pt-2.5 border-t border-slate-200 text-sm">
