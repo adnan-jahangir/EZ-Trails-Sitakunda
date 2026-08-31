@@ -42,6 +42,30 @@
     {
       "source": "/admin",
       "destination": "/admin/index.html"
+    },
+    {
+      "source": "/admin/",
+      "destination": "/admin/index.html"
+    },
+    {
+      "source": "/admin/index",
+      "destination": "/admin/index.html"
+    },
+    {
+      "source": "/admin/bookings",
+      "destination": "/admin/bookings.html"
+    },
+    {
+      "source": "/admin/packages",
+      "destination": "/admin/packages.html"
+    },
+    {
+      "source": "/admin/custom-requests",
+      "destination": "/admin/custom-requests.html"
+    },
+    {
+      "source": "/admin/(.*)",
+      "destination": "/admin/index.html"
     }
   ]
 }

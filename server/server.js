@@ -75,16 +75,38 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
 }
 
-// Serve Frontend Static files from 'public' directory (with clean extensionless URL support)
 const publicPath = path.join(__dirname, '../public');
 const fallbackPath = path.join(__dirname, '..');
 const staticPath = require('fs').existsSync(publicPath) ? publicPath : fallbackPath;
-app.use(express.static(staticPath, { extensions: ['html', 'htm'] }));
+
+// Explicit Admin Route Handlers (guarantees /admin, /admin/, /admin/bookings etc. resolve cleanly with HTTP 200)
+app.get(['/admin', '/admin/', '/admin/index', '/admin/index.html'], (req, res) => {
+  const adminIndex = path.join(staticPath, 'admin', 'index.html');
+  if (require('fs').existsSync(adminIndex)) {
+    return res.sendFile(adminIndex);
+  }
+  res.status(404).sendFile(path.join(staticPath, '404.html'));
+});
+
+const adminSubRoutes = ['bookings', 'packages', 'custom-requests'];
+adminSubRoutes.forEach(sub => {
+  app.get([`/admin/${sub}`, `/admin/${sub}.html`], (req, res) => {
+    const targetFile = path.join(staticPath, 'admin', `${sub}.html`);
+    if (require('fs').existsSync(targetFile)) {
+      return res.sendFile(targetFile);
+    }
+    const adminIndex = path.join(staticPath, 'admin', 'index.html');
+    if (require('fs').existsSync(adminIndex)) {
+      return res.sendFile(adminIndex);
+    }
+    res.status(404).sendFile(path.join(staticPath, '404.html'));
+  });
+});
 
 // Explicit clean route handlers (guarantees GET /packages, /explore etc. return the right HTML)
 const cleanRoutes = ['packages', 'explore', 'my-booking', 'planner', 'contact', 'booking', 'package-detail', 'destination-detail'];
 cleanRoutes.forEach(route => {
-  app.get(`/${route}`, (req, res) => {
+  app.get([`/${route}`, `/${route}.html`], (req, res) => {
     const targetFile = path.join(staticPath, `${route}.html`);
     if (require('fs').existsSync(targetFile)) {
       res.sendFile(targetFile);
@@ -93,6 +115,9 @@ cleanRoutes.forEach(route => {
     }
   });
 });
+
+// Serve Frontend Static files from 'public' directory (with clean extensionless URL support)
+app.use(express.static(staticPath, { extensions: ['html', 'htm'] }));
 
 // Database auto-reconnect middleware (ensures DB is active for serverless/Vercel)
 app.use(async (req, res, next) => {
