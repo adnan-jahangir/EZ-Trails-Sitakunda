@@ -81,6 +81,19 @@ const fallbackPath = path.join(__dirname, '..');
 const staticPath = require('fs').existsSync(publicPath) ? publicPath : fallbackPath;
 app.use(express.static(staticPath, { extensions: ['html', 'htm'] }));
 
+// Explicit clean route handlers (guarantees GET /packages, /explore etc. return the right HTML)
+const cleanRoutes = ['packages', 'explore', 'my-booking', 'planner', 'contact', 'booking', 'package-detail', 'destination-detail'];
+cleanRoutes.forEach(route => {
+  app.get(`/${route}`, (req, res) => {
+    const targetFile = path.join(staticPath, `${route}.html`);
+    if (require('fs').existsSync(targetFile)) {
+      res.sendFile(targetFile);
+    } else {
+      res.status(404).sendFile(path.join(staticPath, '404.html'));
+    }
+  });
+});
+
 // Database auto-reconnect middleware (ensures DB is active for serverless/Vercel)
 app.use(async (req, res, next) => {
   if (req.path.startsWith('/api')) {

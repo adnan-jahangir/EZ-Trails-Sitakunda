@@ -6,6 +6,42 @@
     {
       "source": "/api/(.*)",
       "destination": "/api/index.js"
+    },
+    {
+      "source": "/packages",
+      "destination": "/packages.html"
+    },
+    {
+      "source": "/explore",
+      "destination": "/explore.html"
+    },
+    {
+      "source": "/my-booking",
+      "destination": "/my-booking.html"
+    },
+    {
+      "source": "/planner",
+      "destination": "/planner.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/contact.html"
+    },
+    {
+      "source": "/booking",
+      "destination": "/booking.html"
+    },
+    {
+      "source": "/package-detail",
+      "destination": "/package-detail.html"
+    },
+    {
+      "source": "/destination-detail",
+      "destination": "/destination-detail.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin/index.html"
     }
   ]
 }
