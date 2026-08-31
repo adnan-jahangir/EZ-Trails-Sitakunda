@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="light" lang="en">
 <head>
   <meta charset="utf-8">
@@ -52,15 +52,15 @@
       <!-- Center Links -->
       <div class="hidden md:flex items-center gap-7 text-xs sm:text-[13.5px] font-semibold text-slate-600">
         <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <a href="packages.html" class="hover:text-primary transition-colors">Packages</a>
-        <a href="explore.html" class="hover:text-primary transition-colors">Explore</a>
-        <a href="my-booking.html" class="hover:text-primary transition-colors">My Booking</a>
+        <a href="/packages" class="hover:text-primary transition-colors">Packages</a>
+        <a href="/explore" class="hover:text-primary transition-colors">Explore</a>
+        <a href="/my-booking" class="hover:text-primary transition-colors">My Booking</a>
       </div>
 
       <!-- Right Action Button & Weather Pill -->
       <div class="flex items-center gap-2">
         <div id="sitakunda-weather-pill" class="hidden lg:block"></div>
-        <a href="planner.html" class="flex bg-primary hover:bg-primary-dark text-white font-bold text-[11px] sm:text-xs px-3 sm:px-4 py-1.5 rounded-full shadow-xs transition-all items-center gap-1 flex-shrink-0">
+        <a href="/planner" class="flex bg-primary hover:bg-primary-dark text-white font-bold text-[11px] sm:text-xs px-3 sm:px-4 py-1.5 rounded-full shadow-xs transition-all items-center gap-1 flex-shrink-0">
           <span class="material-symbols-outlined text-sm sm:text-base">explore</span>
           <span>Plan Trip</span>
         </a>
@@ -364,7 +364,7 @@
             </div>
             <p class="text-xs font-bold text-slate-800" id="matched-pkg-title">Sitakunda Adventure Day Tour</p>
             <p class="text-[11px] text-slate-500 mt-0.5" id="matched-pkg-desc">All-inclusive transport, guide, lunch and entry tickets.</p>
-            <a href="booking.html" id="btn-book-matched" class="mt-3 block text-center w-full bg-primary hover:bg-primary-dark text-white font-bold text-xs py-2.5 rounded-xl shadow-xs transition-all">
+            <a href="/booking" id="btn-book-matched" class="mt-3 block text-center w-full bg-primary hover:bg-primary-dark text-white font-bold text-xs py-2.5 rounded-xl shadow-xs transition-all">
               Book This Package
             </a>
           </div>
@@ -489,7 +489,7 @@
       </a>
 
       <!-- Tab 2: Packages -->
-      <a href="packages.html" class="mobile-nav-item flex flex-col items-center justify-center py-1 gap-0.5 text-slate-500 hover:text-primary">
+      <a href="/packages" class="mobile-nav-item flex flex-col items-center justify-center py-1 gap-0.5 text-slate-500 hover:text-primary">
         <div class="mobile-nav-icon w-8 h-8 rounded-full flex items-center justify-center transition-all">
           <span class="material-symbols-outlined text-[22px]">package_2</span>
         </div>
@@ -497,7 +497,7 @@
       </a>
 
       <!-- Tab 3: Explore -->
-      <a href="explore.html" class="mobile-nav-item flex flex-col items-center justify-center py-1 gap-0.5 text-slate-500 hover:text-primary">
+      <a href="/explore" class="mobile-nav-item flex flex-col items-center justify-center py-1 gap-0.5 text-slate-500 hover:text-primary">
         <div class="mobile-nav-icon w-8 h-8 rounded-full flex items-center justify-center transition-all">
           <span class="material-symbols-outlined text-[22px]">explore</span>
         </div>
@@ -505,7 +505,7 @@
       </a>
 
       <!-- Tab 4: My Booking -->
-      <a href="my-booking.html" class="mobile-nav-item flex flex-col items-center justify-center py-1 gap-0.5 text-slate-500 hover:text-primary">
+      <a href="/my-booking" class="mobile-nav-item flex flex-col items-center justify-center py-1 gap-0.5 text-slate-500 hover:text-primary">
         <div class="mobile-nav-icon w-8 h-8 rounded-full flex items-center justify-center transition-all">
           <span class="material-symbols-outlined text-[22px]">receipt_long</span>
         </div>
@@ -710,15 +710,15 @@
       if (selectedDuration === '1day') {
         matchTitle.textContent = 'Sitakunda Adventure Day Tour';
         matchDesc.textContent = 'Covers Chandranath & Guliakhali in 1 high-energy day.';
-        bookBtn.href = 'booking.html?pkg=sitakunda-adventure-tour';
+        bookBtn.href = '/booking?pkg=sitakunda-adventure-tour';
       } else if (selectedDuration === '2days') {
         matchTitle.textContent = '2D1N Sitakunda Hill & Beach Escape';
         matchDesc.textContent = 'Includes eco-cottage night stay, BBQ & all iconic spots.';
-        bookBtn.href = 'booking.html?pkg=2d1n-hill-beach-escape';
+        bookBtn.href = '/booking?pkg=2d1n-hill-beach-escape';
       } else {
         matchTitle.textContent = 'Khaiyachora Extreme Waterfall Trek';
         matchDesc.textContent = 'Comprehensive 3-day deep exploration of all cascades & trails.';
-        bookBtn.href = 'booking.html?pkg=khaiyachora-waterfall-trek';
+        bookBtn.href = '/booking?pkg=khaiyachora-waterfall-trek';
       }
     }
 
@@ -771,4 +771,5 @@
   </script>
 </body>
 </html>
+
 

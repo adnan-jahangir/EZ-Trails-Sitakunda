@@ -37,17 +37,17 @@ function injectNavbar() {
 
         <ul class="nav-links">
           <li><a href="/" class="nav-link ${current === 'index' || current === '' ? 'active' : ''}">Home</a></li>
-          <li><a href="explore.html" class="nav-link ${current === 'explore' || current === 'destination-detail' ? 'active' : ''}">Explore</a></li>
-          <li><a href="packages.html" class="nav-link ${current === 'packages' || current === 'package-detail' ? 'active' : ''}">Packages</a></li>
-          <li><a href="planner.html" class="nav-link ${current === 'planner' ? 'active' : ''}">Planner</a></li>
-          <li><a href="my-booking.html" class="nav-link ${current === 'my-booking' ? 'active' : ''}">My Booking</a></li>
+          <li><a href="/packages" class="nav-link ${current === 'packages' || current === 'package-detail' ? 'active' : ''}">Packages</a></li>
+          <li><a href="/explore" class="nav-link ${current === 'explore' || current === 'destination-detail' ? 'active' : ''}">Explore</a></li>
+          <li><a href="/planner" class="nav-link ${current === 'planner' ? 'active' : ''}">Planner</a></li>
+          <li><a href="/my-booking" class="nav-link ${current === 'my-booking' ? 'active' : ''}">My Booking</a></li>
         </ul>
 
         <div class="nav-actions">
-          <a href="packages.html" class="btn btn-ghost btn-sm" aria-label="Search">
+          <a href="/packages" class="btn btn-ghost btn-sm" aria-label="Search">
             <span class="material-symbols-outlined">search</span>
           </a>
-          <a href="planner.html" class="btn btn-primary btn-sm">
+          <a href="/planner" class="btn btn-primary btn-sm">
             <span class="material-symbols-outlined" style="font-size:17px">route</span>
             Plan Your Trip
           </a>
@@ -87,10 +87,10 @@ function injectFooter() {
           <div>
             <div class="footer-col-title">Our Services</div>
             <ul class="footer-links">
-              <li><a href="packages.html">Hotel Room Booking</a></li>
-              <li><a href="packages.html">Transport & Local Jeeps</a></li>
-              <li><a href="packages.html">Verified Trail Guides</a></li>
-              <li><a href="planner.html">Trip Planner</a></li>
+              <li><a href="/packages">Hotel Room Booking</a></li>
+              <li><a href="/packages">Transport & Local Jeeps</a></li>
+              <li><a href="/packages">Verified Trail Guides</a></li>
+              <li><a href="/planner">Trip Planner</a></li>
             </ul>
           </div>
 
@@ -99,18 +99,18 @@ function injectFooter() {
             <ul class="footer-links">
               <li><a href="tel:01939627110">Hotline: 01939627110</a></li>
               <li><a href="tel:01876418411">Support: 01876418411</a></li>
-              <li><a href="my-booking.html">My Booking</a></li>
-              <li><a href="contact.html">Contact Us</a></li>
+              <li><a href="/my-booking">My Booking</a></li>
+              <li><a href="/contact">Contact Us</a></li>
             </ul>
           </div>
 
           <div>
             <div class="footer-col-title">Company</div>
             <ul class="footer-links">
-              <li><a href="contact.html">About EZ Trails</a></li>
-              <li><a href="contact.html">Partner With Us</a></li>
-              <li><a href="contact.html">Office Location</a></li>
-              <li><a href="explore.html">Sitakunda Spots</a></li>
+              <li><a href="/contact">About EZ Trails</a></li>
+              <li><a href="/contact">Partner With Us</a></li>
+              <li><a href="/contact">Office Location</a></li>
+              <li><a href="/explore">Sitakunda Spots</a></li>
             </ul>
           </div>
         </div>

@@ -75,11 +75,11 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
 }
 
-// Serve Frontend Static files from 'public' directory (or fallback to root)
+// Serve Frontend Static files from 'public' directory (with clean extensionless URL support)
 const publicPath = path.join(__dirname, '../public');
 const fallbackPath = path.join(__dirname, '..');
 const staticPath = require('fs').existsSync(publicPath) ? publicPath : fallbackPath;
-app.use(express.static(staticPath));
+app.use(express.static(staticPath, { extensions: ['html', 'htm'] }));
 
 // Database auto-reconnect middleware (ensures DB is active for serverless/Vercel)
 app.use(async (req, res, next) => {

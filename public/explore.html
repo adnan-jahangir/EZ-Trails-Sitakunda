@@ -64,15 +64,15 @@
       <!-- Center Links -->
       <div class="hidden md:flex items-center gap-7 text-xs sm:text-[13.5px] font-semibold text-slate-600">
         <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <a href="packages.html" class="hover:text-primary transition-colors">Packages</a>
-        <a href="explore.html" class="text-primary font-bold border-b-2 border-primary pb-0.5">Explore</a>
-        <a href="my-booking.html" class="hover:text-primary transition-colors">My Booking</a>
+        <a href="/packages" class="hover:text-primary transition-colors">Packages</a>
+        <a href="/explore" class="text-primary font-bold border-b-2 border-primary pb-0.5">Explore</a>
+        <a href="/my-booking" class="hover:text-primary transition-colors">My Booking</a>
       </div>
 
       <!-- Right Action Button & Weather Pill -->
       <div class="flex items-center gap-2">
         <div id="sitakunda-weather-pill" class="hidden lg:block"></div>
-        <a href="planner.html" class="flex bg-primary hover:bg-primary-dark text-white font-bold text-[11px] sm:text-xs px-3 sm:px-4 py-1.5 rounded-full shadow-xs transition-all items-center gap-1 flex-shrink-0">
+        <a href="/planner" class="flex bg-primary hover:bg-primary-dark text-white font-bold text-[11px] sm:text-xs px-3 sm:px-4 py-1.5 rounded-full shadow-xs transition-all items-center gap-1 flex-shrink-0">
           <span class="material-symbols-outlined text-sm sm:text-base">explore</span>
           <span>Plan Trip</span>
         </a>
@@ -135,7 +135,7 @@
       <div class="text-sm font-semibold text-slate-600">
         Showing <strong class="text-slate-900" id="spots-count">12</strong> destinations in Sitakunda
       </div>
-      <a href="packages.html" class="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+      <a href="/packages" class="text-xs font-bold text-primary hover:underline flex items-center gap-1">
         <span>View All Tour Packages</span>
         <span class="material-symbols-outlined text-sm">arrow_forward</span>
       </a>
@@ -156,10 +156,10 @@
         Tourstk organizes all-inclusive day and weekend trips with dedicated vehicles, certified local guides, and authentic meals.
       </p>
       <div class="flex items-center justify-center gap-4 flex-wrap">
-        <a href="packages.html" class="bg-emerald-400 text-primary hover:bg-emerald-300 font-bold px-8 py-3.5 rounded-full transition-all text-sm shadow-md">
+        <a href="/packages" class="bg-emerald-400 text-primary hover:bg-emerald-300 font-bold px-8 py-3.5 rounded-full transition-all text-sm shadow-md">
           Browse Tour Packages
         </a>
-        <a href="planner.html" class="bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-3.5 rounded-full backdrop-blur-md border border-white/30 transition-all text-sm">
+        <a href="/planner" class="bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-3.5 rounded-full backdrop-blur-md border border-white/30 transition-all text-sm">
           Plan Custom Group Tour
         </a>
       </div>
@@ -207,7 +207,7 @@
       </a>
 
       <!-- Tab 2: Packages -->
-      <a href="packages.html" class="mobile-nav-item flex flex-col items-center justify-center py-1 gap-0.5 text-slate-500 hover:text-primary">
+      <a href="/packages" class="mobile-nav-item flex flex-col items-center justify-center py-1 gap-0.5 text-slate-500 hover:text-primary">
         <div class="mobile-nav-icon w-8 h-8 rounded-full flex items-center justify-center transition-all">
           <span class="material-symbols-outlined text-[22px]">package_2</span>
         </div>
@@ -215,7 +215,7 @@
       </a>
 
       <!-- Tab 3: Explore (Active) -->
-      <a href="explore.html" class="mobile-nav-item is-active flex flex-col items-center justify-center py-1 gap-0.5 text-slate-500 hover:text-primary">
+      <a href="/explore" class="mobile-nav-item is-active flex flex-col items-center justify-center py-1 gap-0.5 text-slate-500 hover:text-primary">
         <div class="mobile-nav-icon w-8 h-8 rounded-full flex items-center justify-center transition-all">
           <span class="material-symbols-outlined text-[22px]">explore</span>
         </div>
@@ -223,7 +223,7 @@
       </a>
 
       <!-- Tab 4: My Booking -->
-      <a href="my-booking.html" class="mobile-nav-item flex flex-col items-center justify-center py-1 gap-0.5 text-slate-500 hover:text-primary">
+      <a href="/my-booking" class="mobile-nav-item flex flex-col items-center justify-center py-1 gap-0.5 text-slate-500 hover:text-primary">
         <div class="mobile-nav-icon w-8 h-8 rounded-full flex items-center justify-center transition-all">
           <span class="material-symbols-outlined text-[22px]">receipt_long</span>
         </div>
@@ -465,11 +465,11 @@
 
             <!-- Bottom Action Buttons -->
             <div class="pt-4 border-t border-slate-100 flex items-center justify-between gap-2.5 mt-5">
-              <a href="destination-detail.html?id=${spot.id}" class="flex-1 text-center bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs py-2.5 rounded-xl transition-colors flex items-center justify-center gap-1">
+              <a href="/destination-detail?id=${spot.id}" class="flex-1 text-center bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs py-2.5 rounded-xl transition-colors flex items-center justify-center gap-1">
                 <span>View Details</span>
                 <span class="material-symbols-outlined text-xs">arrow_forward</span>
               </a>
-              <a href="booking.html?spot=${spot.id}" class="flex-1 text-center bg-primary hover:bg-primary-dark text-white font-bold text-xs py-2.5 rounded-xl transition-colors shadow-xs flex items-center justify-center gap-1">
+              <a href="/booking?spot=${spot.id}" class="flex-1 text-center bg-primary hover:bg-primary-dark text-white font-bold text-xs py-2.5 rounded-xl transition-colors shadow-xs flex items-center justify-center gap-1">
                 <span>Book Trip</span>
                 <span class="material-symbols-outlined text-sm">travel_explore</span>
               </a>
@@ -627,4 +627,5 @@
   </script>
 </body>
 </html>
+
 

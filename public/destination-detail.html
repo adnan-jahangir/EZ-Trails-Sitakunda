@@ -137,15 +137,15 @@
       <!-- Center Links -->
       <div class="hidden md:flex items-center gap-7 text-xs sm:text-[13.5px] font-semibold text-slate-600">
         <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <a href="packages.html" class="hover:text-primary transition-colors">Packages</a>
-        <a href="explore.html" class="text-primary font-bold border-b-2 border-primary pb-0.5">Explore</a>
-        <a href="my-booking.html" class="hover:text-primary transition-colors">My Booking</a>
+        <a href="/packages" class="hover:text-primary transition-colors">Packages</a>
+        <a href="/explore" class="text-primary font-bold border-b-2 border-primary pb-0.5">Explore</a>
+        <a href="/my-booking" class="hover:text-primary transition-colors">My Booking</a>
       </div>
 
       <!-- Right Action Button & Weather Pill -->
       <div class="flex items-center gap-2">
         <div id="sitakunda-weather-pill" class="hidden lg:block"></div>
-        <a href="planner.html" class="flex bg-primary hover:bg-primary-dark text-white font-bold text-[11px] sm:text-xs px-3 sm:px-4 py-1.5 rounded-full shadow-xs transition-all items-center gap-1 flex-shrink-0">
+        <a href="/planner" class="flex bg-primary hover:bg-primary-dark text-white font-bold text-[11px] sm:text-xs px-3 sm:px-4 py-1.5 rounded-full shadow-xs transition-all items-center gap-1 flex-shrink-0">
           <span class="material-symbols-outlined text-sm sm:text-base">explore</span>
           <span>Plan Trip</span>
         </a>
@@ -199,7 +199,7 @@
       </a>
 
       <!-- Tab 2: Packages -->
-      <a href="packages.html" class="mobile-nav-item flex flex-col items-center justify-center py-1 gap-0.5 text-slate-500 hover:text-primary">
+      <a href="/packages" class="mobile-nav-item flex flex-col items-center justify-center py-1 gap-0.5 text-slate-500 hover:text-primary">
         <div class="mobile-nav-icon w-8 h-8 rounded-full flex items-center justify-center transition-all">
           <span class="material-symbols-outlined text-[22px]">package_2</span>
         </div>
@@ -207,7 +207,7 @@
       </a>
 
       <!-- Tab 3: Explore (Active) -->
-      <a href="explore.html" class="mobile-nav-item is-active flex flex-col items-center justify-center py-1 gap-0.5 text-slate-500 hover:text-primary">
+      <a href="/explore" class="mobile-nav-item is-active flex flex-col items-center justify-center py-1 gap-0.5 text-slate-500 hover:text-primary">
         <div class="mobile-nav-icon w-8 h-8 rounded-full flex items-center justify-center transition-all">
           <span class="material-symbols-outlined text-[22px]">explore</span>
         </div>
@@ -215,7 +215,7 @@
       </a>
 
       <!-- Tab 4: My Booking -->
-      <a href="my-booking.html" class="mobile-nav-item flex flex-col items-center justify-center py-1 gap-0.5 text-slate-500 hover:text-primary">
+      <a href="/my-booking" class="mobile-nav-item flex flex-col items-center justify-center py-1 gap-0.5 text-slate-500 hover:text-primary">
         <div class="mobile-nav-icon w-8 h-8 rounded-full flex items-center justify-center transition-all">
           <span class="material-symbols-outlined text-[22px]">receipt_long</span>
         </div>
@@ -268,7 +268,7 @@
       document.getElementById('dest-content-area').innerHTML = `
         <div class="max-w-container-max mx-auto px-6">
           <!-- Back Link -->
-          <a href="explore.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-primary mb-6 transition-colors">
+          <a href="/explore" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-primary mb-6 transition-colors">
             <span class="material-symbols-outlined text-base">arrow_back</span>
             Back to All Spots
           </a>
@@ -395,7 +395,7 @@
 
                 <div class="space-y-3 mb-6">
                   ${matchingPkgs.length > 0 ? matchingPkgs.map(p => `
-                    <a href="package-detail.html?id=${p.id}" class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 block hover:border-emerald-500 transition-all group">
+                    <a href="/package-detail?id=${p.id}" class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 block hover:border-emerald-500 transition-all group">
                       <div class="text-xs font-bold text-primary group-hover:text-emerald-700 transition-colors">${p.name}</div>
                       <div class="text-xs text-emerald-700 font-extrabold mt-1">৳${p.price.toLocaleString()} / person</div>
                     </a>
@@ -406,7 +406,7 @@
                   `}
                 </div>
 
-                <a href="planner.html" class="w-full bg-primary hover:bg-primary-dark text-white text-center font-bold py-3.5 rounded-full block text-xs shadow-xs transition-all">
+                <a href="/planner" class="w-full bg-primary hover:bg-primary-dark text-white text-center font-bold py-3.5 rounded-full block text-xs shadow-xs transition-all">
                   Plan Custom Trip Here
                 </a>
               </div>
@@ -471,7 +471,7 @@
                       </div>
                       <div class="pt-2 mt-2 border-t border-slate-100 flex items-center justify-between">
                         <span class="text-[9px] sm:text-[10px] text-slate-400 truncate">${spot.category}</span>
-                        <a href="destination-detail.html?id=${spot.id}" class="text-[11px] sm:text-xs font-bold text-primary hover:underline flex items-center gap-0.5 flex-shrink-0">
+                        <a href="/destination-detail?id=${spot.id}" class="text-[11px] sm:text-xs font-bold text-primary hover:underline flex items-center gap-0.5 flex-shrink-0">
                           <span>View</span>
                           <span class="material-symbols-outlined text-xs">arrow_forward</span>
                         </a>
@@ -553,7 +553,7 @@
                 <div style="font-size:9px; font-weight:bold; color:#059669;">${spot.bnName}</div>
                 <h4 style="font-size:12px; font-weight:bold; margin:2px 0; color:#0f172a; line-height:1.2;">${spot.name}</h4>
                 <div style="font-size:10px; color:#64748b; margin-bottom:6px;">${distText}</div>
-                <a href="destination-detail.html?id=${spot.id}" style="display:block; text-align:center; background:#0e4d34; color:#fff; font-size:10px; font-weight:bold; padding:5px 0; border-radius:99px; text-decoration:none;">
+                <a href="/destination-detail?id=${spot.id}" style="display:block; text-align:center; background:#0e4d34; color:#fff; font-size:10px; font-weight:bold; padding:5px 0; border-radius:99px; text-decoration:none;">
                   Explore Spot →
                 </a>
               </div>
@@ -618,4 +618,5 @@
   </script>
 </body>
 </html>
+
 
