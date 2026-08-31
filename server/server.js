@@ -23,6 +23,7 @@ const statsRoutes = require('./routes/statsRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const exportRoutes = require('./routes/exportRoutes');
 const auditRoutes = require('./routes/auditRoutes');
+const { autoSeedRooms } = require('./controllers/roomController');
 const roomRoutes = require('./routes/roomRoutes');
 
 const app = express();
@@ -190,6 +191,8 @@ const PORT = process.env.PORT || 5000;
 // Start server after connecting to MongoDB (local dev / standalone)
 const startServer = async () => {
   await connectDB();
+  // Auto-seed rooms collection on startup so it appears in MongoDB Atlas
+  autoSeedRooms().catch(err => console.warn('[Room Seed] Startup seed skipped:', err.message));
   app.listen(PORT, () => {
     console.log(`====================================================`);
     console.log(`🚀 Tourstk API Server is running on port: ${PORT}`);
