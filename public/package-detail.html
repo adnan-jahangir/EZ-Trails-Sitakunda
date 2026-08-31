@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="light" lang="en">
 <head>
   <meta charset="utf-8">
@@ -143,6 +143,18 @@
   <script src="js/api.js"></script>
   <script src="js/animations.js"></script>
   <script>
+    let currentLang = localStorage.getItem('ez_lang') || 'bn'; // Default to Bengali or saved preference
+
+    function setPackageLang(lang) {
+      currentLang = lang;
+      localStorage.setItem('ez_lang', lang);
+      renderPackageDetails();
+    }
+
+    function togglePackageLang() {
+      setPackageLang(currentLang === 'bn' ? 'en' : 'bn');
+    }
+
     function renderPackageDetails() {
       const params = new URLSearchParams(window.location.search);
       const pkgId = params.get('id') || 'sitakunda-adventure-tour';
@@ -152,23 +164,95 @@
       const root = document.getElementById('pkg-content-area');
       if (!root) return;
 
+      const isBn = currentLang === 'bn';
+
+      // Localized Data Resolution
+      const pkgName = isBn ? (pkg.bnName || pkg.name) : pkg.name;
+      const pkgTagline = isBn ? (pkg.bnTagline || pkg.tagline || pkg.shortDesc) : (pkg.tagline || pkg.shortDesc);
+      const pkgDuration = isBn ? (pkg.bnDuration || pkg.duration) : pkg.duration;
+      const pkgType = isBn ? (pkg.bnType || pkg.type) : pkg.type;
+      const pkgDifficulty = isBn ? (pkg.bnDifficulty || pkg.difficulty) : pkg.difficulty;
+      const pkgMinTravelers = isBn ? (pkg.bnMinTravelers || pkg.minTravelers) : pkg.minTravelers;
+
+      // Inclusions & Exclusions
+      const includedList = isBn ? (pkg.bnIncluded || [
+        'পাহাড় ও সমুদ্র ট্রেইলের জন্য অভিজ্ঞ সার্টিফাইড লোকাল গাইড',
+        'সকল স্পটে যাতায়াতের জন্য সংরক্ষিত চাঁদের গাড়ি / এসি হাইস',
+        'চন্দ্রনাথ, গুলিয়াখালী ও ইকোপার্কের সকল এন্ট্রি টিকিট ও পার্কিং ফি',
+        'মানসম্মত ডিলাক্স রুম / ইকো-রিসোর্টে রাত্রিযাপন',
+        'সব বেলার পুষ্টিকর খাবার ও লাইভ বারবিকিউ'
+      ]) : (pkg.included || [
+        'Certified Local Sitakunda Guide for all trails',
+        'Reserved Local Transport & Jeep for all transfers',
+        'All Spot Entry Tickets & Parking Permits',
+        'Overnight Deluxe Room / Resort Stay',
+        'All Full Meals & Live BBQ'
+      ]);
+
+      const excludedList = isBn ? (pkg.bnExcluded || [
+        'নিজ জেলা থেকে সীতাকুণ্ড আসা-যাওয়ার মূল বাস/ট্রেন টিকিট',
+        'ব্যক্তিগত কেনাকাটা বা প্যাকেজ বহির্ভূত অতিরিক্ত খাবার/পানীয়',
+        'ব্যক্তিগত ওষুধ ও নিজস্ব টিপস'
+      ]) : (pkg.excluded || [
+        'Main bus/train tickets from your city to Sitakunda',
+        'Personal shopping or extra snacks outside package',
+        'Personal medicines and tips'
+      ]);
+
+      // What to Pack
+      const packingList = isBn ? (pkg.bnWhatToPack || [
+        'গ্রিপযুক্ত আরামদায়ক ট্র্যাকিং কেডস বা নন-স্লিপ জুতো',
+        'হালকা ব্যাকপ্যাক ও অতিরিক্ত ১-২ সেট সুতি কাপড়',
+        'রি-ইউজেবল পানির বোতল ও ওআরএস স্যালাইন',
+        'পাওয়ার ব্যাংক ও মোবাইলের ওয়াটারপ্রুফ পাউচ'
+      ]) : (pkg.whatToPack || [
+        'Non-slip grip trekking shoes or hiking boots',
+        'Light day-pack with 1-2 extra sets of clothes',
+        'Reusable water bottle & hydration saline (ORS)',
+        'Power bank & waterproof phone pouch'
+      ]);
+
+      // Meals List (Custom to package)
+      const mealsList = pkg.meals || [
+        {
+          time: '08:00 AM',
+          bnTime: '০৮:০০ AM',
+          title: 'Breakfast',
+          bnTitle: 'সকালের নাস্তা',
+          icon: '🌅',
+          items: ['Fresh Hot Paratha', 'Egg Omelette', 'Dal Bhuna', 'Hot Tea'],
+          bnItems: ['গরম পরোটা', 'ডিম ভাজি/অমলেট', 'বুটের ডাল ভুনা', 'গরম চা']
+        },
+        {
+          time: '01:30 PM',
+          bnTime: '০১:৩০ PM',
+          title: 'Traditional Feast Lunch',
+          bnTitle: 'দুপুরের খাবার',
+          icon: '☀️',
+          items: ['Steamed Rice', 'Mejbani Beef / Deshi Chicken', 'Dal & Salad'],
+          bnItems: ['সুগন্ধি সাদা ভাত', 'ঐতিহ্যবাহী মেজবানি মাংস / দেশি মুরগি', 'ঘন ডাল ও সালাদ']
+        }
+      ];
+
+      // Schedule Days (Custom to package)
       const scheduleDays = pkg.scheduleDays || [
         {
           dayNumber: 'D1',
           dayLabel: 'DAY 1',
-          dayTitle: 'Arrival, Trail Exploration & Camp',
+          bnDayLabel: '১ম দিন',
+          title: 'Arrival & Trail Exploration',
+          bnTitle: 'সীতাকুণ্ড আগমন ও ট্রেইল ট্রেকিং',
           timeline: [
-            { time: '08:00 AM', text: 'Pickup from Sitakunda Bus Station & authentic breakfast' },
-            { time: '10:00 AM', text: 'Guided hiking and waterfall expedition' },
-            { time: '02:00 PM', text: 'Traditional local lunch at Sitakunda' },
-            { time: '05:30 PM', text: 'Sunset view & rest at accommodation' }
+            { time: '08:00 AM', text: 'Pickup from Sitakunda Bus Station & breakfast' },
+            { time: '01:30 PM', text: 'Traditional lunch feast' },
+            { time: '05:30 PM', text: 'Sunset beach view & rest' }
           ]
         }
       ];
 
       const scheduleHtml = scheduleDays.map((day, idx) => `
         <div class="border border-slate-200/90 rounded-2xl overflow-hidden bg-white shadow-2xs">
-          <!-- Accordion Header (Matching User Screenshot) -->
+          <!-- Accordion Header -->
           <div onclick="toggleDayAccordion(${idx})" class="p-5 flex items-center justify-between cursor-pointer hover:bg-slate-50/80 transition-colors select-none">
             <div class="flex items-center gap-3.5">
               <!-- D1 / D2 Dark Green Badge -->
@@ -176,8 +260,8 @@
                 ${day.dayNumber}
               </span>
               <div>
-                <span class="text-[10px] font-extrabold uppercase tracking-widest text-emerald-800 block">${day.dayLabel}</span>
-                <h3 class="font-display font-bold text-base sm:text-lg text-slate-900 leading-snug">${day.dayTitle}</h3>
+                <span class="text-[10px] font-extrabold uppercase tracking-widest text-emerald-800 block">${isBn ? (day.bnDayLabel || day.dayLabel) : day.dayLabel}</span>
+                <h3 class="font-display font-bold text-base sm:text-lg text-slate-900 leading-snug">${isBn ? (day.bnTitle || day.title) : (day.title || day.dayTitle)}</h3>
               </div>
             </div>
             <!-- Toggle Chevron Icon -->
@@ -186,7 +270,7 @@
             </div>
           </div>
 
-          <!-- Accordion Timeline Body (Matching User Screenshot) -->
+          <!-- Accordion Timeline Body -->
           <div id="body-${idx}" class="p-6 transition-all duration-300">
             <div class="relative border-l-2 border-emerald-400 ml-3.5 pl-6 py-1 space-y-5">
               ${day.timeline.map(item => `
@@ -195,7 +279,7 @@
                   <div class="absolute -left-[31px] top-1.5 w-3 h-3 rounded-full bg-emerald-600 border-2 border-white ring-2 ring-emerald-400"></div>
                   <!-- Timeline Content -->
                   <div class="text-xs text-slate-700 leading-relaxed">
-                    <strong class="font-bold text-slate-900 mr-1.5">${item.time}</strong>
+                    <strong class="font-bold text-slate-900 mr-1.5 font-mono">${item.time}</strong>
                     <span class="text-slate-400 mr-1.5">—</span>
                     <span class="text-slate-600 font-medium">${item.text}</span>
                   </div>
@@ -207,49 +291,186 @@
       `).join('');
 
       document.getElementById('pkg-content-area').innerHTML = `
-        <div class="max-w-container-max mx-auto px-6">
-          <a href="/packages" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-primary mb-6 transition-colors">
-            <span class="material-symbols-outlined text-base">arrow_back</span>
-            Back to All Packages
-          </a>
+        <div class="max-w-container-max mx-auto px-4 sm:px-6">
+          
+          <!-- Top Breadcrumb & Language Switcher Pill -->
+          <div class="flex items-center justify-between mb-6 gap-3 flex-wrap">
+            <a href="/packages" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-primary transition-colors">
+              <span class="material-symbols-outlined text-base">arrow_back</span>
+              <span>${isBn ? 'সবগুলো প্যাকেজে ফিরে যান' : 'Back to All Packages'}</span>
+            </a>
 
-          <div class="mb-6">
-            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-primary-surface text-primary mb-2">${pkg.type}</span>
-            <h1 class="font-display text-3xl sm:text-4xl font-bold text-primary mb-2">${pkg.name}</h1>
-            <p class="text-sm text-slate-500">${pkg.tagline || pkg.shortDesc}</p>
-          </div>
-
-          <!-- Hero Image -->
-          <div class="rounded-3xl overflow-hidden h-80 sm:h-[450px] mb-12 shadow-sm border border-slate-100 relative group">
-            <img src="${pkg.image}" alt="${pkg.name}" class="w-full h-full object-cover">
-            <div class="absolute bottom-4 left-4 bg-slate-900/80 backdrop-blur-md text-white text-xs font-semibold px-3.5 py-1.5 rounded-full flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-sm text-emerald-400">schedule</span>
-              <span>${pkg.duration}</span>
+            <!-- Compact Language Switcher Pill Box (BN | EN) -->
+            <div class="inline-flex items-center gap-1 bg-slate-100/90 p-1 rounded-xl border border-slate-200/80 shadow-2xs">
+              <span class="material-symbols-outlined text-[15px] text-slate-400 pl-1 select-none">translate</span>
+              <div class="inline-flex items-center bg-slate-200/60 p-0.5 rounded-lg gap-0.5">
+                <button type="button" onclick="setPackageLang('bn')" class="px-2.5 py-1 rounded-md text-[11px] font-extrabold transition-all cursor-pointer ${isBn ? 'bg-white text-emerald-950 shadow-2xs' : 'text-slate-500 hover:text-slate-800'}" title="বাংলায় দেখুন">
+                  বাংলা
+                </button>
+                <button type="button" onclick="setPackageLang('en')" class="px-2.5 py-1 rounded-md text-[11px] font-extrabold font-mono transition-all cursor-pointer ${!isBn ? 'bg-white text-emerald-950 shadow-2xs' : 'text-slate-500 hover:text-slate-800'}" title="Switch to English">
+                  EN
+                </button>
+              </div>
             </div>
           </div>
 
-          <!-- 2-Column Details -->
+          <!-- Package Title & Header -->
+          <div class="mb-6">
+            <div class="flex flex-wrap items-center gap-2 mb-2">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-900 border border-emerald-200">${pkgType}</span>
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-900 border border-amber-200">★ ${isBn ? (pkg.bnBadge || pkg.badge || 'জনপ্রিয়') : (pkg.badge || 'Popular')}</span>
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">${pkgMinTravelers}</span>
+            </div>
+            <h1 class="font-display text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-2">${pkgName}</h1>
+            <p class="text-xs sm:text-sm md:text-base text-slate-500 max-w-3xl leading-relaxed">${pkgTagline}</p>
+          </div>
+
+          <!-- Hero Image -->
+          <div class="rounded-3xl overflow-hidden h-72 sm:h-96 md:h-[450px] mb-10 shadow-md border border-slate-200/80 relative group">
+            <img src="${pkg.image}" alt="${pkg.name}" class="w-full h-full object-cover">
+            <div class="absolute bottom-4 left-4 bg-slate-950/85 backdrop-blur-md text-white text-xs font-bold px-4 py-2 rounded-full flex items-center gap-2 shadow-lg border border-white/20">
+              <span class="material-symbols-outlined text-sm text-emerald-400">schedule</span>
+              <span>${pkgDuration}</span>
+              <span class="text-white/40">•</span>
+              <span class="text-emerald-300">${pkgDifficulty}</span>
+            </div>
+          </div>
+
+          <!-- 2-Column Main Details Grid -->
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            <div class="lg:col-span-2 space-y-10">
+            <div class="lg:col-span-2 space-y-9">
               
-              <!-- Inclusions -->
-              <div>
-                <h2 class="font-display text-2xl font-bold text-primary mb-4">What's Included in This Package</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  ${(pkg.included || pkg.inclusions || pkg.includesList || ['Transport', 'Accommodation', 'Meals', 'Tour Guide']).map(inc => `
-                    <div class="bg-slate-50/80 p-4 rounded-2xl border border-slate-200/80 flex items-center gap-3">
-                      <span class="material-symbols-outlined text-emerald-600 text-xl flex-shrink-0">check_circle</span>
-                      <span class="text-xs font-semibold text-slate-800">${inc}</span>
+              <!-- 1. Rich & Appetizing Meal Plan -->
+              <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between mb-5 pb-3.5 border-b border-slate-100">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
+                      <span class="material-symbols-outlined text-xl">restaurant_menu</span>
+                    </div>
+                    <div>
+                      <h2 class="font-display text-lg sm:text-xl font-bold text-slate-900">
+                        ${isBn ? 'খাবারের মেন্যু ও পদসমূহ' : 'Included Dining & Meal Menu'}
+                      </h2>
+                      <p class="text-[11px] text-slate-500">
+                        ${isBn ? 'ট্যুরের সুস্বাদু ও পুষ্টিকর খাবার প্যাকেজের ভেতরেই অন্তর্ভুক্ত' : 'Fresh, hygienic and authentic local meals included throughout your tour'}
+                      </p>
+                    </div>
+                  </div>
+                  <span class="text-[10px] font-black uppercase text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg">
+                    ${isBn ? '১০০% অন্তর্ভুক্ত' : '100% Included'}
+                  </span>
+                </div>
+
+                <!-- Custom Meal Cards Grid for this specific package -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  ${mealsList.map(meal => {
+                    const title = isBn ? (meal.bnTitle || meal.title) : meal.title;
+                    const items = isBn ? (meal.bnItems || meal.items) : meal.items;
+
+                    return `
+                      <div class="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/90 hover:border-emerald-300 transition-all flex flex-col justify-between">
+                        <div>
+                          <div class="flex items-center gap-2 mb-2.5">
+                            <span class="font-bold text-xs sm:text-sm text-slate-900 flex items-center gap-1.5">
+                              <span>${meal.icon || '🍽️'}</span>
+                              <span>${title}</span>
+                            </span>
+                          </div>
+                          <!-- Food Items Chips -->
+                          <div class="flex flex-wrap gap-1.5 my-2">
+                            ${items.map(item => `
+                              <span class="inline-flex items-center text-[11px] font-semibold bg-white text-slate-800 px-2.5 py-1 rounded-xl border border-slate-200 shadow-2xs">
+                                ✓ ${item}
+                              </span>
+                            `).join('')}
+                          </div>
+                        </div>
+                        ${meal.note ? `
+                          <p class="text-[10px] text-slate-500 mt-1.5 pt-1.5 border-t border-slate-200/60 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-xs text-amber-600">info</span>
+                            <span>${meal.note}</span>
+                          </p>
+                        ` : ''}
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+
+              <!-- 2. What's Included -->
+              <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                  <h3 class="font-display text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-emerald-700 text-2xl">verified</span>
+                    <span>${isBn ? 'প্যাকেজের অন্তর্ভুক্ত সেবাসমূহ' : "What's Included in This Tour"}</span>
+                  </h3>
+                  <span class="text-[10px] font-bold text-slate-500 uppercase">${isBn ? 'কোনো গোপন চার্জ নেই' : 'No Hidden Charges'}</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                  ${includedList.map(inc => `
+                    <div class="p-3 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 flex items-start gap-2.5 text-emerald-950">
+                      <span class="material-symbols-outlined text-base text-emerald-700 flex-shrink-0 mt-0.5">check_circle</span>
+                      <span class="font-semibold leading-relaxed">${inc}</span>
                     </div>
                   `).join('')}
                 </div>
               </div>
 
-              <!-- Itinerary Schedule (Matching User Screenshot) -->
+              <!-- 3. What's NOT Included -->
+              <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm">
+                <h3 class="font-display text-base font-bold text-slate-900 mb-3.5 flex items-center gap-2">
+                  <span class="material-symbols-outlined text-rose-500 text-xl">cancel</span>
+                  <span>${isBn ? 'যা অন্তর্ভুক্ত নয়' : "What is NOT Included"}</span>
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                  ${excludedList.map(exc => `
+                    <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-2 text-slate-600">
+                      <span class="text-rose-500 font-bold text-sm">✕</span>
+                      <span class="font-medium">${exc}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+
+              <!-- 4. What to Pack & Bring -->
+              <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm">
+                <h3 class="font-display text-base font-bold text-slate-900 mb-3.5 flex items-center gap-2">
+                  <span class="material-symbols-outlined text-amber-600 text-xl">backpack</span>
+                  <span>${isBn ? 'ট্যুরে সাথে যা আনা প্রয়োজন' : 'Recommended Packing Checklist'}</span>
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-700">
+                  ${packingList.map(item => `
+                    <div class="flex items-center gap-2.5 p-3 rounded-2xl bg-amber-50/40 border border-amber-200/60">
+                      <span class="text-base">🎒</span>
+                      <span class="font-semibold">${item}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+
+              <!-- 5. Flexible Reschedule Policy -->
+              <div class="bg-gradient-to-br from-[#012215] to-[#044a30] text-white rounded-3xl p-6 shadow-md border border-emerald-700/60 text-xs">
+                <div class="flex items-center gap-2 font-bold text-emerald-300 mb-2">
+                  <span class="material-symbols-outlined text-lg">shield</span>
+                  <span>${isBn ? 'ট্যুর নিশ্চয়তা ও ফ্রি তারিখ পরিবর্তন নীতি' : 'Booking Guarantee & Free Rescheduling'}</span>
+                </div>
+                <p class="text-emerald-100/90 leading-relaxed text-[11.5px]">
+                  ${isBn ? 
+                    '✓ যেকোনো প্রয়োজনে ট্যুর শুরুর ২৪ ঘণ্টা পূর্বে জানালে সম্পূর্ণ ফ্রিতে তারিখ পরিবর্তন করা যাবে। সীতাকুণ্ডে নামার পর থেকে সার্বক্ষণিক আমাদের হোয়াটসঅ্যাপ ও কল সহায়তা পাবেন।' : 
+                    '✓ Free date rescheduling with 24 hours prior notice. Full 24/7 WhatsApp coordination from arrival at Sitakunda to departure.'}
+                </p>
+              </div>
+
+              <!-- 6. Tour Itinerary Schedule Accordion -->
               <div>
                 <div class="flex items-center justify-between mb-4">
-                  <h2 class="font-display text-2xl font-bold text-primary">Tour Schedule & Itinerary</h2>
-                  <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full">${pkg.duration || '2 Days • 1 Night'}</span>
+                  <h2 class="font-display text-xl sm:text-2xl font-bold text-primary">
+                    ${isBn ? 'ট্যুরের পূর্ণাঙ্গ সময়সূচী' : 'Tour Schedule & Itinerary'}
+                  </h2>
+                  <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+                    ${pkgDuration}
+                  </span>
                 </div>
                 
                 <div class="space-y-4">
@@ -258,28 +479,43 @@
               </div>
             </div>
 
-            <!-- Sticky Booking Card -->
+            <!-- Sticky Right Sidebar: Quick Booking Dock -->
             <div>
-              <div class="sticky top-28 bg-white p-6 sm:p-7 rounded-3xl border border-slate-200 shadow-sm">
-                <div class="text-xs text-slate-400">Package Starting Rate</div>
-                <div class="text-3xl font-extrabold text-primary my-1">৳${(pkg.price || 0).toLocaleString()}</div>
-                <div class="text-xs text-slate-500 mb-6">${pkg.priceNote || 'per person'}</div>
+              <div class="sticky top-24 bg-white p-6 sm:p-7 rounded-3xl border border-slate-200 shadow-xl">
+                <div class="text-xs text-slate-400 font-bold uppercase tracking-wider">
+                  ${isBn ? 'প্যাকেজ শুরু মাত্র' : 'Package Starting Rate'}
+                </div>
+                <div class="text-3xl sm:text-4xl font-extrabold text-primary my-1.5 font-body">৳${(pkg.price || 0).toLocaleString()}</div>
+                <div class="text-xs text-slate-500 mb-6">${isBn ? (pkg.bnPriceNote || 'জনপ্রতি সর্বমোট') : (pkg.priceNote || 'per person all-inclusive')}</div>
 
-                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 text-xs space-y-2.5 mb-6 text-slate-600">
-                  <div class="flex justify-between"><span>Duration:</span><strong class="text-slate-900 font-bold">${pkg.duration || '2 Days • 1 Night'}</strong></div>
-                  <div class="flex justify-between"><span>Departures:</span><strong class="text-slate-900 font-bold">${pkg.departures || 'Friday & Saturday'}</strong></div>
-                  <div class="flex justify-between"><span>Status:</span><strong class="text-emerald-700 font-bold">Booking Open</strong></div>
+                <div class="bg-slate-50/90 p-4 rounded-2xl border border-slate-200/80 text-xs space-y-2.5 mb-6 text-slate-600">
+                  <div class="flex justify-between">
+                    <span>${isBn ? 'সময়কাল:' : 'Duration:'}</span>
+                    <strong class="text-slate-900 font-bold">${pkgDuration}</strong>
+                  </div>
+                  <div class="flex justify-between">
+                    <span>${isBn ? 'গাইড ও ট্রান্সপোর্ট:' : 'Guide & Transport:'}</span>
+                    <strong class="text-emerald-700 font-bold">${isBn ? '১০০% অন্তর্ভুক্ত' : '100% Included'}</strong>
+                  </div>
+                  <div class="flex justify-between">
+                    <span>${isBn ? 'খাবার ও নাস্তা:' : 'All Meals & Snacks:'}</span>
+                    <strong class="text-emerald-700 font-bold">${isBn ? 'অন্তর্ভুক্ত' : 'Included'}</strong>
+                  </div>
+                  <div class="flex justify-between">
+                    <span>${isBn ? 'বুকিং অবস্থা:' : 'Booking Status:'}</span>
+                    <strong class="text-emerald-700 font-bold">${isBn ? 'চলমান' : 'Open'}</strong>
+                  </div>
                 </div>
 
-                <a href="/booking?pkg=${pkg.id || pkg.packageId}" class="w-full bg-primary hover:bg-primary-dark text-white text-center font-bold py-3.5 rounded-full block mb-3 text-sm transition-all shadow-xs">
-                  Book This Package
+                <a href="/booking?pkg=${pkg.id || pkg.packageId}" class="w-full bg-gradient-to-r from-[#012d1d] via-[#044c31] to-[#012d1d] hover:brightness-110 text-white text-center font-extrabold py-4 rounded-2xl block mb-3 text-xs sm:text-sm shadow-md hover:shadow-lg transition-all">
+                  ${isBn ? 'এই প্যাকেজটি বুক করুন' : 'Book This Package Now'}
                 </a>
 
-                <a href="https://wa.me/8801812345678?text=Hello%20Tourstk,%20inquiring%20about%20${encodeURIComponent(pkg.name || 'Tour Package')}" target="_blank" class="w-full bg-[#25d366] hover:bg-[#20ba59] text-white text-center font-bold py-3.5 rounded-full flex items-center justify-center gap-2 text-sm transition-all shadow-xs">
+                <a href="https://wa.me/8801939627110?text=${encodeURIComponent('Hello EZ Trails, I want to know about ' + pkg.name)}" target="_blank" class="w-full bg-[#25d366] hover:bg-[#20ba59] text-white text-center font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 text-xs sm:text-sm transition-all shadow-xs">
                   <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24">
                     <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
                   </svg>
-                  <span>Inquire on WhatsApp</span>
+                  <span>${isBn ? 'হোয়াটসঅ্যাপে বিস্তারিত জানুন' : 'Inquire on WhatsApp'}</span>
                 </a>
               </div>
             </div>

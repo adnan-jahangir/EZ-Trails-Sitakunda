@@ -73,6 +73,14 @@ const bookingSchema = new mongoose.Schema(
       },
     ],
 
+    // Accommodation & Room Selection
+    roomPreference: {
+      roomType: { type: String, default: 'Standard Eco Cottage' },
+      bedType: { type: String, default: '1 Queen Double Bed' },
+      roomCount: { type: Number, default: 1 },
+      upgradeFee: { type: Number, default: 0 },
+    },
+
     // Financial & Payment details
     pricing: {
       basePrice: { type: Number, required: true },

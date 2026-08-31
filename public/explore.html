@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="light" lang="en">
 <head>
   <meta charset="utf-8">
@@ -104,22 +104,22 @@
 
       <!-- Category Filter Pills -->
       <div class="flex flex-wrap gap-2.5 justify-center" id="category-pills">
-        <button type="button" class="cat-pill active px-4 py-2 rounded-full text-xs font-bold bg-primary text-white shadow-xs transition-all" data-cat="all" onclick="selectCategory(this)">
+        <button type="button" class="cat-pill active px-4 py-2 rounded-full text-xs font-bold bg-primary text-white shadow-xs transition-all cursor-pointer" data-cat="all" onclick="selectCategory(this)">
           All Destinations (12)
         </button>
-        <button type="button" class="cat-pill px-4 py-2 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-cat="Hills & Peaks" onclick="selectCategory(this)">
+        <button type="button" class="cat-pill px-4 py-2 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer" data-cat="Hills & Peaks" onclick="selectCategory(this)">
           ⛰️ Hills & Peaks
         </button>
-        <button type="button" class="cat-pill px-4 py-2 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-cat="Waterfalls & Treks" onclick="selectCategory(this)">
+        <button type="button" class="cat-pill px-4 py-2 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer" data-cat="Waterfalls & Treks" onclick="selectCategory(this)">
           🌊 Waterfalls & Treks
         </button>
-        <button type="button" class="cat-pill px-4 py-2 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-cat="Beaches & Coastlines" onclick="selectCategory(this)">
+        <button type="button" class="cat-pill px-4 py-2 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer" data-cat="Beaches & Coastlines" onclick="selectCategory(this)">
           🏖️ Beaches & Coastlines
         </button>
-        <button type="button" class="cat-pill px-4 py-2 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-cat="Lakes & Kayaking" onclick="selectCategory(this)">
+        <button type="button" class="cat-pill px-4 py-2 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer" data-cat="Lakes & Kayaking" onclick="selectCategory(this)">
           🛶 Lakes & Kayaking
         </button>
-        <button type="button" class="cat-pill px-4 py-2 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-cat="Heritage & Springs" onclick="selectCategory(this)">
+        <button type="button" class="cat-pill px-4 py-2 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer" data-cat="Heritage & Springs" onclick="selectCategory(this)">
           🏛️ Heritage & Springs
         </button>
       </div>
@@ -288,10 +288,10 @@
     function setExploreCategory(category, btnEl) {
       activeCategory = category;
       document.querySelectorAll('.cat-pill').forEach(p => {
-        p.className = 'cat-pill px-5 py-2.5 rounded-full text-xs font-bold bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer';
+        p.className = 'cat-pill px-4 py-2 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer';
       });
       if (btnEl) {
-        btnEl.className = 'cat-pill px-5 py-2.5 rounded-full text-xs font-bold bg-primary text-white shadow-xs transition-all flex items-center gap-1.5 cursor-pointer';
+        btnEl.className = 'cat-pill active px-4 py-2 rounded-full text-xs font-bold bg-primary text-white shadow-xs transition-all cursor-pointer';
       }
       renderExploreGrid();
       if (window.TourstkAnimations) setTimeout(window.TourstkAnimations.refresh, 100);
@@ -302,18 +302,22 @@
       setExploreCategory(cat, btn);
     }
 
+    function filterDestinations() {
+      renderExploreGrid();
+    }
+
     function renderExploreGrid() {
       const container = document.getElementById('destinations-grid');
       const countEl = document.getElementById('spots-count');
       if (!container || !TOURSTK.destinations) return;
 
-      const searchInput = (document.getElementById('explore-search')?.value || '').toLowerCase();
+      const searchInput = (document.getElementById('spot-search')?.value || document.getElementById('explore-search')?.value || '').toLowerCase();
 
       const list = TOURSTK.destinations.filter(d => {
         const matchesCategory = activeCategory === 'all' || d.category === activeCategory;
         const matchesSearch = !searchInput || 
           d.name.toLowerCase().includes(searchInput) || 
-          d.bnName.toLowerCase().includes(searchInput) ||
+          (d.bnName && d.bnName.toLowerCase().includes(searchInput)) ||
           d.shortDesc.toLowerCase().includes(searchInput) ||
           (d.tags && d.tags.some(t => t.toLowerCase().includes(searchInput)));
 
@@ -341,14 +345,8 @@
           { type: 'video', src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4', thumb: spot.image, label: '4K Drone Tour' }
         ];
 
-        // Difficulty Color Pill
-        const diffColor = spot.difficulty && spot.difficulty.includes('Hard') || (spot.difficulty || '').includes('Challenging')
-          ? 'bg-rose-50 text-rose-700 border-rose-200'
-          : (spot.difficulty || '').includes('Moderate')
-          ? 'bg-amber-50 text-amber-700 border-amber-200'
-          : 'bg-emerald-50 text-emerald-700 border-emerald-200';
-
-        const diffDot = spot.difficulty && spot.difficulty.includes('Hard') || (spot.difficulty || '').includes('Challenging')
+        // Difficulty Dot
+        const diffDot = spot.difficulty && (spot.difficulty.includes('Hard') || spot.difficulty.includes('Challenging'))
           ? 'bg-rose-500'
           : (spot.difficulty || '').includes('Moderate')
           ? 'bg-amber-500'
@@ -357,18 +355,18 @@
         return `
           <div class="bg-white rounded-3xl border border-slate-200 p-4 shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1">
             
-            <!-- TOP MEDIA CONTAINER (Exact Match to User Reference Screenshot + Ultra Explorer Accents) -->
+            <!-- TOP MEDIA CONTAINER -->
             <div>
               <!-- Main Feature Screen -->
               <div class="relative h-60 sm:h-64 rounded-2xl overflow-hidden bg-slate-950 shadow-inner group/screen" id="main-media-box-${spot.id}">
                 
-                <!-- Duration Badge on Top Left (Matching User Reference) -->
+                <!-- Duration Badge on Top Left -->
                 <div class="absolute top-3.5 left-3.5 bg-black/65 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1 rounded-lg shadow-md z-10 flex items-center gap-1.5 border border-white/10">
                   <span class="material-symbols-outlined text-xs text-emerald-400">schedule</span>
                   <span>${spot.duration || '2 Days • 1 Night'}</span>
                 </div>
 
-                <!-- Top Right Badges: Elevation & Fullscreen 4K Expand -->
+                <!-- Top Right Badges: Category & Fullscreen 4K Expand -->
                 <div class="absolute top-3.5 right-3.5 z-10 flex items-center gap-2">
                   <span class="bg-white/90 backdrop-blur-md text-primary font-bold text-[10px] px-2.5 py-1 rounded-md shadow-xs flex items-center gap-1">
                     <span class="material-symbols-outlined text-xs">terrain</span>
@@ -389,12 +387,12 @@
                 <!-- Main Active Image -->
                 <img id="main-img-${spot.id}" src="${gallery[0].src}" alt="${spot.name}" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
 
-                <!-- Main Active Video (Loaded on Click) -->
+                <!-- Main Active Video -->
                 <video id="main-video-${spot.id}" class="w-full h-full object-cover hidden" controls playsinline>
                   <source id="main-video-src-${spot.id}" src="" type="video/mp4">
                 </video>
 
-                <!-- Video Floating Play Trigger Overlay (If Video is Active) -->
+                <!-- Video Floating Play Trigger Overlay -->
                 <button id="video-overlay-btn-${spot.id}" onclick="playCurrentCardVideo('${spot.id}')" class="absolute inset-0 bg-black/30 hover:bg-black/20 flex items-center justify-center z-10 hidden transition-all group-hover:scale-105">
                   <span class="w-14 h-14 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-2xl ring-4 ring-white/40">
                     <span class="material-symbols-outlined text-3xl ml-0.5">play_arrow</span>
@@ -402,7 +400,7 @@
                 </button>
               </div>
 
-              <!-- 4-THUMBNAIL STRIP (Matching User Reference Image) -->
+              <!-- 4-THUMBNAIL STRIP -->
               <div class="grid grid-cols-4 gap-2.5 mt-3" id="thumbs-${spot.id}">
                 ${gallery.slice(0, 4).map((item, idx) => {
                   if (item.type === 'video') {
@@ -427,10 +425,10 @@
                 }).join('')}
               </div>
 
-              <!-- Spot Header & Bangla Title -->
+              <!-- Spot Header & Details -->
               <div class="mt-4">
                 <div class="flex items-center justify-between gap-2 mb-1">
-                  <span class="text-[11px] font-extrabold text-emerald-800 tracking-wide">${spot.bnName || ''}</span>
+                  <span class="text-[11px] font-extrabold text-emerald-800 tracking-wide">${spot.bnName || spot.category}</span>
                   <span class="text-[11px] font-bold text-slate-700 bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-full flex items-center gap-1 shadow-2xs">
                     <span class="material-symbols-outlined text-xs text-amber-500">star</span> 4.9 <span class="text-slate-400 font-normal">(120+)</span>
                   </span>
@@ -438,7 +436,7 @@
                 <h3 class="font-display font-bold text-xl text-slate-900 mb-1.5 group-hover:text-primary transition-colors">${spot.name}</h3>
                 <p class="text-xs text-slate-600 leading-relaxed line-clamp-2">${spot.shortDesc}</p>
                 
-                <!-- DISCOVERY METRICS BAR (Difficulty + Best Time) -->
+                <!-- DISCOVERY METRICS BAR -->
                 <div class="grid grid-cols-2 gap-2 mt-3.5 pt-3 border-t border-slate-100">
                   <div class="flex items-center gap-1.5 text-[11px] font-semibold text-slate-700 bg-slate-50 p-2 rounded-xl border border-slate-100">
                     <span class="w-2 h-2 rounded-full ${diffDot}"></span>

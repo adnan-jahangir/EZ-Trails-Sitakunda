@@ -22,6 +22,7 @@ const createBooking = async (req, res, next) => {
       pickupLocation,
       selectedSpots,
       addOns,
+      roomPreference,
       pricing,
       payment,
       specialRequests,
@@ -58,6 +59,12 @@ const createBooking = async (req, res, next) => {
       pickupLocation,
       selectedSpots: selectedSpots || [],
       addOns: addOns || [],
+      roomPreference: roomPreference || {
+        roomType: 'Standard Eco Cottage',
+        bedType: '1 Queen Double Bed',
+        roomCount: 1,
+        upgradeFee: 0,
+      },
       pricing,
       payment: payment || {
         method: 'bkash',

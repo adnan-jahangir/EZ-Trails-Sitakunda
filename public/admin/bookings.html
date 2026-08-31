@@ -183,6 +183,7 @@
           <div class="flex justify-between text-sm"><span class="text-muted">Package</span><span class="font-semibold">${b.packageName || 'N/A'}</span></div>
           <div class="flex justify-between text-sm"><span class="text-muted">Travel Date</span><span>${b.travelDate || 'N/A'}</span></div>
           <div class="flex justify-between text-sm"><span class="text-muted">Travelers</span><span>${b.travelers || '-'}</span></div>
+          ${b.roomPreference && b.roomPreference.roomType ? `<div class="flex justify-between text-sm"><span class="text-muted">Room & Bed</span><span class="font-semibold text-primary">${b.roomPreference.roomType} (${b.roomPreference.bedType || '1 Queen Bed'}, ${b.roomPreference.roomCount || 1} Room)</span></div>` : ''}
           ${b.pickup ? `<div class="flex justify-between text-sm"><span class="text-muted">Pickup</span><span>${b.pickup}</span></div>` : ''}
           ${b.special ? `<div class="flex justify-between text-sm"><span class="text-muted">Special</span><span>${b.special}</span></div>` : ''}
           <div class="flex justify-between text-sm font-bold"><span>Total Price</span><span class="text-primary">৳${(b.totalPrice||0).toLocaleString()}</span></div>

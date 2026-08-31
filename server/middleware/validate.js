@@ -36,6 +36,13 @@ const bookingSchema = z.object({
   specialRequests: z.string().max(2000).optional().nullable(),
   addOns: z.array(z.any()).optional(),
 
+  roomPreference: z.object({
+    roomType: z.string().default('Standard Eco Cottage'),
+    bedType: z.string().default('1 Queen Double Bed'),
+    roomCount: z.number().int().min(1).default(1),
+    upgradeFee: z.number().min(0).default(0),
+  }).passthrough().optional(),
+
   pricing: z.object({
     basePrice: z.number().min(0).default(0),
     addOnsTotal: z.number().min(0).default(0),

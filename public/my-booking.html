@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="light" lang="en">
 <head>
   <meta charset="utf-8">
@@ -80,20 +80,26 @@
   <!-- Tracking Area -->
   <section class="py-16 bg-white">
     <div class="max-w-xl mx-auto px-6">
-      <!-- Search Box -->
-      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mb-8">
+      <!-- Track Form Card -->
+      <div class="bg-white/95 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-slate-200/90 shadow-[0_8px_30px_rgb(0,0,0,0.06)] mb-8">
         <form onsubmit="trackTourstkBooking(event)" class="space-y-4">
           <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Booking ID</label>
-            <input type="text" required class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm focus:border-primary focus:ring-1 focus:ring-primary" id="track-id" placeholder="e.g. TSK-492108">
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Booking ID (Optional)</label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-3.5 top-3 text-slate-400 text-lg pointer-events-none">tag</span>
+              <input type="text" class="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-10 pr-4 py-3 text-xs sm:text-sm font-semibold focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all uppercase placeholder:normal-case placeholder:text-slate-400" id="track-id" placeholder="e.g. STK-123456">
+            </div>
           </div>
           <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Phone Number</label>
-            <input type="tel" required class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm focus:border-primary focus:ring-1 focus:ring-primary" id="track-phone" placeholder="e.g. 01711223344">
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Customer Phone Number <span class="text-rose-500">*</span></label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-3.5 top-3 text-slate-400 text-lg pointer-events-none">phone</span>
+              <input type="tel" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-10 pr-4 py-3 text-xs sm:text-sm font-semibold focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all placeholder:text-slate-400" id="track-phone" placeholder="e.g. 01812345678">
+            </div>
           </div>
-          <button type="submit" class="w-full bg-primary hover:bg-primary-container text-white font-bold py-3.5 rounded-xl text-sm shadow-xs transition-all flex items-center justify-center gap-2">
+          <button type="submit" class="w-full bg-gradient-to-r from-[#012d1d] via-[#044c31] to-[#012d1d] hover:brightness-110 text-white font-extrabold py-3.5 rounded-2xl text-xs sm:text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
             <span class="material-symbols-outlined text-lg">search</span>
-            Track Booking Status
+            <span>Track Booking Status</span>
           </button>
         </form>
       </div>
@@ -159,6 +165,7 @@
             travelers: match.guests?.total || match.guests?.adults || 1,
             pickup: match.pickupLocation,
             guideType: match.addOns?.[0]?.name || 'Standard Coordinator',
+            roomPreference: match.roomPreference || null,
             totalPrice: match.pricing?.grandTotal || 0,
             status: match.status.toLowerCase(),
             paymentMethod: match.payment?.method || 'bkash',
@@ -309,7 +316,17 @@
           <div class="flex justify-between"><span>Travel Date:</span><strong class="text-slate-900 font-bold">${booking.travelDate}</strong></div>
           <div class="flex justify-between"><span>Travelers:</span><strong class="text-slate-900 font-bold">${booking.travelers} Person(s)</strong></div>
           <div class="flex justify-between"><span>Pickup Point:</span><strong class="text-slate-900 font-bold">${booking.pickup || 'Sitakunda Bus Station'}</strong></div>
-          <div class="flex justify-between"><span>Guide Preference:</span><strong class="text-emerald-800 font-bold">${booking.guideType || 'Standard Coordinator'}</strong></div>
+          ${booking.roomPreference && booking.roomPreference.roomType ? `
+            <div class="flex justify-between">
+              <span>Accommodation:</span>
+              <strong class="text-purple-900 font-bold">${booking.roomPreference.roomType} (${booking.roomPreference.roomCount || 1} Room)</strong>
+            </div>
+            <div class="flex justify-between">
+              <span>Bed Setup:</span>
+              <strong class="text-slate-900 font-bold">${booking.roomPreference.bedType || '1 Queen Double Bed'}</strong>
+            </div>
+          ` : ''}
+          <div class="flex justify-between"><span>Included Perks:</span><strong class="text-emerald-800 font-bold">✓ Guide + Transport + Tickets (Included)</strong></div>
           <div class="flex justify-between pt-2.5 border-t border-slate-200 text-sm">
             <span class="font-bold text-primary">Total Price:</span>
             <span class="font-black text-emerald-800 font-body tabular-nums">৳${booking.totalPrice.toLocaleString()}</span>
