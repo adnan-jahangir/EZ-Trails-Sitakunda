@@ -2466,7 +2466,9 @@
       try {
         await TourstkAPI.deleteReview(id);
       } catch (e) {}
-    // ==========================================
+      loadReviews();
+    }
+
     // 7. ROOMS & ACCOMMODATIONS
     // ==========================================
     let allRoomsCache = [];
