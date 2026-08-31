@@ -10,30 +10,58 @@ const createBooking = async (req, res, next) => {
   try {
     const {
       customerName,
+      name,
       phone,
+      mobile,
       email,
       emergencyContact,
       address,
       packageId,
       packageName,
       travelDate,
+      date,
       returnDate,
       guests,
+      travelers,
       pickupLocation,
+      pickup,
       selectedSpots,
       addOns,
       roomPreference,
       pricing,
+      totalPrice,
+      total,
       payment,
       specialRequests,
     } = req.body;
 
-    if (!customerName || !phone || !travelDate || !pricing?.grandTotal) {
+    const finalName = (customerName || name || '').trim();
+    const finalPhone = (phone || mobile || '').trim();
+    const finalDate = (travelDate || date || '').trim();
+    const finalGrandTotal = Number(pricing?.grandTotal || totalPrice || total || 0);
+
+    if (!finalName || !finalPhone || !finalDate) {
       return res.status(400).json({
         success: false,
-        message: 'Missing required booking fields (Name, Phone, Travel Date, Price)',
+        message: 'Missing required booking fields (Name, Phone, Travel Date)',
       });
     }
+
+    // Normalized Pricing Object
+    const finalPricing = {
+      basePrice: Number(pricing?.basePrice || 0),
+      addOnsTotal: Number(pricing?.addOnsTotal || 0),
+      discount: Number(pricing?.discount || 0),
+      grandTotal: finalGrandTotal > 0 ? finalGrandTotal : 1499,
+    };
+
+    // Normalized Guests
+    const guestCount = Number(guests?.total || travelers || 1);
+    const finalGuests = {
+      adults: Number(guests?.adults || guestCount || 1),
+      children: Number(guests?.children || 0),
+      total: guestCount,
+    };
 
     // Generate unique human readable Booking ID
     let uniqueId = Booking.generateBookingId();
@@ -46,17 +74,17 @@ const createBooking = async (req, res, next) => {
 
     const newBooking = await Booking.create({
       bookingId: uniqueId,
-      customerName,
-      phone,
-      email,
-      emergencyContact,
-      address,
+      customerName: finalName,
+      phone: finalPhone,
+      email: email || '',
+      emergencyContact: emergencyContact || '',
+      address: address || '',
       packageId: packageId || 'custom',
       packageName: packageName || 'Custom Sitakunda Tour',
-      travelDate,
-      returnDate,
-      guests: guests || { adults: 1, children: 0, total: 1 },
-      pickupLocation,
+      travelDate: finalDate,
+      returnDate: returnDate || '',
+      guests: finalGuests,
+      pickupLocation: pickupLocation || pickup || 'Sitakunda Bus Station',
       selectedSpots: selectedSpots || [],
       addOns: addOns || [],
       roomPreference: roomPreference || {
@@ -65,14 +93,14 @@ const createBooking = async (req, res, next) => {
         roomCount: 1,
         upgradeFee: 0,
       },
-      pricing,
+      pricing: finalPricing,
       payment: payment || {
         method: 'bkash',
-        paymentStatus: 'Unpaid',
+        paymentStatus: 'Pending Verification',
         paidAmount: 0,
       },
       status: 'Pending',
-      specialRequests,
+      specialRequests: specialRequests || '',
     });
 
     // 📬 Background Asynchronous Email / Notification Queue Dispatch

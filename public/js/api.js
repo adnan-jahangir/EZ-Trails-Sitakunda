@@ -206,6 +206,39 @@ const TourstkAPI = {
     });
   },
 
+  // =================== ROOMS & ACCOMMODATIONS ===================
+  async getRooms(params = {}) {
+    const query = new URLSearchParams(params).toString();
+    return await this.request(`/rooms?${query}`, { method: 'GET' });
+  },
+
+  async getRoom(id) {
+    return await this.request(`/rooms/${id}`, { method: 'GET' });
+  },
+
+  async createRoom(data) {
+    return await this.request('/rooms', {
+      method: 'POST',
+      body: JSON.stringify(data),
+      authRequired: true,
+    });
+  },
+
+  async updateRoom(id, data) {
+    return await this.request(`/rooms/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+      authRequired: true,
+    });
+  },
+
+  async deleteRoom(id) {
+    return await this.request(`/rooms/${id}`, {
+      method: 'DELETE',
+      authRequired: true,
+    });
+  },
+
   // =================== DESTINATIONS ===================
   async getDestinations() {
     return await this.request('/destinations', { method: 'GET' });

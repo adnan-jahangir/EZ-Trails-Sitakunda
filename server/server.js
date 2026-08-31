@@ -23,6 +23,7 @@ const statsRoutes = require('./routes/statsRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const exportRoutes = require('./routes/exportRoutes');
 const auditRoutes = require('./routes/auditRoutes');
+const roomRoutes = require('./routes/roomRoutes');
 
 const app = express();
 
@@ -140,6 +141,7 @@ app.use('/api/admin/stats', statsRoutes);
 app.use('/api/admin/audit-logs', auditRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/export', exportRoutes);
+app.use('/api/rooms', roomRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

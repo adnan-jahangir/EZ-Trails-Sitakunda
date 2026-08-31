@@ -3,15 +3,16 @@ const { z } = require('zod');
 // =================== BOOKING VALIDATION ===================
 const bookingSchema = z.object({
   customerName: z
-    .string({ required_error: 'Customer name is required' })
-    .min(2, 'Name must be at least 2 characters')
-    .max(100, 'Name must be under 100 characters')
-    .trim(),
+    .string()
+    .min(1, 'Name is required')
+    .optional(),
+  name: z.string().optional(),
 
   phone: z
-    .string({ required_error: 'Phone number is required' })
-    .min(8, 'Phone number must be at least 8 digits')
-    .max(20, 'Phone number is too long'),
+    .string()
+    .min(6, 'Phone number is required')
+    .optional(),
+  mobile: z.string().optional(),
 
   email: z
     .string()
@@ -23,8 +24,9 @@ const bookingSchema = z.object({
   packageName: z.string().optional().default('Sitakunda Tour'),
 
   travelDate: z
-    .string({ required_error: 'Travel date is required' })
-    .min(1, 'Travel date is required'),
+    .string()
+    .optional(),
+  date: z.string().optional(),
 
   guests: z.object({
     adults: z.number().int().min(1).default(1),
