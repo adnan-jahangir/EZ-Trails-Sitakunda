@@ -162,21 +162,25 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// 404 Fallback Handler
+// 404 Fallback Handler (Guarantees all /api/* requests ALWAYS return JSON)
 app.use((req, res) => {
+  if (req.path.startsWith('/api') || req.xhr || req.headers.accept?.includes('application/json')) {
+    return res.status(404).json({ 
+      success: false, 
+      message: `API Endpoint ${req.method} ${req.path} not found` 
+    });
+  }
   if (req.accepts('html')) {
     const notFoundFile = path.join(staticPath, '404.html');
     if (require('fs').existsSync(notFoundFile)) {
-      res.status(404).sendFile(notFoundFile);
-    } else {
-      res.status(404).send('<h1>404 - Page Not Found</h1>');
+      return res.status(404).sendFile(notFoundFile);
     }
-  } else {
-    res.status(404).json({ success: false, message: 'Resource not found' });
+    return res.status(404).send('<h1>404 - Page Not Found</h1>');
   }
+  res.status(404).json({ success: false, message: 'Resource not found' });
 });
 
-// Central Error Handler
+// Central Error Handler (Guarantees all API errors return clean JSON)
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
