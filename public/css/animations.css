@@ -3,7 +3,12 @@
    Zero Text Blurriness, 60FPS GPU Acceleration, Pixel-Perfect Font Rendering
    ========================================================================== */
 
-/* 1. Global Crisp Font Rendering (Fixes blur on transform/scale/hover) */
+/* 1. Global Crisp Font Rendering & Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
 html, body, div, p, span, h1, h2, h3, h4, h5, h6, a, button, input, textarea {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

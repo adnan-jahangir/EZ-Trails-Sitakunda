@@ -170,11 +170,12 @@
 
     window.addEventListener('scroll', onScroll, { passive: true });
 
-    // Handle smooth clicks for hash anchors
+    // Handle smooth clicks for hash anchors with sticky navbar offset
     document.addEventListener('click', (e) => {
       const anchor = e.target.closest('a[href^="#"]');
       if (!anchor) return;
       const targetId = anchor.getAttribute('href').replace('#', '');
+      if (!targetId) return;
       const targetEl = document.getElementById(targetId);
       if (targetEl) {
         e.preventDefault();
@@ -183,20 +184,35 @@
         history.pushState(null, null, '#' + targetId);
         updateActiveNavLinks(targetId);
         
-        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const headerOffset = 72;
+        const elementPosition = targetEl.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+        window.scrollTo({
+          top: Math.max(0, offsetPosition),
+          behavior: 'smooth',
+        });
+
         setTimeout(() => {
           isUserClickScroll = false;
-        }, 800);
+        }, 900);
       }
     });
 
     // Check if loaded with existing hash
     if (window.location.hash) {
-      const initialTarget = document.getElementById(window.location.hash.replace('#', ''));
+      const hashId = window.location.hash.replace('#', '');
+      const initialTarget = document.getElementById(hashId);
       if (initialTarget) {
         setTimeout(() => {
-          initialTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 400);
+          const headerOffset = 72;
+          const elementPosition = initialTarget.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+          window.scrollTo({
+            top: Math.max(0, offsetPosition),
+            behavior: 'smooth',
+          });
+        }, 500);
       }
     }
   }
