@@ -282,59 +282,101 @@
           </div>
         </div>
 
-        <!-- 🌟 ASSIGNED GUIDE & LEADER CARD (Displayed when Admin Confirms & Assigns Guide) -->
+        <!-- 🌟 PREMIUM ASSIGNED GUIDE & LEADER CARD -->
         ${(booking.assignedGuide && booking.assignedGuide.name) ? `
-          <div class="bg-gradient-to-br from-emerald-950 via-[#0e4d34] to-emerald-900 text-white rounded-3xl p-5 sm:p-6 mb-6 shadow-xl border border-emerald-600/80 animate-in fade-in zoom-in-95 duration-300">
-            <div class="flex items-center justify-between mb-4 pb-3 border-b border-emerald-800/80">
-              <div class="flex items-center gap-2 text-emerald-300 text-xs font-bold uppercase tracking-wider">
-                <span class="material-symbols-outlined text-base">verified</span>
-                <span>Assigned Sitakunda Tour Leader</span>
-              </div>
-              <span class="text-[10.5px] font-bold bg-emerald-500/25 text-emerald-300 border border-emerald-400/40 px-3 py-1 rounded-full flex items-center gap-1 shadow-2xs">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>Active on Duty</span>
-              </span>
-            </div>
+          <div class="relative overflow-hidden rounded-3xl mb-6 shadow-2xl" style="background: linear-gradient(145deg, #021810 0%, #0a3d2a 35%, #0e5438 60%, #0c3d28 100%);">
+            
+            <!-- Decorative Background Elements -->
+            <div class="absolute inset-0 opacity-[0.04]" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;1&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+            <div class="absolute -right-10 -top-10 w-40 h-40 bg-emerald-400/5 rounded-full blur-2xl"></div>
+            <div class="absolute -left-8 -bottom-8 w-32 h-32 bg-emerald-300/5 rounded-full blur-3xl"></div>
 
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div class="flex items-center gap-3.5">
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 text-white flex items-center justify-center font-black text-2xl border-2 border-white/30 shadow-md flex-shrink-0">
-                  ${booking.assignedGuide.name.charAt(0)}
-                </div>
-                <div>
-                  <div class="font-display font-bold text-lg text-white flex items-center gap-1.5 leading-tight">
-                    <span>${booking.assignedGuide.name}</span>
-                    <span class="material-symbols-outlined text-emerald-300 text-lg" title="Certified Verified Tour Leader">verified</span>
+            <div class="relative p-5 sm:p-7">
+              <!-- Header Row -->
+              <div class="flex items-center justify-between mb-5">
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-lg bg-emerald-400/15 border border-emerald-400/25 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-emerald-300 text-sm" style="font-variation-settings: 'FILL' 1;">shield_person</span>
                   </div>
-                  <div class="text-xs text-emerald-200 font-medium mt-0.5">${guideRole}</div>
-                  <div class="flex items-center gap-2 mt-1">
-                    <span class="inline-flex items-center gap-0.5 text-[11px] font-bold text-amber-300 bg-amber-950/60 border border-amber-500/40 px-2 py-0.5 rounded-md">
-                      ⭐ ${guideRating} / 5.0 Rating
-                    </span>
-                    <span class="text-[11px] text-emerald-200/90 font-mono font-semibold">📞 ${rawGuidePhone || ('+' + cleanGuidePhone)}</span>
+                  <span class="text-[10.5px] font-extrabold text-emerald-300/90 uppercase tracking-[0.12em]">Your Assigned Tour Leader</span>
+                </div>
+                <span class="inline-flex items-center gap-1.5 bg-emerald-400/10 border border-emerald-400/20 text-emerald-300 text-[10px] font-bold px-3 py-1.5 rounded-full backdrop-blur-sm">
+                  <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+                  </span>
+                  Active on Duty
+                </span>
+              </div>
+
+              <!-- Guide Profile -->
+              <div class="flex flex-col sm:flex-row gap-5">
+                <!-- Left: Avatar + Info -->
+                <div class="flex items-start gap-4 flex-1">
+                  <!-- Premium Avatar -->
+                  <div class="relative flex-shrink-0">
+                    <div class="w-[72px] h-[72px] rounded-2xl bg-gradient-to-br from-emerald-300 via-emerald-400 to-teal-500 flex items-center justify-center text-emerald-950 font-black text-3xl shadow-lg shadow-emerald-900/40 border-2 border-white/20" style="font-family: 'Playfair Display', serif;">
+                      ${booking.assignedGuide.name.charAt(0)}
+                    </div>
+                    <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-emerald-500 rounded-lg flex items-center justify-center shadow-md border-2 border-emerald-950">
+                      <span class="material-symbols-outlined text-white text-xs" style="font-size: 14px; font-variation-settings: 'FILL' 1;">verified</span>
+                    </div>
                   </div>
+
+                  <!-- Info Block -->
+                  <div class="min-w-0">
+                    <h3 class="font-display font-extrabold text-xl text-white leading-tight tracking-tight">${booking.assignedGuide.name}</h3>
+                    <p class="text-emerald-300/80 text-[11.5px] font-semibold mt-0.5 flex items-center gap-1.5">
+                      <span class="material-symbols-outlined text-xs text-emerald-400/70" style="font-size: 14px;">hiking</span>
+                      ${guideRole}
+                    </p>
+
+                    <!-- Star Rating -->
+                    <div class="flex items-center gap-2.5 mt-2.5">
+                      <div class="flex items-center gap-px">
+                        ${[1,2,3,4,5].map(i => `<span class="text-sm" style="color: ${i <= Math.round(guideRating) ? '#fbbf24' : '#374151'};">${i <= Math.round(guideRating) ? '★' : '☆'}</span>`).join('')}
+                      </div>
+                      <span class="text-amber-300/90 text-[11px] font-bold">${guideRating}<span class="text-emerald-400/50 font-medium"> / 5.0</span></span>
+                    </div>
+
+                    <!-- Phone Chip -->
+                    <div class="mt-2.5 inline-flex items-center gap-1.5 bg-white/[0.06] border border-white/10 rounded-lg px-2.5 py-1.5">
+                      <span class="material-symbols-outlined text-emerald-400/70 text-xs" style="font-size: 14px;">phone_in_talk</span>
+                      <span class="text-emerald-100/90 text-[11.5px] font-mono font-semibold tracking-wide">${rawGuidePhone || ('+' + cleanGuidePhone)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Right: Action Buttons -->
+                <div class="flex sm:flex-col gap-2.5 sm:justify-center sm:min-w-[140px]">
+                  <a href="tel:${dialPhone}" class="flex-1 group relative overflow-hidden bg-white hover:bg-emerald-50 text-emerald-950 font-bold text-xs px-5 py-3.5 rounded-2xl shadow-lg shadow-black/20 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98]">
+                    <span class="material-symbols-outlined text-lg text-emerald-700 group-hover:text-emerald-600 transition-colors" style="font-variation-settings: 'FILL' 1;">call</span>
+                    <span class="font-extrabold">Call Now</span>
+                  </a>
+                  <a href="https://wa.me/${waPhone}?text=${guideWaMsg}" target="_blank" class="flex-1 group relative overflow-hidden bg-[#25d366] hover:bg-[#1fbe5a] text-white font-bold text-xs px-5 py-3.5 rounded-2xl shadow-lg shadow-black/20 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98]">
+                    <svg class="w-[18px] h-[18px] fill-white" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                    <span class="font-extrabold">WhatsApp</span>
+                  </a>
                 </div>
               </div>
 
-              <!-- Direct Contact Buttons -->
-              <div class="flex items-center gap-2.5 pt-1 sm:pt-0">
-                <a href="tel:${dialPhone}" class="flex-1 sm:flex-initial bg-white hover:bg-emerald-50 text-emerald-950 font-bold text-xs px-4 py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer">
-                  <span class="material-symbols-outlined text-base text-emerald-800">call</span>
-                  <span>Call Guide</span>
-                </a>
-                <a href="https://wa.me/${waPhone}?text=${guideWaMsg}" target="_blank" class="flex-1 sm:flex-initial bg-[#25d366] hover:bg-[#20ba59] text-white font-bold text-xs px-4 py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer">
-                  <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                  <span>WhatsApp</span>
-                </a>
-              </div>
+              <!-- Vehicle & Transport Strip -->
+              ${booking.assignedVehicle ? `
+                <div class="mt-5 bg-white/[0.05] border border-white/10 rounded-2xl p-3.5 flex items-center gap-3 backdrop-blur-sm">
+                  <div class="w-9 h-9 rounded-xl bg-emerald-400/10 border border-emerald-400/20 flex items-center justify-center flex-shrink-0">
+                    <span class="material-symbols-outlined text-emerald-300 text-lg">directions_car</span>
+                  </div>
+                  <div>
+                    <span class="text-[10px] font-bold text-emerald-400/60 uppercase tracking-wider block">Reserved Vehicle & Transport</span>
+                    <span class="text-emerald-100 text-[12.5px] font-bold">${booking.assignedVehicle}</span>
+                  </div>
+                  <span class="ml-auto text-[10px] font-bold bg-emerald-400/10 text-emerald-300 border border-emerald-400/20 px-2.5 py-1 rounded-full hidden sm:inline-flex items-center gap-1">
+                    <span class="material-symbols-outlined text-xs" style="font-size: 12px;">check_circle</span>
+                    Reserved
+                  </span>
+                </div>
+              ` : ''}
             </div>
-
-            ${booking.assignedVehicle ? `
-              <div class="mt-3.5 pt-3 border-t border-emerald-800/60 flex items-center gap-2 text-xs text-emerald-200">
-                <span class="material-symbols-outlined text-sm text-emerald-300">directions_car</span>
-                <span><strong>Reserved Vehicle & Transport:</strong> ${booking.assignedVehicle}</span>
-              </div>
-            ` : ''}
           </div>
         ` : ''}
 
