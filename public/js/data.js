@@ -1086,14 +1086,24 @@ const BookingManager = {
     localStorage.setItem(this.KEY, JSON.stringify(list));
     return newBooking;
   },
-  updateStatus(id, newStatus, note) {
+  updateStatus(id, newStatus, note, extraFields) {
     const list = this.getAll();
-    const booking = list.find(b => b.id === id || b.bookingId === id || b._id === id);
+    const cleanSearchId = (id || '').trim().toUpperCase();
+    const booking = list.find(b => 
+      (b.id && b.id.toUpperCase() === cleanSearchId) || 
+      (b.bookingId && b.bookingId.toUpperCase() === cleanSearchId) || 
+      (b._id && String(b._id).toUpperCase() === cleanSearchId)
+    );
     if (booking) {
       booking.status = newStatus;
       if (note !== undefined) booking.note = note;
+      if (extraFields && typeof extraFields === 'object') {
+        Object.assign(booking, extraFields);
+      }
       this.save(list);
+      return booking;
     }
+    return null;
   },
   delete(id) {
     let list = this.getAll();

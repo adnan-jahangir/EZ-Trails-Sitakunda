@@ -131,6 +131,8 @@ const bookingSchema = new mongoose.Schema(
       name: { type: String, trim: true },
       phone: { type: String, trim: true },
       role: { type: String, default: 'Certified Local Tour Leader' },
+      specialty: { type: String, default: 'Mountain Ridge & Waterfall Guide' },
+      rating: { type: Number, default: 4.9 },
       photo: { type: String },
     },
     assignedVehicle: {

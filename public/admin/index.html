@@ -1653,12 +1653,15 @@
       const guidePhone = document.getElementById('assign-guide-phone')?.value.trim() || '01812345678';
       const guideRole = document.getElementById('assign-guide-role')?.value.trim() || 'Certified Local Mountain Leader';
       const vehicle = document.getElementById('assign-vehicle')?.value.trim() || '';
-      const isPaymentVerified = document.getElementById('assign-pay-verified')?.checked;
+      const selectedGuideObj = allRegisteredGuides.find(g => g.name === guideName || g.phone === guidePhone) || {};
+      const guideRating = selectedGuideObj.rating || 4.9;
 
       const assignedGuide = {
         name: guideName,
         phone: guidePhone,
-        role: guideRole
+        role: guideRole,
+        specialty: guideRole,
+        rating: guideRating,
       };
 
       const b = allBookingsCache.find(x => x.id === bookingCode || x._id === internalId);
@@ -1666,13 +1669,15 @@
 
       try {
         const targetId = internalId || bookingCode;
-        await TourstkAPI.updateBookingStatus(targetId, {
-          status: 'Confirmed',
-          paymentStatus: isPaymentVerified ? 'Paid' : 'Pending Verification',
-          paidAmount: paidAmount,
-          assignedGuide,
-          assignedVehicle: vehicle
-        });
+        if (typeof TourstkAPI !== 'undefined') {
+          await TourstkAPI.updateBookingStatus(targetId, {
+            status: 'Confirmed',
+            paymentStatus: isPaymentVerified ? 'Paid' : 'Pending Verification',
+            paidAmount: paidAmount,
+            assignedGuide,
+            assignedVehicle: vehicle
+          });
+        }
       } catch (err) {
         console.warn('API update error, saving local state:', err);
       }
@@ -1680,10 +1685,20 @@
       if (b) {
         b.status = 'confirmed';
         b.paymentStatus = isPaymentVerified ? 'Paid' : 'Pending Verification';
+        b.paidAmount = paidAmount;
         b.assignedGuide = assignedGuide;
         b.assignedVehicle = vehicle;
       }
-      BookingManager.updateStatus(bookingCode, 'confirmed');
+
+      if (typeof BookingManager !== 'undefined') {
+        BookingManager.updateStatus(bookingCode, 'confirmed', undefined, {
+          status: 'confirmed',
+          paymentStatus: isPaymentVerified ? 'Paid' : 'Pending Verification',
+          paidAmount: paidAmount,
+          assignedGuide: assignedGuide,
+          assignedVehicle: vehicle,
+        });
+      }
 
       closeModal('modal-assign-guide');
 
