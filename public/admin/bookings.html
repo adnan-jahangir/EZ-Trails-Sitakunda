@@ -128,10 +128,35 @@
         }
       }
 
-      if (!bookings.length && typeof BookingManager !== 'undefined') {
-        bookings = BookingManager.getAll();
-      }
+      const localBookings = (typeof BookingManager !== 'undefined') ? BookingManager.getAll() : [];
+      const mergedMap = new Map();
+      bookings.forEach(b => {
+        const id = b.id || b.bookingId || b._id;
+        if (id) mergedMap.set(String(id).toUpperCase(), b);
+      });
+      localBookings.forEach(b => {
+        const id = b.id || b.bookingId || b._id;
+        if (id && !mergedMap.has(String(id).toUpperCase())) {
+          mergedMap.set(String(id).toUpperCase(), {
+            id: b.id || id,
+            _id: b._id || id,
+            name: b.name || b.customerName,
+            phone: b.phone,
+            email: b.email,
+            packageName: b.packageName,
+            travelDate: b.travelDate,
+            travelers: b.travelers || b.guests?.total || 1,
+            totalPrice: b.totalPrice || b.pricing?.grandTotal || 0,
+            status: (b.status || 'pending').toLowerCase(),
+            paymentStatus: b.paymentStatus || 'Pending Verification',
+            trxId: b.trxId || '',
+            paidAmount: b.paidAmount || 0,
+            specialRequests: b.specialRequests || '',
+          });
+        }
+      });
 
+      bookings = Array.from(mergedMap.values());
       liveBookingsCache = bookings;
       renderBookingsTable();
     }

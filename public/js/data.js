@@ -1044,34 +1044,85 @@ const BookingManager = {
   getAll() {
     try {
       const data = localStorage.getItem(this.KEY);
-      return data ? JSON.parse(data) : [];
+      if (!data) return [];
+      const parsed = JSON.parse(data);
+      if (Array.isArray(parsed)) return parsed;
+      if (parsed && typeof parsed === 'object') return [parsed];
+      return [];
     } catch(e) {
       return [];
     }
   },
   save(list) {
-    localStorage.setItem(this.KEY, JSON.stringify(list));
+    if (Array.isArray(list)) {
+      localStorage.setItem(this.KEY, JSON.stringify(list));
+    } else if (list && typeof list === 'object') {
+      const all = this.getAll();
+      const existingIdx = all.findIndex(b => (b.id && b.id === list.id) || (b._id && b._id === list._id));
+      if (existingIdx >= 0) {
+        all[existingIdx] = { ...all[existingIdx], ...list };
+      } else {
+        all.unshift(list);
+      }
+      localStorage.setItem(this.KEY, JSON.stringify(all));
+    }
   },
   create(data) {
     const list = this.getAll();
-    const id = 'TSK-' + Math.floor(100000 + Math.random() * 900000);
+    const id = data.id || data.bookingId || ('STK-' + Math.floor(100000 + Math.random() * 900000));
     const newBooking = {
       id,
+      bookingId: id,
       ...data,
-      status: 'pending',
-      createdAt: new Date().toISOString()
+      status: data.status || 'pending',
+      createdAt: data.createdAt || new Date().toISOString()
     };
-    list.unshift(newBooking);
-    this.save(list);
+    const existingIdx = list.findIndex(b => (b.id && b.id === id) || (b.bookingId && b.bookingId === id));
+    if (existingIdx >= 0) {
+      list[existingIdx] = { ...list[existingIdx], ...newBooking };
+    } else {
+      list.unshift(newBooking);
+    }
+    localStorage.setItem(this.KEY, JSON.stringify(list));
     return newBooking;
+  },
+  updateStatus(id, newStatus, note) {
+    const list = this.getAll();
+    const booking = list.find(b => b.id === id || b.bookingId === id || b._id === id);
+    if (booking) {
+      booking.status = newStatus;
+      if (note !== undefined) booking.note = note;
+      this.save(list);
+    }
+  },
+  delete(id) {
+    let list = this.getAll();
+    list = list.filter(b => b.id !== id && b.bookingId !== id && b._id !== id);
+    this.save(list);
   },
   findByIdAndPhone(id, phone) {
     const list = this.getAll();
     const cleanId = (id || '').trim().toUpperCase();
     const cleanPhone = (phone || '').trim().replace(/[^0-9]/g, '');
-    return list.find(b => 
-      b.id.toUpperCase() === cleanId && 
-      b.phone.replace(/[^0-9]/g, '').includes(cleanPhone.slice(-10))
-    );
+    const last8 = cleanPhone.length >= 8 ? cleanPhone.slice(-8) : cleanPhone;
+
+    return list.find(b => {
+      const bId = (b.id || b.bookingId || '').toUpperCase();
+      const bPhone = (b.phone || '').replace(/[^0-9]/g, '');
+      
+      // If both ID and phone given
+      if (cleanId && last8) {
+        return (bId === cleanId || bId.includes(cleanId)) && (bPhone.includes(last8) || last8.includes(bPhone.slice(-8)));
+      }
+      // If only ID given
+      if (cleanId) {
+        return bId === cleanId || bId.includes(cleanId);
+      }
+      // If only phone given
+      if (last8) {
+        return bPhone.includes(last8) || last8.includes(bPhone.slice(-8));
+      }
+      return false;
+    });
   }
 };

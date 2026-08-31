@@ -1110,9 +1110,44 @@
         console.warn('API lookup, fallback to local', err);
       }
 
-      if (!bookings || bookings.length === 0) {
-        bookings = BookingManager.getAll();
-      }
+      // Merge with local BookingManager storage seamlessly
+      const localBookings = (typeof BookingManager !== 'undefined') ? BookingManager.getAll() : [];
+      const mergedMap = new Map();
+      
+      bookings.forEach(b => {
+        const id = b.id || b.bookingId || b._id;
+        if (id) mergedMap.set(String(id).toUpperCase(), b);
+      });
+
+      localBookings.forEach(b => {
+        const id = b.id || b.bookingId || b._id;
+        if (id && !mergedMap.has(String(id).toUpperCase())) {
+          mergedMap.set(String(id).toUpperCase(), {
+            _id: b._id || id,
+            id: b.id || id,
+            name: b.name || b.customerName,
+            phone: b.phone,
+            email: b.email,
+            packageName: b.packageName,
+            pickup: b.pickup || b.pickupLocation,
+            travelDate: b.travelDate,
+            travelers: b.travelers || b.guests?.total || 1,
+            guideType: b.guideType || 'Standard Coordinator',
+            totalPrice: b.totalPrice || b.pricing?.grandTotal || 0,
+            status: (b.status || 'pending').toLowerCase(),
+            paymentStatus: b.paymentStatus || 'Pending Verification',
+            trxId: b.trxId || '',
+            senderNumber: b.senderNumber || '',
+            paidAmount: b.paidAmount || 0,
+            paymentMethod: b.paymentMethod || 'bkash',
+            note: b.note || b.adminNotes || '',
+            assignedGuide: b.assignedGuide || null,
+            assignedVehicle: b.assignedVehicle || '',
+          });
+        }
+      });
+
+      bookings = Array.from(mergedMap.values());
 
       // Check for incoming new bookings since last poll
       if (!isInitialBookingsLoad && bookings && bookings.length > 0) {

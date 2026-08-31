@@ -150,40 +150,55 @@
       try {
         // Try live MongoDB API tracking
         const searchIdentifier = id || phone;
-        const apiRes = await TourstkAPI.trackBooking(searchIdentifier);
-        if (apiRes.success && apiRes.data && apiRes.data.length > 0) {
-          const match = phone 
-            ? apiRes.data.find(b => b.phone.includes(phone) || (id && b.bookingId.toLowerCase() === id.toLowerCase())) || apiRes.data[0]
-            : apiRes.data[0];
+        if (searchIdentifier && typeof TourstkAPI !== 'undefined') {
+          const apiRes = await TourstkAPI.trackBooking(searchIdentifier);
+          if (apiRes.success && apiRes.data && apiRes.data.length > 0) {
+            const cleanPhoneDigits = phone.replace(/[^0-9]/g, '');
+            const last8 = cleanPhoneDigits.length >= 8 ? cleanPhoneDigits.slice(-8) : cleanPhoneDigits;
+            const cleanId = (id || '').trim().toLowerCase();
 
-            booking = {
-            id: match.bookingId,
-            name: match.customerName,
-            phone: match.phone,
-            packageName: match.packageName,
-            travelDate: match.travelDate,
-            travelers: match.guests?.total || match.guests?.adults || 1,
-            pickup: match.pickupLocation,
-            guideType: match.addOns?.[0]?.name || 'Standard Coordinator',
-            roomPreference: match.roomPreference || null,
-            totalPrice: match.pricing?.grandTotal || 0,
-            status: match.status.toLowerCase(),
-            paymentMethod: match.payment?.method || 'bkash',
-            trxId: match.payment?.trxId || '',
-            senderNumber: match.payment?.senderNumber || '',
-            paidAmount: match.payment?.paidAmount || 0,
-            paymentStatus: match.payment?.paymentStatus || 'Pending Verification',
-            adminNotes: match.adminNotes,
-            assignedGuide: match.assignedGuide && match.assignedGuide.name ? match.assignedGuide : null,
-            assignedVehicle: match.assignedVehicle || '',
-          };
+            const match = apiRes.data.find(b => {
+              const bPhone = (b.phone || '').replace(/[^0-9]/g, '');
+              const bId = (b.bookingId || b.id || '').toLowerCase();
+              if (cleanId && last8) {
+                return (bId === cleanId || bId.includes(cleanId)) && (bPhone.includes(last8) || last8.includes(bPhone.slice(-8)));
+              }
+              if (cleanId) return bId === cleanId || bId.includes(cleanId);
+              if (last8) return bPhone.includes(last8) || last8.includes(bPhone.slice(-8));
+              return true;
+            }) || apiRes.data[0];
+
+            if (match) {
+              booking = {
+                id: match.bookingId || match.id,
+                name: match.customerName || match.name,
+                phone: match.phone,
+                packageName: match.packageName,
+                travelDate: match.travelDate,
+                travelers: match.guests?.total || match.guests?.adults || match.travelers || 1,
+                pickup: match.pickupLocation || match.pickup,
+                guideType: match.addOns?.[0]?.name || 'Standard Coordinator',
+                roomPreference: match.roomPreference || null,
+                totalPrice: match.pricing?.grandTotal || match.totalPrice || 0,
+                status: (match.status || 'pending').toLowerCase(),
+                paymentMethod: match.payment?.method || match.paymentMethod || 'bkash',
+                trxId: match.payment?.trxId || match.trxId || '',
+                senderNumber: match.payment?.senderNumber || match.senderNumber || '',
+                paidAmount: match.payment?.paidAmount || match.paidAmount || 0,
+                paymentStatus: match.payment?.paymentStatus || match.paymentStatus || 'Pending Verification',
+                adminNotes: match.adminNotes || match.note,
+                assignedGuide: match.assignedGuide && match.assignedGuide.name ? match.assignedGuide : null,
+                assignedVehicle: match.assignedVehicle || '',
+              };
+            }
+          }
         }
       } catch (err) {
         console.warn('API lookup failed, checking local store', err);
       }
 
       // Fallback to local storage if API didn't find anything
-      if (!booking) {
+      if (!booking && typeof BookingManager !== 'undefined') {
         booking = BookingManager.findByIdAndPhone(id, phone);
       }
 
