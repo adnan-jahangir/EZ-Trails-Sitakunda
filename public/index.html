@@ -779,17 +779,15 @@
       // 1. Initial Render
       renderFeaturedPackages();
       renderFeaturedDestinations();
-      if (typeof renderReviews === 'function') renderReviews();
 
       // 2. Fetch latest live data from MongoDB Atlas
       if (window.TourstkAPI) {
-        await Promise.all([
+        Promise.all([
           TourstkAPI.fetchAndSyncPackages(),
           TourstkAPI.fetchAndSyncDestinations(),
           TourstkAPI.fetchAndSyncReviews()
-        ]);
+        ]).catch(() => {});
       }
-    });
 
       // 3. Render Reviews & Auto-Sliding Carousel Engine
       const reviewsTrack = document.getElementById('reviews-track');
