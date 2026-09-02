@@ -255,10 +255,6 @@
           </div>
         </div>
         <div class="flex items-center gap-2">
-          <button type="button" onclick="openAddPhotoFromLightbox()" class="px-3 py-1.5 rounded-xl bg-emerald-600/90 hover:bg-emerald-500 text-white flex items-center gap-1.5 text-xs font-bold transition-all cursor-pointer shadow-md">
-            <span class="material-symbols-outlined text-sm">add_photo_alternate</span>
-            <span>+ Add More</span>
-          </button>
           <button onclick="closeMediaModal()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all cursor-pointer">
             <span class="material-symbols-outlined text-xl">close</span>
           </button>
@@ -275,6 +271,10 @@
         </video>
       </div>
 
+      <!-- Modal Bottom Thumbnail Navigation Strip -->
+      <div class="p-4 bg-slate-900/80 border-t border-white/10 flex items-center justify-center gap-3 overflow-x-auto" id="modal-thumbs-bar">
+        <!-- Injected via JS -->
+      </div>
     </div>
   </div>
 
