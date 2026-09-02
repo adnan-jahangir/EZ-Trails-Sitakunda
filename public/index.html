@@ -67,6 +67,24 @@
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
     }
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-repeat: no-repeat;
+      opacity: 0;
+      transform: scale(1.08);
+      transition: opacity 1.6s cubic-bezier(0.4, 0, 0.2, 1), transform 6.5s ease-out;
+      pointer-events: none;
+      filter: contrast(1.04) saturate(1.08);
+      z-index: 1;
+      will-change: opacity, transform;
+    }
+    .hero-slide.is-active {
+      opacity: 1;
+      transform: scale(1.0);
+      z-index: 2;
+    }
   </style>
 </head>
 <body class="bg-white text-slate-800 font-body antialiased selection:bg-emerald-100 selection:text-emerald-900">
@@ -106,7 +124,7 @@
     <!-- 4K Multi-Slide Cinematic Auto-Rotating Background -->
     <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none" id="hero-slider-wrapper">
       <!-- Slide 1: Chandranath Peak -->
-      <div class="hero-slide" style="background-image: url('images/hero-slide-1.jpg'); background-position: center 30%;" data-spot="Chandranath Peak"></div>
+      <div class="hero-slide is-active" style="background-image: url('images/hero-slide-1.jpg'); background-position: center 30%;" data-spot="Chandranath Peak"></div>
       <!-- Slide 2: Mahamaya Lake & Kayaks (4K) -->
       <div class="hero-slide" style="background-image: url('images/hero-slide-7.jpg'); background-position: center 45%;" data-spot="Mahamaya Lake Kayaking"></div>
       <!-- Slide 3: Sitakunda Ships Outer Anchorage (4K Drone) -->
@@ -1132,18 +1150,18 @@
       if (heroSlideTimer) clearInterval(heroSlideTimer);
       heroSlideTimer = setInterval(() => {
         showHeroSlide(currentHeroSlide + 1);
-      }, 5000);
+      }, 4000);
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      // Trigger slide 0 immediately on first frame
-      requestAnimationFrame(() => {
-        setTimeout(() => {
-          showHeroSlide(0);
-        }, 50);
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        showHeroSlide(0);
+        startHeroSlideTimer();
       });
+    } else {
+      showHeroSlide(0);
       startHeroSlideTimer();
-    });
+    }
   </script>
 </body>
 </html>
