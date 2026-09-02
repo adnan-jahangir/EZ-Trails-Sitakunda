@@ -8,64 +8,80 @@
       "destination": "/api"
     },
     {
+      "source": "/",
+      "destination": "/public/index.html"
+    },
+    {
+      "source": "/index",
+      "destination": "/public/index.html"
+    },
+    {
+      "source": "/index.html",
+      "destination": "/public/index.html"
+    },
+    {
       "source": "/packages",
-      "destination": "/packages.html"
+      "destination": "/public/packages.html"
     },
     {
       "source": "/explore",
-      "destination": "/explore.html"
+      "destination": "/public/explore.html"
     },
     {
       "source": "/my-booking",
-      "destination": "/my-booking.html"
+      "destination": "/public/my-booking.html"
     },
     {
       "source": "/planner",
-      "destination": "/planner.html"
+      "destination": "/public/planner.html"
     },
     {
       "source": "/contact",
-      "destination": "/contact.html"
+      "destination": "/public/contact.html"
     },
     {
       "source": "/booking",
-      "destination": "/booking.html"
+      "destination": "/public/booking.html"
     },
     {
       "source": "/package-detail",
-      "destination": "/package-detail.html"
+      "destination": "/public/package-detail.html"
     },
     {
       "source": "/destination-detail",
-      "destination": "/destination-detail.html"
+      "destination": "/public/destination-detail.html"
     },
     {
       "source": "/admin",
-      "destination": "/admin/index.html"
+      "destination": "/public/admin/index.html"
     },
     {
       "source": "/admin/",
-      "destination": "/admin/index.html"
+      "destination": "/public/admin/index.html"
     },
     {
       "source": "/admin/index",
-      "destination": "/admin/index.html"
+      "destination": "/public/admin/index.html"
     },
     {
       "source": "/admin/bookings",
-      "destination": "/admin/bookings.html"
+      "destination": "/public/admin/bookings.html"
     },
     {
       "source": "/admin/packages",
-      "destination": "/admin/packages.html"
+      "destination": "/public/admin/packages.html"
     },
     {
       "source": "/admin/custom-requests",
-      "destination": "/admin/custom-requests.html"
+      "destination": "/public/admin/custom-requests.html"
     },
     {
       "source": "/admin/(.*)",
-      "destination": "/admin/index.html"
+      "destination": "/public/admin/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/public/$1"
     }
   ]
 }
