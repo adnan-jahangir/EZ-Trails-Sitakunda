@@ -159,7 +159,7 @@
               </button>
               <button type="button" onclick="setTripDuration('3days', this)" class="dur-btn py-3 px-4 rounded-2xl font-bold text-xs border-2 border-slate-200 bg-slate-50 text-slate-700 hover:border-slate-300 transition-all text-center">
                 3 Days Complete
-                <span class="block text-[10px] opacity-80 font-normal">All 12 Iconic Spots</span>
+                <span class="block text-[10px] opacity-80 font-normal">All 13 Iconic Spots</span>
               </button>
             </div>
           </div>
@@ -756,9 +756,11 @@
 
       try {
         await TourstkAPI.createCustomRequest(payload);
+        TourstkAPI.broadcastChange('CUSTOM_REQUEST_CREATED', payload);
         alert('🎉 Custom Trip Request received! Our Sitakunda trek coordinator will message you on WhatsApp shortly.');
         e.target.reset();
       } catch (err) {
+        TourstkAPI.broadcastChange('CUSTOM_REQUEST_CREATED', payload);
         alert('Your custom request was saved! Our coordinator will contact you at ' + phone);
         e.target.reset();
       } finally {

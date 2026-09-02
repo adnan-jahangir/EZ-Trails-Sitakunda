@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="light" lang="en">
 <head>
   <meta charset="utf-8">
@@ -39,6 +39,11 @@
   </script>
   <link rel="stylesheet" href="css/animations.css">
   <style>
+    /* Crisp Image Quality */
+    img {
+      image-rendering: -webkit-optimize-contrast;
+    }
+
     /* Custom Leaflet Map Pin Styles — Mobile-Optimized & Compact */
     .custom-spot-pin {
       position: relative;
@@ -244,18 +249,31 @@
       return (R * c).toFixed(1);
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    function renderDestinationDetails() {
+      // Load custom photos from localStorage
+      try {
+        const customSpots = JSON.parse(localStorage.getItem('tourstk_custom_spots') || '{}');
+        Object.keys(customSpots).forEach(id => {
+          const s = (window.TOURSTK?.destinations || []).find(d => d.id === id || d.destinationId === id);
+          if (s && Array.isArray(customSpots[id])) {
+            s.gallery = customSpots[id];
+          }
+        });
+      } catch (e) {}
+
       const params = new URLSearchParams(window.location.search);
       const destId = params.get('id') || 'chandranath-hill';
-      const dest = TOURSTK.destinations.find(d => d.id === destId) || TOURSTK.destinations[0];
+      const allDests = (window.TOURSTK?.destinations || []);
+      const dest = allDests.find(d => d.id === destId || d.destinationId === destId) || allDests[0];
 
       if (!dest) return;
 
+      const allPkgs = (window.TOURSTK?.packages || []);
       // Matching packages for this spot
-      const matchingPkgs = TOURSTK.packages.filter(p => p.destinations.includes(dest.id));
+      const matchingPkgs = allPkgs.filter(p => (p.destinations || p.spots || []).includes(dest.id) || (p.destinations || p.spots || []).includes(dest.destinationId));
 
       // Calculate distance to all other destinations
-      const nearbySpots = TOURSTK.destinations
+      const nearbySpots = allDests
         .filter(d => d.id !== dest.id)
         .map(d => {
           const dist = (dest.lat && dest.lng && d.lat && d.lng) 
@@ -265,7 +283,15 @@
         })
         .sort((a, b) => a.distance - b.distance);
 
-      document.getElementById('dest-content-area').innerHTML = `
+      const activeGallery = (dest.gallery && dest.gallery.length > 0) ? dest.gallery : [
+        { type: 'image', src: dest.image, thumb: dest.image, label: 'Main View' }
+      ];
+      const initialMedia = activeGallery[0];
+      window.currentDestGallery = activeGallery;
+
+      const contentArea = document.getElementById('dest-content-area');
+      if (!contentArea) return;
+      contentArea.innerHTML = `
         <div class="max-w-container-max mx-auto px-6">
           <!-- Back Link -->
           <a href="/explore" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-primary mb-6 transition-colors">
@@ -287,27 +313,31 @@
           <!-- Live Sitakunda Weather & Trail Advisory -->
           <div id="dest-weather-advisory" class="mb-8"></div>
 
-          <!-- INTERACTIVE GALLERY & 4K VIDEO PLAYER (Matching User Reference Image) -->
+          <!-- INTERACTIVE GALLERY & 4K CINEMA STAGE -->
           <div class="mb-12">
-            <!-- Main Display Screen -->
-            <div class="rounded-3xl overflow-hidden h-80 sm:h-[480px] shadow-md border border-slate-100 relative group bg-slate-950" id="dest-main-media-box">
+            <!-- Main Display Screen with Ambient Backdrop (100% full photo visible, no cutting in half!) -->
+            <div class="rounded-3xl overflow-hidden shadow-xl border border-slate-200 relative group bg-slate-950 min-h-[380px] sm:min-h-[500px] max-h-[620px] flex items-center justify-center p-3 sm:p-5" id="dest-main-media-box">
               
-              <!-- Duration Badge on Top Left (Matching User Reference) -->
-              <div class="absolute top-4 left-4 bg-black/65 backdrop-blur-md text-white text-xs font-bold px-3.5 py-1.5 rounded-xl shadow-md z-10 flex items-center gap-1.5 border border-white/10">
+              <!-- Ambient Blurred Backdrop -->
+              <div id="dest-hero-ambient-blur" class="absolute inset-0 bg-cover bg-center blur-3xl opacity-40 scale-110 pointer-events-none transition-all duration-700" style="background-image: url('${initialMedia.thumb || initialMedia.src}');"></div>
+
+              <!-- Duration Badge on Top Left -->
+              <div class="absolute top-4 left-4 bg-black/70 backdrop-blur-md text-white text-xs font-bold px-3.5 py-1.5 rounded-xl shadow-md z-20 flex items-center gap-1.5 border border-white/10">
+                <span class="material-symbols-outlined text-xs text-emerald-400">schedule</span>
                 <span>${dest.duration || '2 Days • 1 Night'}</span>
               </div>
 
-              <!-- Main Image Element -->
-              <img id="dest-hero-main-img" src="${(dest.gallery && dest.gallery[0]) ? dest.gallery[0].src : dest.image}" alt="${dest.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+              <!-- Main Image Element (object-contain ensures complete photo is shown, no harsh crop or zoom pixelation) -->
+              <img id="dest-hero-main-img" src="${initialMedia.src}" alt="${dest.name}" class="relative z-10 max-h-[360px] sm:max-h-[480px] w-auto max-w-full object-contain rounded-2xl shadow-2xl transition-all duration-500">
               
               <!-- Main Video Element -->
-              <video id="dest-hero-main-video" class="w-full h-full object-cover hidden" controls playsinline>
+              <video id="dest-hero-main-video" class="relative z-10 max-h-[360px] sm:max-h-[480px] w-auto max-w-full object-contain rounded-2xl shadow-2xl hidden" controls playsinline>
                 <source id="dest-hero-video-src" src="" type="video/mp4">
               </video>
 
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent pointer-events-none"></div>
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent pointer-events-none z-10"></div>
               
-              <div class="absolute bottom-6 left-6 flex items-center gap-3 z-10">
+              <div class="absolute bottom-6 left-6 flex items-center gap-3 z-20">
                 <span class="bg-white/90 backdrop-blur-md text-primary text-xs font-bold px-4 py-2 rounded-full shadow-sm">
                   ${dest.category}
                 </span>
@@ -318,17 +348,12 @@
               </div>
             </div>
 
-            <!-- 4-Thumbnail Row Below -->
-            <div class="grid grid-cols-4 gap-3 sm:gap-4 mt-3.5">
-              ${(dest.gallery || [
-                { type: 'image', src: dest.image, thumb: dest.image, label: 'Main View' },
-                { type: 'image', src: dest.fallbackImage || dest.image, thumb: dest.fallbackImage || dest.image, label: 'Scenic View' },
-                { type: 'image', src: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80', thumb: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=300&q=80', label: 'Valley' },
-                { type: 'video', src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4', thumb: dest.image, label: '4K Video' }
-              ]).slice(0, 4).map((item, idx) => {
+            <!-- Balanced Proportional Thumbnail Row with Add More -->
+            <div class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2.5 sm:gap-3.5 mt-4">
+              ${activeGallery.map((item, idx) => {
                 if (item.type === 'video') {
                   return `
-                    <button type="button" onclick="switchDetailHeroMedia(${idx})" title="${item.label || 'Watch 4K Video Tour'}" class="dest-thumb-btn relative h-16 sm:h-24 rounded-2xl overflow-hidden border-2 border-transparent opacity-85 hover:opacity-100 hover:border-emerald-500 transition-all cursor-pointer bg-slate-900 group/vid shadow-xs">
+                    <button type="button" onclick="switchDetailHeroMedia(${idx})" title="${item.label || 'Watch 4K Video Tour'}" class="dest-thumb-btn relative aspect-[16/10] rounded-2xl overflow-hidden border-2 border-transparent opacity-85 hover:opacity-100 hover:border-emerald-500 transition-all cursor-pointer bg-slate-900 group/vid shadow-xs">
                       <img src="${item.thumb || dest.image}" alt="Video thumbnail" class="w-full h-full object-cover brightness-75 group-hover/vid:scale-105 transition-transform duration-300">
                       <div class="absolute inset-0 flex items-center justify-center">
                         <span class="w-8 h-8 rounded-full bg-[#0e4d34] text-white flex items-center justify-center shadow-lg ring-2 ring-white/40">
@@ -341,11 +366,17 @@
                 }
 
                 return `
-                  <button type="button" onclick="switchDetailHeroMedia(${idx})" title="${item.label || 'View Photo'}" class="dest-thumb-btn relative h-16 sm:h-24 rounded-2xl overflow-hidden border-2 ${idx === 0 ? 'border-primary ring-2 ring-emerald-400/50' : 'border-transparent opacity-75 hover:opacity-100 hover:border-slate-300'} transition-all cursor-pointer shadow-xs">
+                  <button type="button" onclick="switchDetailHeroMedia(${idx})" title="${item.label || 'View Photo'}" class="dest-thumb-btn relative aspect-[16/10] rounded-2xl overflow-hidden border-2 ${idx === 0 ? 'border-primary ring-2 ring-emerald-400/50' : 'border-transparent opacity-75 hover:opacity-100 hover:border-slate-300'} transition-all cursor-pointer shadow-xs">
                     <img src="${item.thumb || item.src}" alt="${item.label || dest.name}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
                   </button>
                 `;
               }).join('')}
+
+              <!-- ADD MORE IMAGE BUTTON -->
+              <a href="/explore?addPhoto=${dest.id}" title="Add more photos to ${dest.name}" class="relative aspect-[16/10] rounded-2xl border-2 border-dashed border-emerald-400 hover:border-emerald-600 bg-emerald-50/70 hover:bg-emerald-100/90 flex flex-col items-center justify-center text-emerald-800 transition-all cursor-pointer p-1 text-center group/add shadow-2xs">
+                <span class="material-symbols-outlined text-lg text-emerald-600 group-hover/add:scale-125 transition-transform">add_a_photo</span>
+                <span class="text-[9px] font-extrabold leading-tight mt-0.5 text-emerald-800">+ Add More</span>
+              </a>
             </div>
           </div>
 
@@ -511,7 +542,7 @@
           maxZoom: 19
         }).addTo(map);
 
-        // Pin each of the 12 destinations on the Map
+        // Pin each of the 14 destinations on the Map
         TOURSTK.destinations.forEach(spot => {
           if (!spot.lat || !spot.lng) return;
 
@@ -578,6 +609,20 @@
       ];
 
       }, 100);
+    }
+
+    window.addEventListener('tourstk:destinations-updated', renderDestinationDetails);
+    window.addEventListener('tourstk:packages-updated', renderDestinationDetails);
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      renderDestinationDetails();
+      if (window.TourstkAPI) {
+        await Promise.all([
+          TourstkAPI.fetchAndSyncDestinations(),
+          TourstkAPI.fetchAndSyncPackages()
+        ]);
+        renderDestinationDetails();
+      }
     });
 
     function switchDetailHeroMedia(itemIndex) {
@@ -586,6 +631,12 @@
       const mainImg = document.getElementById('dest-hero-main-img');
       const mainVideo = document.getElementById('dest-hero-main-video');
       const videoSrc = document.getElementById('dest-hero-video-src');
+
+      // Update ambient backdrop
+      const ambient = document.getElementById('dest-hero-ambient-blur');
+      if (ambient) {
+        ambient.style.backgroundImage = `url('${item.thumb || item.src}')`;
+      }
 
       // Update active border on thumbnails
       document.querySelectorAll('.dest-thumb-btn').forEach((btn, idx) => {

@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Explore Sitakunda — 12 Iconic Destinations | EZ Trails Sitakunda</title>
-  <meta name="description" content="Discover all 12 iconic tourist spots in Sitakunda. From Chandranath Hill and Guliakhali Beach to Khaiyachora Waterfall and Mohamaya Lake.">
+  <title>Explore Sitakunda — 14 Iconic Destinations | EZ Trails Sitakunda</title>
+  <meta name="description" content="Discover all 14 iconic tourist spots in Sitakunda. From Chandranath Hill and Guliakhali Beach to DC Park, Cafe 24, Akilpur Beach and Mohamaya Lake.">
   <meta name="theme-color" content="#0e4d34">
 
   <!-- OpenGraph / Facebook / WhatsApp Rich Link Preview -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://tourstk.com/explore.html">
-  <meta property="og:title" content="Explore Sitakunda — 12 Iconic Destinations & Trails">
+  <meta property="og:title" content="Explore Sitakunda — 14 Iconic Destinations & Trails">
   <meta property="og:description" content="From misty mountain summits to tidal grass beaches and 9-tier waterfalls. Find complete guide & safety tips.">
   <meta property="og:image" content="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&h=630&q=85">
   <meta property="og:site_name" content="EZ Trails Sitakunda (Tourstk)">
@@ -48,6 +48,15 @@
   </script>
 
   <link rel="stylesheet" href="css/animations.css">
+  <style>
+    /* Sharp Image Contrast & Unified Responsive Media Stage */
+    img {
+      image-rendering: -webkit-optimize-contrast;
+    }
+    .card-media-screen {
+      aspect-ratio: 16 / 10;
+    }
+  </style>
 </head>
 <body class="bg-white text-slate-900 font-sans antialiased selection:bg-emerald-100 selection:text-emerald-900 min-h-screen flex flex-col justify-between">
 
@@ -105,7 +114,7 @@
       <!-- Category Filter Pills -->
       <div class="flex flex-wrap gap-2.5 justify-center" id="category-pills">
         <button type="button" class="cat-pill active px-4 py-2 rounded-full text-xs font-bold bg-primary text-white shadow-xs transition-all cursor-pointer" data-cat="all" onclick="selectCategory(this)">
-          All Destinations (12)
+          All Destinations (14)
         </button>
         <button type="button" class="cat-pill px-4 py-2 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer" data-cat="Hills & Peaks" onclick="selectCategory(this)">
           ⛰️ Hills & Peaks
@@ -133,7 +142,7 @@
     
     <div class="flex justify-between items-center mb-8">
       <div class="text-sm font-semibold text-slate-600">
-        Showing <strong class="text-slate-900" id="spots-count">12</strong> destinations in Sitakunda
+        Showing <strong class="text-slate-900" id="spots-count">14</strong> destinations in Sitakunda
       </div>
       <a href="/packages" class="text-xs font-bold text-primary hover:underline flex items-center gap-1">
         <span>View All Tour Packages</span>
@@ -245,15 +254,23 @@
             <p id="modal-spot-subtitle" class="text-xs text-emerald-400 font-medium">4K Cinematic Preview & Photos</p>
           </div>
         </div>
-        <button onclick="closeMediaModal()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all cursor-pointer">
-          <span class="material-symbols-outlined text-xl">close</span>
-        </button>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="openAddPhotoFromLightbox()" class="px-3 py-1.5 rounded-xl bg-emerald-600/90 hover:bg-emerald-500 text-white flex items-center gap-1.5 text-xs font-bold transition-all cursor-pointer shadow-md">
+            <span class="material-symbols-outlined text-sm">add_photo_alternate</span>
+            <span>+ Add More</span>
+          </button>
+          <button onclick="closeMediaModal()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all cursor-pointer">
+            <span class="material-symbols-outlined text-xl">close</span>
+          </button>
+        </div>
       </div>
 
-      <!-- Modal Main Media Screen -->
-      <div class="relative flex-grow flex items-center justify-center bg-black min-h-[300px] sm:min-h-[480px] p-2">
-        <img id="modal-active-img" src="" alt="Fullscreen preview" class="max-w-full max-h-[70vh] object-contain rounded-xl">
-        <video id="modal-active-video" class="max-w-full max-h-[70vh] rounded-xl hidden" controls playsinline>
+      <!-- Modal Main Media Screen with Ambient Blur Stage -->
+      <div class="relative flex-grow flex items-center justify-center bg-black min-h-[320px] sm:min-h-[500px] p-3 overflow-hidden">
+        <!-- Ambient Blur Background -->
+        <div id="modal-backdrop-blur" class="absolute inset-0 bg-cover bg-center blur-3xl opacity-40 scale-110 pointer-events-none transition-all duration-500"></div>
+        <img id="modal-active-img" src="" alt="Fullscreen preview" class="relative z-10 max-w-full max-h-[70vh] object-contain rounded-2xl shadow-2xl transition-all duration-300">
+        <video id="modal-active-video" class="relative z-10 max-w-full max-h-[70vh] rounded-2xl shadow-2xl hidden" controls playsinline>
           <source id="modal-active-video-src" src="" type="video/mp4">
         </video>
       </div>
@@ -262,6 +279,71 @@
       <div class="p-4 bg-slate-900/80 border-t border-white/10 flex items-center justify-center gap-3 overflow-x-auto" id="modal-thumbs-bar">
         <!-- Injected via JS -->
       </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD MORE PHOTO TO SPOT -->
+  <div id="modal-add-photo" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden items-center justify-center p-4 sm:p-6 transition-all">
+    <div class="relative w-full max-w-lg bg-white rounded-3xl overflow-hidden shadow-2xl border border-slate-200 animate-in fade-in zoom-in duration-200">
+      <!-- Modal Header -->
+      <div class="p-5 sm:p-6 flex items-center justify-between border-b border-slate-100 bg-gradient-to-r from-emerald-50 via-teal-50 to-slate-50">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-primary text-white flex items-center justify-center shadow-md">
+            <span class="material-symbols-outlined text-xl">add_photo_alternate</span>
+          </div>
+          <div>
+            <h3 id="add-photo-spot-title" class="text-slate-900 font-display font-bold text-base sm:text-lg">Add Photo to Spot</h3>
+            <p id="add-photo-spot-subtitle" class="text-xs text-emerald-700 font-semibold">Upload or paste image to expand explore gallery</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeAddPhotoModal()" class="w-9 h-9 rounded-full bg-slate-200/70 hover:bg-slate-300 text-slate-700 flex items-center justify-center transition-all cursor-pointer">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body Form -->
+      <form onsubmit="handleSaveMorePhoto(event)" class="p-5 sm:p-6 space-y-4">
+        <input type="hidden" id="add-photo-spot-id">
+
+        <!-- Live Preview Stage -->
+        <div class="relative h-44 rounded-2xl bg-slate-900 overflow-hidden flex items-center justify-center border border-slate-200 group">
+          <img id="add-photo-preview-img" src="images/spots/chandranath-hill.jpg" alt="Preview" class="w-full h-full object-contain">
+          <div class="absolute bottom-2 left-2 bg-black/60 text-white text-[10px] font-bold px-2 py-0.5 rounded backdrop-blur-xs">
+            Live Preview
+          </div>
+        </div>
+
+        <!-- File Upload or URL -->
+        <div>
+          <label class="block text-xs font-bold text-slate-800 mb-1.5">Select Image File or Enter Path/URL *</label>
+          <div class="flex gap-2">
+            <input type="text" id="add-photo-src" required placeholder="images/spots/... or https://..." class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-800 font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none" oninput="updateAddPhotoPreview(this.value)">
+            <label class="bg-primary hover:bg-primary-dark text-white px-3.5 py-2.5 rounded-xl text-xs font-bold cursor-pointer flex items-center gap-1 shadow-xs transition-colors shrink-0" id="add-photo-upload-label">
+              <span class="material-symbols-outlined text-base">cloud_upload</span>
+              <span>Upload</span>
+              <input type="file" id="add-photo-file" accept="image/*" class="hidden" onchange="handleModalPhotoUpload(this)">
+            </label>
+          </div>
+          <p class="text-[10px] text-slate-400 mt-1">Upload from computer or use local/online image link.</p>
+        </div>
+
+        <!-- Photo Caption / Label -->
+        <div>
+          <label class="block text-xs font-bold text-slate-800 mb-1.5">Photo Caption / Label</label>
+          <input type="text" id="add-photo-label" placeholder="e.g. Sunset view, Scenic lake, Bamboo forest trail" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-800 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+        </div>
+
+        <!-- Submit Button -->
+        <div class="pt-2 flex gap-3">
+          <button type="button" onclick="closeAddPhotoModal()" class="w-1/3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl text-xs transition-all cursor-pointer">
+            Cancel
+          </button>
+          <button type="submit" id="add-photo-submit-btn" class="flex-1 bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-xl text-xs shadow-md hover:shadow-lg transition-all cursor-pointer flex items-center justify-center gap-1.5">
+            <span class="material-symbols-outlined text-base">add_circle</span>
+            <span>Save & Add to Gallery</span>
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -274,8 +356,32 @@
     let activeCategory = 'all';
     let currentModalGallery = [];
     let currentModalIndex = 0;
+    let currentModalSpotId = null;
+
+    // Live update when destinations are added or modified in Admin
+    window.addEventListener('tourstk:destinations-updated', () => {
+      renderExploreGrid();
+    });
 
     document.addEventListener('DOMContentLoaded', async () => {
+      renderExploreGrid();
+
+      if (window.TourstkAPI) {
+        await TourstkAPI.fetchAndSyncDestinations();
+        renderExploreGrid();
+      }
+
+      // Load custom photos from localStorage if present
+      try {
+        const customSpots = JSON.parse(localStorage.getItem('tourstk_custom_spots') || '{}');
+        Object.keys(customSpots).forEach(id => {
+          const spot = (window.TOURSTK?.destinations || []).find(d => d.id === id || d.destinationId === id);
+          if (spot && Array.isArray(customSpots[id])) {
+            spot.gallery = customSpots[id];
+          }
+        });
+      } catch (e) {}
+
       const urlParams = new URLSearchParams(window.location.search);
       const query = urlParams.get('q');
       const searchInput = document.getElementById('explore-search') || document.getElementById('spot-search');
@@ -283,6 +389,11 @@
         searchInput.value = query;
       }
       renderExploreGrid();
+
+      const addPhotoParam = urlParams.get('addPhoto');
+      if (addPhotoParam) {
+        setTimeout(() => openAddPhotoModal(addPhotoParam), 300);
+      }
     });
 
     function setExploreCategory(category, btnEl) {
@@ -338,7 +449,7 @@
       }
 
       container.innerHTML = list.map(spot => {
-        const gallery = spot.gallery && spot.gallery.length >= 4 ? spot.gallery : [
+        const gallery = spot.gallery && spot.gallery.length > 0 ? spot.gallery : [
           { type: 'image', src: spot.image, thumb: spot.image, label: 'Main View' },
           { type: 'image', src: spot.fallbackImage || spot.image, thumb: spot.fallbackImage || spot.image, label: 'Scenic Landscape' },
           { type: 'image', src: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80', thumb: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=300&q=80', label: 'Valley View' },
@@ -366,14 +477,19 @@
                   <span>${spot.duration || '2 Days • 1 Night'}</span>
                 </div>
 
-                <!-- Top Right Badges: Category & Fullscreen 4K Expand -->
-                <div class="absolute top-3.5 right-3.5 z-10 flex items-center gap-2">
+                <!-- Top Right Badges: Category, Add More & Fullscreen 4K Expand -->
+                <div class="absolute top-3.5 right-3.5 z-10 flex items-center gap-1.5">
                   <span class="bg-white/90 backdrop-blur-md text-primary font-bold text-[10px] px-2.5 py-1 rounded-md shadow-xs flex items-center gap-1">
                     <span class="material-symbols-outlined text-xs">terrain</span>
                     <span>${spot.elevation || spot.category}</span>
                   </span>
                   
-                  <button type="button" onclick="openMediaModal('${spot.id}')" title="Open 4K HD Lightbox" class="w-8 h-8 rounded-lg bg-black/60 hover:bg-black/80 backdrop-blur-md text-white flex items-center justify-center transition-all cursor-pointer border border-white/15">
+                  <button type="button" onclick="openAddPhotoModal('${spot.id}')" title="Add More Images to ${spot.name}" class="px-2 py-1 rounded-lg bg-emerald-600/90 hover:bg-emerald-700 backdrop-blur-md text-white flex items-center gap-1 text-[10px] font-extrabold transition-all cursor-pointer shadow-sm border border-emerald-400/30 hover:scale-105">
+                    <span class="material-symbols-outlined text-xs">add_photo_alternate</span>
+                    <span class="hidden sm:inline">+ Add More</span>
+                  </button>
+
+                  <button type="button" onclick="openMediaModal('${spot.id}')" title="Open 4K HD Lightbox" class="w-8 h-8 rounded-lg bg-black/60 hover:bg-black/80 backdrop-blur-md text-white flex items-center justify-center transition-all cursor-pointer border border-white/15 hover:scale-105">
                     <span class="material-symbols-outlined text-sm">fullscreen</span>
                   </button>
                 </div>
@@ -381,7 +497,7 @@
                 <!-- Media Counter Pill at Bottom Right -->
                 <div class="absolute bottom-3 right-3 bg-black/70 backdrop-blur-md text-white text-[10px] font-semibold px-2 py-0.5 rounded-md z-10 flex items-center gap-1 border border-white/10 pointer-events-none">
                   <span class="material-symbols-outlined text-xs text-amber-300">photo_library</span>
-                  <span>3 Photos + 1 Video</span>
+                  <span>${gallery.length} Photos</span>
                 </div>
 
                 <!-- Main Active Image -->
@@ -400,8 +516,8 @@
                 </button>
               </div>
 
-              <!-- 4-THUMBNAIL STRIP -->
-              <div class="grid grid-cols-4 gap-2.5 mt-3" id="thumbs-${spot.id}">
+              <!-- DYNAMIC THUMBNAIL STRIP & ADD MORE OPTION -->
+              <div class="grid grid-cols-4 sm:grid-cols-5 gap-2 mt-3" id="thumbs-${spot.id}">
                 ${gallery.slice(0, 4).map((item, idx) => {
                   if (item.type === 'video') {
                     return `
@@ -423,6 +539,12 @@
                     </button>
                   `;
                 }).join('')}
+
+                <!-- ADD MORE IMAGE CARD -->
+                <button type="button" onclick="openAddPhotoModal('${spot.id}')" title="Add More Images to ${spot.name}" class="relative h-14 sm:h-16 rounded-xl border-2 border-dashed border-emerald-400 hover:border-emerald-600 bg-emerald-50/70 hover:bg-emerald-100/90 flex flex-col items-center justify-center text-emerald-800 transition-all cursor-pointer group/add p-1 text-center">
+                  <span class="material-symbols-outlined text-base text-emerald-600 group-hover/add:scale-125 transition-transform">add_a_photo</span>
+                  <span class="text-[9px] font-extrabold leading-tight mt-0.5 text-emerald-800">+ Add More</span>
+                </button>
               </div>
 
               <!-- Spot Header & Details -->
@@ -538,6 +660,7 @@
       const spot = (TOURSTK.destinations || []).find(d => d.id === spotId);
       if (!spot) return;
 
+      currentModalSpotId = spotId;
       currentModalGallery = spot.gallery || [
         { type: 'image', src: spot.image, thumb: spot.image, label: 'Main View' }
       ];
@@ -571,6 +694,10 @@
       const img = document.getElementById('modal-active-img');
       const video = document.getElementById('modal-active-video');
       const videoSrc = document.getElementById('modal-active-video-src');
+      const backdrop = document.getElementById('modal-backdrop-blur');
+      if (backdrop) {
+        backdrop.style.backgroundImage = `url('${item.thumb || item.src}')`;
+      }
 
       // Update active thumbnail borders
       document.querySelectorAll('.modal-thumb-btn').forEach((btn, idx) => {
@@ -605,6 +732,124 @@
       if (video) video.pause();
       modal.classList.add('hidden');
       modal.classList.remove('flex');
+    }
+
+    function openAddPhotoFromLightbox() {
+      if (!currentModalSpotId) return;
+      closeMediaModal();
+      openAddPhotoModal(currentModalSpotId);
+    }
+
+    // =========================================================================
+    // ADD MORE PHOTO MODAL HANDLERS (ADMIN / EXPLORE)
+    // =========================================================================
+    function openAddPhotoModal(spotId) {
+      const spot = (TOURSTK.destinations || []).find(d => d.id === spotId || d.destinationId === spotId);
+      if (!spot) return;
+
+      document.getElementById('add-photo-spot-id').value = spotId;
+      document.getElementById('add-photo-spot-title').textContent = `Add Photo: ${spot.name}`;
+      document.getElementById('add-photo-spot-subtitle').textContent = `${spot.bnName || spot.category} • Currently has ${(spot.gallery && spot.gallery.length) || 1} photos`;
+      document.getElementById('add-photo-src').value = '';
+      document.getElementById('add-photo-label').value = '';
+      document.getElementById('add-photo-preview-img').src = spot.image || 'images/spots/chandranath-hill.jpg';
+      
+      const modal = document.getElementById('modal-add-photo');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeAddPhotoModal() {
+      const modal = document.getElementById('modal-add-photo');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function updateAddPhotoPreview(src) {
+      if (!src) return;
+      const img = document.getElementById('add-photo-preview-img');
+      if (img) img.src = src;
+    }
+
+    async function handleModalPhotoUpload(inputEl) {
+      if (!inputEl.files || !inputEl.files[0]) return;
+      const file = inputEl.files[0];
+      const labelEl = document.getElementById('add-photo-upload-label');
+      const srcInput = document.getElementById('add-photo-src');
+      
+      if (labelEl) {
+        labelEl.innerHTML = `<span class="material-symbols-outlined text-base animate-spin">progress_activity</span><span>Uploading...</span>`;
+      }
+
+      try {
+        const res = await TourstkAPI.uploadImage(file);
+        if (res && res.success && res.data && res.data.url) {
+          srcInput.value = res.data.url;
+          updateAddPhotoPreview(res.data.url);
+        } else {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            srcInput.value = e.target.result;
+            updateAddPhotoPreview(e.target.result);
+          };
+          reader.readAsDataURL(file);
+        }
+      } catch (err) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          srcInput.value = e.target.result;
+          updateAddPhotoPreview(e.target.result);
+        };
+        reader.readAsDataURL(file);
+      } finally {
+        if (labelEl) {
+          labelEl.innerHTML = `<span class="material-symbols-outlined text-base">cloud_upload</span><span>Upload</span><input type="file" id="add-photo-file" accept="image/*" class="hidden" onchange="handleModalPhotoUpload(this)">`;
+        }
+      }
+    }
+
+    async function handleSaveMorePhoto(e) {
+      e.preventDefault();
+      const spotId = document.getElementById('add-photo-spot-id').value;
+      const src = document.getElementById('add-photo-src').value.trim();
+      const label = document.getElementById('add-photo-label').value.trim() || 'Spot View';
+
+      if (!src) {
+        alert('Please choose or enter an image URL or local path.');
+        return;
+      }
+
+      const spot = (TOURSTK.destinations || []).find(d => d.id === spotId || d.destinationId === spotId);
+      if (!spot) return;
+
+      if (!spot.gallery || !Array.isArray(spot.gallery)) {
+        spot.gallery = [{ type: 'image', src: spot.image, thumb: spot.image, label: 'Main View' }];
+      }
+
+      const newPhoto = { type: 'image', src, thumb: src, label };
+      spot.gallery.push(newPhoto);
+
+      // Persist to localStorage
+      try {
+        const customSpots = JSON.parse(localStorage.getItem('tourstk_custom_spots') || '{}');
+        customSpots[spotId] = spot.gallery;
+        localStorage.setItem('tourstk_custom_spots', JSON.stringify(customSpots));
+      } catch (err) {}
+
+      // Sync with MongoDB API
+      try {
+        await TourstkAPI.updateDestination(spotId, { gallery: spot.gallery });
+      } catch (err) {}
+
+      closeAddPhotoModal();
+      renderExploreGrid();
+
+      // Show toast
+      const toast = document.createElement('div');
+      toast.className = 'fixed bottom-6 right-6 z-50 bg-emerald-800 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-2 text-xs font-bold transition-all';
+      toast.innerHTML = `<span class="material-symbols-outlined text-base">check_circle</span> Photo added to ${spot.name}! Total: ${spot.gallery.length} photos`;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 4000);
     }
 
     // Keyboard support for Lightbox

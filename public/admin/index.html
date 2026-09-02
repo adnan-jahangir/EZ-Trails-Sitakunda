@@ -732,6 +732,18 @@
           </div>
         </div>
         <div>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="block font-bold text-slate-700">Gallery Photos & Extra Images</label>
+            <button type="button" onclick="addMoreGalleryRow()" class="text-xs font-bold text-emerald-700 hover:text-emerald-900 flex items-center gap-1 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2.5 py-1 rounded-lg cursor-pointer transition-colors">
+              <span class="material-symbols-outlined text-sm">add_photo_alternate</span>
+              + Add More
+            </button>
+          </div>
+          <div id="dest-gallery-container" class="space-y-2 max-h-48 overflow-y-auto p-2 bg-slate-50 border border-slate-200 rounded-xl">
+            <!-- Dynamic Gallery Rows injected via JS -->
+          </div>
+        </div>
+        <div>
           <label class="block font-bold text-slate-700 mb-1">Description</label>
           <textarea id="dest-desc" rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs"></textarea>
         </div>
@@ -1261,13 +1273,34 @@
         showLoginGateway();
       }
 
-      // Real-Time 15-second background poll for incoming bookings & custom requests
+      // Real-Time 12-second background poll for incoming bookings & custom requests
       setInterval(async () => {
         if (document.visibilityState === 'visible' && TourstkAPI.isAuthenticated()) {
           await loadBookings();
           await loadCustomRequests();
         }
-      }, 15000);
+      }, 12000);
+    });
+
+    // Real-Time Instant Listeners for Website Customer Submissions
+    window.addEventListener('tourstk:booking-created', (e) => {
+      if (e.detail) {
+        showLiveBookingToast(e.detail);
+      }
+      loadBookings();
+    });
+
+    window.addEventListener('tourstk:bookings-updated', () => {
+      loadBookings();
+    });
+
+    window.addEventListener('tourstk:review-created', () => {
+      loadReviews();
+    });
+
+    window.addEventListener('tourstk:custom-request-created', (e) => {
+      playBookingNotificationChime();
+      loadCustomRequests();
     });
 
     // Tab Scroll Navigation Helper
@@ -1923,6 +1956,7 @@
 
       alert(`✅ Guide "${guideName}" assigned & Booking "${bookingCode || internalId}" Confirmed!`);
       await loadBookings();
+      TourstkAPI.broadcastChange('BOOKING_UPDATED');
     }
 
     async function updateBookingStatus(internalId, bookingCode, newStatus) {
@@ -1940,6 +1974,7 @@
       }
       BookingManager.updateStatus(bookingCode, newStatus);
       loadBookings();
+      TourstkAPI.broadcastChange('BOOKING_UPDATED');
     }
 
     async function promptCoordinatorNote(internalId, bookingCode) {
@@ -1955,6 +1990,7 @@
         BookingManager.updateStatus(bookingCode, b ? b.status : 'pending', note);
         alert('Note saved!');
         loadBookings();
+        TourstkAPI.broadcastChange('BOOKING_UPDATED');
       }
     }
 
@@ -1968,6 +2004,7 @@
       BookingManager.delete(bookingCode);
       alert(`Booking ${bookingCode} deleted!`);
       loadBookings();
+      TourstkAPI.broadcastChange('BOOKING_UPDATED');
     }
 
     function filterAdminBookings() {
@@ -2112,10 +2149,12 @@
         closeModal('modal-package');
         await loadPackages();
         await TourstkAPI.fetchAndSyncPackages();
+        TourstkAPI.broadcastChange('PACKAGE_UPDATED');
       } catch (err) {
         alert(editId ? 'Package updated!' : 'Package saved!');
         closeModal('modal-package');
         await loadPackages();
+        TourstkAPI.broadcastChange('PACKAGE_UPDATED');
       }
     }
 
@@ -2125,8 +2164,10 @@
         await TourstkAPI.deletePackage(id);
         await loadPackages();
         await TourstkAPI.fetchAndSyncPackages();
+        TourstkAPI.broadcastChange('PACKAGE_UPDATED');
       } catch (err) {
         await loadPackages();
+        TourstkAPI.broadcastChange('PACKAGE_UPDATED');
       }
     }
 
@@ -2153,6 +2194,7 @@
         const sCat = s.category || 'Spot';
         const sDiff = s.difficulty || 'Moderate';
         const sDesc = s.shortDesc || s.description || '';
+        const galleryCount = (s.gallery && s.gallery.length) || 1;
 
         return `
           <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow">
@@ -2165,19 +2207,129 @@
               <div class="text-xs text-slate-500 font-medium">${sBn}</div>
               <p class="text-xs text-slate-500 mt-2 line-clamp-2">${sDesc}</p>
             </div>
-            <div class="flex justify-end items-center gap-2 pt-4 border-t border-slate-100 mt-4">
-              <button onclick="openEditDestinationModal('${sId}')" class="text-emerald-700 hover:bg-emerald-50 px-2.5 py-1.5 rounded-lg flex items-center gap-1 text-xs font-bold transition-colors">
-                <span class="material-symbols-outlined text-base">edit</span>
-                Edit
+            <div class="flex flex-wrap justify-between items-center gap-2 pt-4 border-t border-slate-100 mt-4">
+              <button onclick="openEditDestinationModal('${sId}')" class="text-xs font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/80 px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer" title="Manage spot photos">
+                <span class="material-symbols-outlined text-sm">photo_library</span>
+                <span>Gallery (${galleryCount})</span>
+                <span class="text-emerald-600 font-extrabold">+ Add More</span>
               </button>
-              <button onclick="deleteDestinationItem('${sId}', '${sName}')" class="text-rose-600 hover:bg-rose-50 px-2.5 py-1.5 rounded-lg flex items-center gap-1 text-xs font-bold transition-colors">
-                <span class="material-symbols-outlined text-base">delete</span>
-                Delete
-              </button>
+              <div class="flex items-center gap-1">
+                <button onclick="openEditDestinationModal('${sId}')" class="text-emerald-700 hover:bg-emerald-50 px-2 py-1.5 rounded-lg flex items-center gap-1 text-xs font-bold transition-colors">
+                  <span class="material-symbols-outlined text-base">edit</span>
+                </button>
+                <button onclick="deleteDestinationItem('${sId}', '${sName}')" class="text-rose-600 hover:bg-rose-50 px-2 py-1.5 rounded-lg flex items-center gap-1 text-xs font-bold transition-colors">
+                  <span class="material-symbols-outlined text-base">delete</span>
+                </button>
+              </div>
             </div>
           </div>
         `;
       }).join('');
+    }
+
+    function renderGalleryRows(gallery = []) {
+      const container = document.getElementById('dest-gallery-container');
+      if (!container) return;
+      container.innerHTML = '';
+      if (!gallery || gallery.length === 0) {
+        container.innerHTML = `<div class="text-[11px] text-slate-400 text-center py-2 italic" id="empty-gallery-msg">No additional images added yet. Click "+ Add More" above.</div>`;
+        return;
+      }
+      gallery.forEach((item, idx) => {
+        addMoreGalleryRow(item.src || item, item.label || `Photo ${idx + 1}`);
+      });
+    }
+
+    function addMoreGalleryRow(src = '', label = '') {
+      const container = document.getElementById('dest-gallery-container');
+      if (!container) return;
+      const emptyMsg = document.getElementById('empty-gallery-msg');
+      if (emptyMsg) emptyMsg.remove();
+
+      const rowId = 'g-row-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+      const inputId = 'g-src-' + rowId;
+      const previewId = 'g-prev-' + rowId;
+
+      const row = document.createElement('div');
+      row.id = rowId;
+      row.className = 'gallery-item-row flex items-center gap-2 bg-white p-2 rounded-lg border border-slate-200 shadow-2xs';
+      row.innerHTML = `
+        <img id="${previewId}" src="${src || 'images/spots/chandranath-hill.jpg'}" class="w-10 h-10 rounded-md object-cover border border-slate-200 shrink-0" onerror="this.src='images/spots/chandranath-hill.jpg'">
+        <div class="flex-1 space-y-1">
+          <div class="flex gap-1.5">
+            <input type="text" id="${inputId}" value="${src}" placeholder="Image URL / images/spots/..." class="gallery-src-input flex-1 bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-[11px]" oninput="document.getElementById('${previewId}').src = this.value">
+            <label class="bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 px-2 py-1 rounded-lg text-[10px] font-bold cursor-pointer flex items-center gap-0.5 shrink-0">
+              <span class="material-symbols-outlined text-xs">cloud_upload</span>
+              <input type="file" accept="image/*" class="hidden" onchange="handleImageFileUpload(this, '${inputId}', '${previewId}')">
+            </label>
+          </div>
+          <input type="text" value="${label}" placeholder="Photo caption / label (e.g. Sunset view)" class="gallery-label-input w-full bg-slate-50 border border-slate-200 rounded-lg px-2 py-0.5 text-[10px] text-slate-600">
+        </div>
+        <button type="button" onclick="document.getElementById('${rowId}').remove()" title="Remove Image" class="text-rose-500 hover:bg-rose-50 p-1.5 rounded-lg cursor-pointer">
+          <span class="material-symbols-outlined text-base">delete</span>
+        </button>
+      `;
+      container.appendChild(row);
+    }
+
+    async function handleImageFileUpload(inputEl, targetInputId, previewImgId) {
+      if (!inputEl.files || !inputEl.files[0]) return;
+      const file = inputEl.files[0];
+      const targetInput = document.getElementById(targetInputId);
+      const parentLabel = inputEl.parentElement;
+      const originalLabelContent = parentLabel ? parentLabel.innerHTML : '';
+      
+      try {
+        if (parentLabel) {
+          parentLabel.innerHTML = `<span class="material-symbols-outlined text-xs animate-spin">progress_activity</span>`;
+        }
+        
+        const res = await TourstkAPI.uploadImage(file);
+        if (res && res.success && res.data && res.data.url) {
+          if (targetInput) {
+            targetInput.value = res.data.url;
+            targetInput.dispatchEvent(new Event('input'));
+          }
+          if (previewImgId) {
+            const p = document.getElementById(previewImgId);
+            if (p) p.src = res.data.url;
+          }
+        } else {
+          // Local base64 fallback
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            if (targetInput) {
+              targetInput.value = e.target.result;
+              targetInput.dispatchEvent(new Event('input'));
+            }
+            if (previewImgId) {
+              const p = document.getElementById(previewImgId);
+              if (p) p.src = e.target.result;
+            }
+          };
+          reader.readAsDataURL(file);
+        }
+      } catch (err) {
+        console.warn('Upload error, using local fallback:', err);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          if (targetInput) {
+            targetInput.value = e.target.result;
+            targetInput.dispatchEvent(new Event('input'));
+          }
+          if (previewImgId) {
+            const p = document.getElementById(previewImgId);
+            if (p) p.src = e.target.result;
+          }
+        };
+        reader.readAsDataURL(file);
+      } finally {
+        setTimeout(() => {
+          if (parentLabel) {
+            parentLabel.innerHTML = `<span class="material-symbols-outlined text-xs">cloud_upload</span><input type="file" accept="image/*" class="hidden" onchange="handleImageFileUpload(this, '${targetInputId}', '${previewImgId || ''}')">`;
+          }
+        }, 500);
+      }
     }
 
     function openAddDestinationModal() {
@@ -2190,6 +2342,7 @@
       document.getElementById('dest-diff').value = 'Moderate';
       document.getElementById('dest-image').value = 'images/spots/chandranath-hill.jpg';
       document.getElementById('dest-desc').value = '';
+      renderGalleryRows([]);
       document.getElementById('modal-destination').classList.remove('hidden');
     }
 
@@ -2206,6 +2359,10 @@
       document.getElementById('dest-diff').value = s.difficulty || 'Moderate';
       document.getElementById('dest-image').value = s.image || 'images/spots/chandranath-hill.jpg';
       document.getElementById('dest-desc').value = s.shortDesc || s.description || '';
+      
+      const gallery = (s.gallery && s.gallery.length > 0) ? s.gallery : (s.image ? [{ src: s.image, label: 'Main View' }] : []);
+      renderGalleryRows(gallery);
+
       document.getElementById('modal-destination').classList.remove('hidden');
     }
 
@@ -2216,8 +2373,23 @@
       const bnName = document.getElementById('dest-bn').value;
       const category = document.getElementById('dest-cat').value;
       const difficulty = document.getElementById('dest-diff').value;
-      const image = document.getElementById('dest-image').value;
+      let image = document.getElementById('dest-image').value;
       const shortDesc = document.getElementById('dest-desc').value;
+
+      // Collect all dynamic gallery rows
+      const galleryRows = document.querySelectorAll('.gallery-item-row');
+      const gallery = [];
+      galleryRows.forEach((row, i) => {
+        const src = row.querySelector('.gallery-src-input')?.value?.trim();
+        const label = row.querySelector('.gallery-label-input')?.value?.trim() || `Photo ${i + 1}`;
+        if (src) {
+          gallery.push({ type: 'image', src, thumb: src, label });
+        }
+      });
+
+      if (!image && gallery.length > 0) {
+        image = gallery[0].src;
+      }
 
       const payload = {
         name,
@@ -2226,6 +2398,7 @@
         difficulty,
         image,
         shortDesc,
+        gallery: gallery.length > 0 ? gallery : [{ type: 'image', src: image, thumb: image, label: 'Main View' }]
       };
 
       try {
@@ -2235,12 +2408,22 @@
           payload.destinationId = name.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Math.floor(100 + Math.random() * 900);
           await TourstkAPI.createDestination(payload);
         }
+
+        // Also update local cache / TOURSTK.destinations
+        const existingIdx = TOURSTK.destinations.findIndex(d => (d.id === editId || d.destinationId === editId));
+        if (existingIdx !== -1) {
+          Object.assign(TOURSTK.destinations[existingIdx], payload);
+        }
+
         closeModal('modal-destination');
         await loadDestinations();
+        await TourstkAPI.fetchAndSyncDestinations();
+        TourstkAPI.broadcastChange('DESTINATION_UPDATED');
       } catch (err) {
         alert(editId ? 'Spot updated!' : 'Spot added!');
         closeModal('modal-destination');
         await loadDestinations();
+        TourstkAPI.broadcastChange('DESTINATION_UPDATED');
       }
     }
 
@@ -2249,8 +2432,11 @@
       try {
         await TourstkAPI.deleteDestination(id);
         await loadDestinations();
+        await TourstkAPI.fetchAndSyncDestinations();
+        TourstkAPI.broadcastChange('DESTINATION_UPDATED');
       } catch (e) {
         await loadDestinations();
+        TourstkAPI.broadcastChange('DESTINATION_UPDATED');
       }
     }
 
@@ -2458,7 +2644,9 @@
         alert('Review added!');
       }
       closeModal('modal-review');
-      loadReviews();
+      await loadReviews();
+      await TourstkAPI.fetchAndSyncReviews();
+      TourstkAPI.broadcastChange('REVIEW_UPDATED');
     }
 
     async function deleteReviewItem(id) {
@@ -2466,7 +2654,9 @@
       try {
         await TourstkAPI.deleteReview(id);
       } catch (e) {}
-      loadReviews();
+      await loadReviews();
+      await TourstkAPI.fetchAndSyncReviews();
+      TourstkAPI.broadcastChange('REVIEW_UPDATED');
     }
 
     // 7. ROOMS & ACCOMMODATIONS
@@ -2698,11 +2888,14 @@
         }
         closeModal('modal-room');
         await loadRooms();
+        await TourstkAPI.fetchAndSyncRooms();
+        TourstkAPI.broadcastChange('ROOM_UPDATED');
       } catch (err) {
         console.error('Room save error:', err);
         alert(`Room saved: ${err.message || 'Saved successfully'}`);
         closeModal('modal-room');
         await loadRooms();
+        TourstkAPI.broadcastChange('ROOM_UPDATED');
       }
     }
 
@@ -2710,6 +2903,8 @@
       try {
         await TourstkAPI.updateRoom(id, { isAvailable: newAvail });
         await loadRooms();
+        await TourstkAPI.fetchAndSyncRooms();
+        TourstkAPI.broadcastChange('ROOM_UPDATED');
       } catch (e) {
         await loadRooms();
       }
@@ -2721,6 +2916,8 @@
         await TourstkAPI.deleteRoom(id);
         alert('Room deleted from MongoDB Atlas');
         await loadRooms();
+        await TourstkAPI.fetchAndSyncRooms();
+        TourstkAPI.broadcastChange('ROOM_UPDATED');
       } catch (err) {
         alert('Room deleted');
         await loadRooms();

@@ -267,6 +267,27 @@ const TourstkAPI = {
     });
   },
 
+  // =================== IMAGE UPLOAD ===================
+  async uploadImage(file, folder = 'tourstk') {
+    const formData = new FormData();
+    formData.append('image', file);
+    formData.append('folder', folder);
+    const token = this.getToken();
+    try {
+      const res = await fetch(`${this.baseUrl}/upload`, {
+        method: 'POST',
+        headers: {
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+        },
+        body: formData,
+      });
+      return await res.json();
+    } catch (err) {
+      console.error('Upload failed:', err);
+      return { success: false, message: err.message };
+    }
+  },
+
   // =================== TOUR GUIDES ===================
   async getGuides() {
     return await this.request('/guides', { method: 'GET' });
@@ -275,6 +296,14 @@ const TourstkAPI = {
   async createGuide(data) {
     return await this.request('/guides', {
       method: 'POST',
+      body: JSON.stringify(data),
+      authRequired: true,
+    });
+  },
+
+  async updateGuide(id, data) {
+    return await this.request(`/guides/${id}`, {
+      method: 'PUT',
       body: JSON.stringify(data),
       authRequired: true,
     });
@@ -350,6 +379,75 @@ const TourstkAPI = {
   },
 
   // =================== LIVE DATA SYNC & NORMALIZATION ===================
+  channel: null,
+
+  getChannel() {
+    if (!this.channel && typeof BroadcastChannel !== 'undefined') {
+      try {
+        this.channel = new BroadcastChannel('tourstk_live_sync_channel');
+        this.channel.onmessage = (event) => {
+          if (event && event.data) {
+            this.handleLiveSyncMessage(event.data);
+          }
+        };
+      } catch (e) {
+        this.channel = null;
+      }
+    }
+    return this.channel;
+  },
+
+  broadcastChange(type, data = {}) {
+    const payload = { type, data, timestamp: Date.now() };
+    const ch = this.getChannel();
+    if (ch) {
+      try {
+        ch.postMessage(payload);
+      } catch (e) {}
+    }
+    try {
+      localStorage.setItem('tourstk_sync_event', JSON.stringify(payload));
+    } catch (e) {}
+    // Trigger locally in current window as well
+    this.handleLiveSyncMessage(payload, true);
+  },
+
+  handleLiveSyncMessage(payload, isLocal = false) {
+    if (!payload || !payload.type) return;
+    const { type, data } = payload;
+
+    switch (type) {
+      case 'PACKAGE_UPDATED':
+        this.fetchAndSyncPackages();
+        break;
+      case 'DESTINATION_UPDATED':
+        this.fetchAndSyncDestinations();
+        break;
+      case 'ROOM_UPDATED':
+        this.fetchAndSyncRooms();
+        break;
+      case 'REVIEW_UPDATED':
+      case 'REVIEW_CREATED':
+        this.fetchAndSyncReviews();
+        window.dispatchEvent(new CustomEvent('tourstk:review-created', { detail: data }));
+        break;
+      case 'BOOKING_CREATED':
+        window.dispatchEvent(new CustomEvent('tourstk:booking-created', { detail: data }));
+        window.dispatchEvent(new CustomEvent('tourstk:bookings-updated', { detail: data }));
+        break;
+      case 'BOOKING_UPDATED':
+        window.dispatchEvent(new CustomEvent('tourstk:bookings-updated', { detail: data }));
+        break;
+      case 'CUSTOM_REQUEST_CREATED':
+        window.dispatchEvent(new CustomEvent('tourstk:custom-request-created', { detail: data }));
+        break;
+      case 'REFRESH_ALL':
+        this.fetchAllLive();
+        break;
+    }
+  },
+
+  // 1. PACKAGES NORMALIZER & SYNC
   normalizePackage(p) {
     if (!p) return null;
     return {
@@ -359,6 +457,7 @@ const TourstkAPI = {
       name: p.title || p.name || 'Tour Package',
       title: p.title || p.name || 'Tour Package',
       bnTitle: p.bnTitle || p.bnName || '',
+      bnName: p.bnTitle || p.bnName || '',
       tagline: p.tagline || p.shortDesc || '',
       shortDesc: p.tagline || p.shortDesc || '',
       category: p.category || p.duration || 'Standard Tour',
@@ -388,7 +487,7 @@ const TourstkAPI = {
     try {
       const res = await this.getPackages();
       if (res?.success && Array.isArray(res.data) && res.data.length > 0) {
-        const normalized = res.data.map(p => this.normalizePackage(p));
+        const normalized = res.data.map(p => this.normalizePackage(p)).filter(Boolean);
         if (typeof window.TOURSTK !== 'undefined') {
           window.TOURSTK.packages = normalized;
         }
@@ -401,14 +500,178 @@ const TourstkAPI = {
     return (typeof window.TOURSTK !== 'undefined' && window.TOURSTK.packages) ? window.TOURSTK.packages : [];
   },
 
-  // Auto-Sync Setup (Window focus & Visibility change)
+  // 2. DESTINATIONS NORMALIZER & SYNC
+  normalizeDestination(d) {
+    if (!d) return null;
+    const sId = d.destinationId || d.id || (d._id ? d._id.toString() : '');
+    return {
+      _id: d._id,
+      id: sId,
+      destinationId: sId,
+      name: d.name || 'Sitakunda Destination',
+      bnName: d.bnName || '',
+      category: d.category || 'Hills & Peaks',
+      categoryIcon: d.categoryIcon || (
+        d.category === 'Beaches & Coastlines' ? 'beach_access' :
+        d.category === 'Waterfalls & Springs' ? 'water_drop' :
+        d.category === 'Lakes & Valleys' ? 'kayaking' : 'terrain'
+      ),
+      difficulty: d.difficulty || 'Moderate',
+      elevation: d.elevation || 'Scenic Trail',
+      duration: d.duration || 'Day Trip',
+      bestTime: d.bestTime || 'Morning & Sunset',
+      lat: Number(d.lat) || 22.6,
+      lng: Number(d.lng) || 91.65,
+      image: d.image || 'images/spots/chandranath-hill.jpg',
+      fallbackImage: d.fallbackImage || d.image || 'images/spots/chandranath-hill.jpg',
+      gallery: Array.isArray(d.gallery) && d.gallery.length > 0 ? d.gallery : [
+        { type: 'image', src: d.image || 'images/spots/chandranath-hill.jpg', thumb: d.image || 'images/spots/chandranath-hill.jpg', label: 'Main View' }
+      ],
+      shortDesc: d.shortDesc || '',
+      description: d.description || d.shortDesc || '',
+      tags: Array.isArray(d.tags) && d.tags.length > 0 ? d.tags : ['Sitakunda', 'Tourism'],
+      thingsToDo: Array.isArray(d.thingsToDo) && d.thingsToDo.length > 0 ? d.thingsToDo : ['Sightseeing', 'Photography'],
+      tips: Array.isArray(d.tips) && d.tips.length > 0 ? d.tips : ['Carry water', 'Wear trekking shoes'],
+      isActive: d.isActive !== false,
+    };
+  },
+
+  async fetchAndSyncDestinations() {
+    try {
+      const res = await this.getDestinations();
+      if (res?.success && Array.isArray(res.data) && res.data.length > 0) {
+        const normalized = res.data.map(d => this.normalizeDestination(d)).filter(Boolean);
+        if (typeof window.TOURSTK !== 'undefined') {
+          window.TOURSTK.destinations = normalized;
+        }
+        window.dispatchEvent(new CustomEvent('tourstk:destinations-updated', { detail: normalized }));
+        return normalized;
+      }
+    } catch (e) {
+      console.warn('[Tourstk Live Sync] Using local backup destinations');
+    }
+    return (typeof window.TOURSTK !== 'undefined' && window.TOURSTK.destinations) ? window.TOURSTK.destinations : [];
+  },
+
+  // 3. ROOMS / ACCOMMODATION NORMALIZER & SYNC
+  normalizeRoom(r) {
+    if (!r) return null;
+    const key = r.slug || r._id || (r.name ? r.name.toLowerCase().replace(/[^a-z0-9]+/g, '-') : 'room');
+    return {
+      _id: r._id,
+      id: r._id || key,
+      slug: r.slug || key,
+      key: key,
+      name: r.name || 'Accommodation Room',
+      bnName: r.bnName || '',
+      category: r.category || 'Standard Cottage',
+      pricePerRoom: Number(r.pricePerRoom) || 0,
+      badge: r.badge || ((Number(r.pricePerRoom) || 0) > 0 ? `+৳${r.pricePerRoom} / Room` : 'Package Included (৳0)'),
+      bnBadge: r.bnBadge || ((Number(r.pricePerRoom) || 0) > 0 ? `+৳${r.pricePerRoom} / রুম` : 'প্যাকেজে অন্তর্ভুক্ত (৳০)'),
+      subtitle: r.subtitle || 'Sitakunda Tour Accommodation',
+      bnSubtitle: r.bnSubtitle || '',
+      desc: r.desc || '',
+      bnDesc: r.bnDesc || '',
+      image: r.image || 'https://images.unsplash.com/photo-1587061949409-02df41d5e562?w=800&auto=format&fit=crop&q=80',
+      photos: Array.isArray(r.photos) && r.photos.length > 0 ? r.photos : [r.image],
+      amenities: Array.isArray(r.amenities) ? r.amenities : [],
+      bnAmenities: Array.isArray(r.bnAmenities) ? r.bnAmenities : (Array.isArray(r.amenities) ? r.amenities : []),
+      bedOptions: Array.isArray(r.bedOptions) ? r.bedOptions : [],
+      maxGuestsPerRoom: Number(r.maxGuestsPerRoom) || 3,
+      totalRoomsAvailable: Number(r.totalRoomsAvailable) || 10,
+      isAvailable: r.isAvailable !== false,
+      sortOrder: Number(r.sortOrder) || 0,
+    };
+  },
+
+  async fetchAndSyncRooms() {
+    try {
+      const res = await this.getRooms();
+      if (res?.success && Array.isArray(res.data) && res.data.length > 0) {
+        const normalized = res.data.map(r => this.normalizeRoom(r)).filter(Boolean);
+        window.TOURSTK_ROOMS = normalized;
+        if (typeof window.TOURSTK !== 'undefined') {
+          window.TOURSTK.accommodations = normalized;
+        }
+        window.dispatchEvent(new CustomEvent('tourstk:rooms-updated', { detail: normalized }));
+        return normalized;
+      }
+    } catch (e) {
+      console.warn('[Tourstk Live Sync] Using local backup rooms');
+    }
+    return window.TOURSTK_ROOMS || [];
+  },
+
+  // 4. REVIEWS NORMALIZER & SYNC
+  normalizeReview(r) {
+    if (!r) return null;
+    const name = r.customerName || r.name || 'Verified Traveler';
+    return {
+      _id: r._id,
+      id: r._id || Math.random().toString(),
+      name: name,
+      customerName: name,
+      package: r.tourPackage || r.package || 'Sitakunda Adventure Tour',
+      tourPackage: r.tourPackage || r.package || 'Sitakunda Adventure Tour',
+      rating: Number(r.rating) || 5,
+      text: r.reviewText || r.text || '',
+      reviewText: r.reviewText || r.text || '',
+      role: r.role || 'Verified Traveler',
+      initials: name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase(),
+      createdAt: r.createdAt || new Date().toISOString(),
+      isApproved: r.isApproved !== false,
+    };
+  },
+
+  async fetchAndSyncReviews() {
+    try {
+      const res = await this.getReviews();
+      if (res?.success && Array.isArray(res.data) && res.data.length > 0) {
+        const normalized = res.data.map(r => this.normalizeReview(r)).filter(Boolean);
+        if (typeof window.TOURSTK !== 'undefined') {
+          window.TOURSTK.reviews = normalized;
+        }
+        window.dispatchEvent(new CustomEvent('tourstk:reviews-updated', { detail: normalized }));
+        return normalized;
+      }
+    } catch (e) {
+      console.warn('[Tourstk Live Sync] Using local backup reviews');
+    }
+    return (typeof window.TOURSTK !== 'undefined' && window.TOURSTK.reviews) ? window.TOURSTK.reviews : [];
+  },
+
+  // Synchronize all core data from database
+  async fetchAllLive() {
+    return await Promise.all([
+      this.fetchAndSyncPackages(),
+      this.fetchAndSyncDestinations(),
+      this.fetchAndSyncRooms(),
+      this.fetchAndSyncReviews(),
+    ]);
+  },
+
+  // Auto-Sync Setup (BroadcastChannel + Storage Event + Heartbeat Poller)
   initLiveSync() {
+    // 1. Initialize BroadcastChannel
+    this.getChannel();
+
+    // 2. Storage event listener (cross-window/iframe fallback)
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'tourstk_sync_event' && e.newValue) {
+        try {
+          const payload = JSON.parse(e.newValue);
+          this.handleLiveSyncMessage(payload);
+        } catch (err) {}
+      }
+    });
+
+    // 3. Heartbeat & visibility trigger
     let lastSync = 0;
     const triggerSync = () => {
       const now = Date.now();
-      if (now - lastSync > 4000) { // Throttle at 4s
+      if (now - lastSync > 3500) { // Throttle at 3.5s
         lastSync = now;
-        this.fetchAndSyncPackages();
+        this.fetchAllLive();
       }
     };
 
@@ -418,7 +681,14 @@ const TourstkAPI = {
     });
 
     // Initial background sync
-    setTimeout(triggerSync, 500);
+    setTimeout(triggerSync, 300);
+
+    // Periodic light poller every 12 seconds
+    setInterval(() => {
+      if (document.visibilityState === 'visible') {
+        triggerSync();
+      }
+    }, 12000);
   }
 };
 

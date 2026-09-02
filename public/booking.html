@@ -1181,14 +1181,31 @@
       onPackageSelectChange();
     }
 
-    // Live update listener
-    window.addEventListener('tourstk:packages-updated', populatePackageDropdown);
+    // Live update listeners
+    window.addEventListener('tourstk:packages-updated', () => {
+      populatePackageDropdown();
+      calculateBookingPrice();
+    });
+
+    window.addEventListener('tourstk:rooms-updated', () => {
+      renderRoomCards();
+      calculateBookingPrice();
+    });
 
     document.addEventListener('DOMContentLoaded', async () => {
       applyBookingTranslations();
       populatePackageDropdown();
+      renderRoomCards();
+      calculateBookingPrice();
+
       if (window.TourstkAPI) {
-        await TourstkAPI.fetchAndSyncPackages();
+        await Promise.all([
+          TourstkAPI.fetchAndSyncPackages(),
+          TourstkAPI.fetchAndSyncRooms()
+        ]);
+        populatePackageDropdown();
+        renderRoomCards();
+        calculateBookingPrice();
       }
 
       // Set min date to today + default to tomorrow
@@ -1263,11 +1280,64 @@
     }
 
     // =========================================================================
-    // ACCOMMODATION & ROOM SUITE LOGIC
+    // ACCOMMODATION & ROOM SUITE LOGIC (DYNAMIC MONGODB ATLAS INTEGRATION)
     // =========================================================================
     let selectedRoomKey = 'standard';
     let selectedBedTitle = '1 Queen Double Bed';
     let bookingRoomCount = 1;
+
+    function renderRoomCards() {
+      const container = document.getElementById('room-cards-grid');
+      if (!container) return;
+      const isBn = currentLang === 'bn';
+
+      // Get rooms from live TourstkAPI sync or fallback to ROOM_CATALOG
+      let rooms = (window.TOURSTK_ROOMS && Array.isArray(window.TOURSTK_ROOMS) && window.TOURSTK_ROOMS.length > 0)
+        ? window.TOURSTK_ROOMS.filter(r => r.isAvailable !== false)
+        : Object.values(ROOM_CATALOG);
+
+      if (!rooms || rooms.length === 0) {
+        rooms = Object.values(ROOM_CATALOG);
+      }
+
+      // Verify selected key
+      const hasKey = rooms.some(r => r.key === selectedRoomKey || r.slug === selectedRoomKey || r._id === selectedRoomKey);
+      if (!hasKey && rooms.length > 0) {
+        selectedRoomKey = rooms[0].key || rooms[0].slug || 'standard';
+      }
+
+      container.innerHTML = rooms.map(r => {
+        const key = r.key || r.slug || r._id;
+        const isSelected = (selectedRoomKey === key);
+        const name = isBn ? (r.bnName || r.name) : r.name;
+        const badge = isBn ? (r.bnBadge || r.badge) : r.badge;
+        const sub = isBn ? (r.bnSubtitle || r.subtitle) : (r.subtitle || r.desc || '');
+        const price = r.pricePerRoom || 0;
+        const badgeClass = price === 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800';
+
+        return `
+          <label class="room-card relative flex flex-col p-4 rounded-2xl border-2 ${isSelected ? 'border-primary bg-emerald-50/40' : 'border-slate-200 bg-white hover:border-slate-300'} cursor-pointer transition-all shadow-2xs group" onclick="selectRoomType('${key}')">
+            <input type="radio" name="room_type" value="${key}" ${isSelected ? 'checked' : ''} class="hidden" onchange="calculateBookingPrice()">
+            <div class="flex items-start gap-3.5 mb-3">
+              <img src="${r.image || 'https://images.unsplash.com/photo-1587061949409-02df41d5e562?w=300&auto=format&fit=crop&q=75'}" alt="${name}" class="w-16 h-16 rounded-xl object-cover border border-slate-200 flex-shrink-0 group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://images.unsplash.com/photo-1587061949409-02df41d5e562?w=300&auto=format&fit=crop&q=75'">
+              <div class="flex-grow min-w-0">
+                <div class="flex items-center justify-between gap-1">
+                  <span class="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-primary transition-colors">${name}</span>
+                </div>
+                <span class="inline-block text-[10px] font-extrabold px-2 py-0.5 rounded-full mt-0.5 ${badgeClass}">${badge}</span>
+                <p class="text-[11px] text-slate-500 mt-1 line-clamp-1">${sub}</p>
+              </div>
+            </div>
+            <div class="flex items-center justify-between pt-2.5 border-t border-slate-200/70 text-[11px]">
+              <span class="text-slate-500 flex items-center gap-1"><span class="material-symbols-outlined text-xs text-emerald-700">check_circle</span> <span>${(r.amenities && r.amenities[0]) || 'Attached Bath'}</span></span>
+              <button type="button" onclick="event.stopPropagation(); openRoomModal('${key}')" class="text-primary hover:underline font-bold text-[11px] flex items-center gap-1 bg-slate-100 hover:bg-emerald-50 px-2 py-0.5 rounded-md transition-colors">
+                <span class="material-symbols-outlined text-xs">visibility</span> <span>${isBn ? 'ছবি ও সুবিধা' : 'Photos & Amenities'}</span>
+              </button>
+            </div>
+          </label>
+        `;
+      }).join('');
+    }
 
     function selectRoomType(key) {
       selectedRoomKey = key;
@@ -1328,7 +1398,8 @@
     }
 
     function openRoomModal(key) {
-      const room = ROOM_CATALOG[key] || ROOM_CATALOG.standard;
+      const allRooms = (window.TOURSTK_ROOMS && window.TOURSTK_ROOMS.length > 0) ? window.TOURSTK_ROOMS : Object.values(ROOM_CATALOG);
+      const room = allRooms.find(r => r.key === key || r.slug === key || r._id === key || r.id === key) || ROOM_CATALOG[key] || ROOM_CATALOG.standard || allRooms[0];
       const modal = document.getElementById('room-preview-modal');
       if (!modal) return;
 
@@ -1341,12 +1412,37 @@
       // Render photos
       const gallery = document.getElementById('modal-room-gallery');
       if (gallery) {
-        gallery.innerHTML = room.photos.map(p => `
+        const photoList = (room.photos && room.photos.length > 0) ? room.photos : [room.image];
+        gallery.innerHTML = photoList.map(p => `
           <div class="rounded-2xl overflow-hidden shadow-2xs border border-slate-200 aspect-[4/3]">
-            <img src="${p}" alt="${room.name}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+            <img src="${p}" alt="${room.name}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" onerror="this.src='https://images.unsplash.com/photo-1587061949409-02df41d5e562?w=800&auto=format&fit=crop&q=80'">
           </div>
         `).join('');
       }
+
+      // Render amenities
+      const amenList = document.getElementById('modal-room-amenities');
+      if (amenList) {
+        const list = isBn ? (room.bnAmenities || room.amenities) : room.amenities;
+        amenList.innerHTML = (list || []).map(a => `
+          <li class="flex items-center gap-2 text-slate-700 text-xs font-semibold">
+            <span class="material-symbols-outlined text-base text-emerald-700">check_circle</span>
+            <span>${a}</span>
+          </li>
+        `).join('');
+      }
+
+      const selectBtn = document.getElementById('modal-room-select-btn');
+      if (selectBtn) {
+        selectBtn.onclick = () => {
+          selectRoomType(key);
+          closeRoomModal();
+        };
+      }
+
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
 
       // Render amenities
       const amenList = document.getElementById('modal-room-amenities');
@@ -1405,7 +1501,8 @@
       const extraRooms = Math.max(0, bookingRoomCount - baseIncludedRooms);
       const EXTRA_STANDARD_ROOM_PRICE = 1000; // ৳1,000 per extra room beyond standard twin sharing
 
-      const room = ROOM_CATALOG[selectedRoomKey] || ROOM_CATALOG.standard;
+      const allRooms = (window.TOURSTK_ROOMS && window.TOURSTK_ROOMS.length > 0) ? window.TOURSTK_ROOMS : Object.values(ROOM_CATALOG);
+      const room = allRooms.find(r => r.key === selectedRoomKey || r.slug === selectedRoomKey || r._id === selectedRoomKey) || ROOM_CATALOG[selectedRoomKey] || ROOM_CATALOG.standard || allRooms[0];
       const roomUpgradeRate = room.pricePerRoom || 0;
       let roomFee = 0;
 
@@ -1622,6 +1719,17 @@
           if (response && response.success && response.data) {
             assignedId = response.data.bookingId || assignedId;
           }
+          // Broadcast live to Admin and other windows
+          TourstkAPI.broadcastChange('BOOKING_CREATED', {
+            id: assignedId,
+            bookingId: assignedId,
+            customerName: bookingPayload.customerName,
+            name: bookingPayload.customerName,
+            packageName: bookingPayload.packageName,
+            totalPrice: total,
+            travelDate: bookingPayload.travelDate,
+            phone: bookingPayload.phone,
+          });
         }
       } catch (err) {
         console.warn('API submission warning, saving to local state:', err);

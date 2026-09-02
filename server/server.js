@@ -123,7 +123,11 @@ app.use(express.static(staticPath, { extensions: ['html', 'htm'] }));
 
 // Database auto-reconnect middleware (ensures DB is active for serverless/Vercel)
 app.use(async (req, res, next) => {
-  if (req.path.startsWith('/api')) {
+  // Normalize Vercel serverless stripped paths
+  if (!req.url.startsWith('/api') && ['/packages', '/destinations', '/rooms', '/reviews', '/bookings', '/custom-requests', '/contact', '/admin', '/health', '/auth', '/upload', '/export'].some(p => req.path.startsWith(p))) {
+    req.url = '/api' + req.url;
+  }
+  if (req.url.startsWith('/api') || req.path.startsWith('/api')) {
     await connectDB();
   }
   next();

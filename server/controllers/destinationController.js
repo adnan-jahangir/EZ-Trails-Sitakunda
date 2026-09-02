@@ -20,7 +20,7 @@ const getDestinations = async (req, res, next) => {
 // @access  Private (SuperAdmin, Manager)
 const createDestination = async (req, res, next) => {
   try {
-    let { destinationId, name, bnName, category, difficulty, bestTime, shortDesc, description, image } = req.body;
+    let { destinationId, name, bnName, category, difficulty, bestTime, shortDesc, description, image, gallery } = req.body;
     if (!destinationId) {
       destinationId = name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     }
@@ -38,6 +38,7 @@ const createDestination = async (req, res, next) => {
       shortDesc,
       description,
       image: image || 'images/spots/chandranath-hill.jpg',
+      gallery: Array.isArray(gallery) ? gallery : undefined,
     });
     cacheService.invalidatePrefix('destinations');
 
@@ -63,10 +64,12 @@ const createDestination = async (req, res, next) => {
 const updateDestination = async (req, res, next) => {
   try {
     const idParam = req.params.id;
-    if (!isValidObjectId(idParam)) {
-      return res.status(400).json({ success: false, message: 'Invalid destination ID format' });
+    let item;
+    if (isValidObjectId(idParam)) {
+      item = await Destination.findByIdAndUpdate(idParam, req.body, { new: true, runValidators: true });
+    } else {
+      item = await Destination.findOneAndUpdate({ destinationId: idParam }, req.body, { new: true, runValidators: true });
     }
-    const item = await Destination.findByIdAndUpdate(idParam, req.body, { new: true, runValidators: true });
     if (!item) return res.status(404).json({ success: false, message: 'Destination not found' });
     cacheService.invalidatePrefix('destinations');
 
@@ -92,10 +95,12 @@ const updateDestination = async (req, res, next) => {
 const deleteDestination = async (req, res, next) => {
   try {
     const idParam = req.params.id;
-    if (!isValidObjectId(idParam)) {
-      return res.status(400).json({ success: false, message: 'Invalid destination ID format' });
+    let item;
+    if (isValidObjectId(idParam)) {
+      item = await Destination.findByIdAndDelete(idParam);
+    } else {
+      item = await Destination.findOneAndDelete({ destinationId: idParam });
     }
-    const item = await Destination.findByIdAndDelete(idParam);
     if (!item) return res.status(404).json({ success: false, message: 'Destination not found' });
     cacheService.invalidatePrefix('destinations');
 

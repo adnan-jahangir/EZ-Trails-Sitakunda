@@ -209,17 +209,17 @@
     </div>
   </section>
 
-  <!-- 4. EXPLORE SITAKUNDA (12 Destinations Preview) -->
+  <!-- 4. EXPLORE SITAKUNDA (14 Destinations Preview) -->
   <section class="py-24 bg-slate-50 border-y border-slate-100" id="explore">
     <div class="max-w-container-max mx-auto px-6">
       <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-4">
         <div>
-          <span class="text-xs font-bold uppercase tracking-widest text-emerald-700 block mb-2">12 Iconic Destinations</span>
+          <span class="text-xs font-bold uppercase tracking-widest text-emerald-700 block mb-2">14 Iconic Destinations</span>
           <h2 class="font-display text-3xl sm:text-4xl font-bold text-primary">Explore Sitakunda</h2>
           <p class="text-slate-500 text-sm sm:text-base mt-2">Places worth visiting, experiences worth remembering.</p>
         </div>
         <a href="/explore" class="inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-emerald-700">
-          Explore All 12 Destinations
+          Explore All 14 Destinations
           <span class="material-symbols-outlined text-base">arrow_forward</span>
         </a>
       </div>
@@ -734,45 +734,62 @@
     // Live update without manual reload
     window.addEventListener('tourstk:packages-updated', renderFeaturedPackages);
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      // 1. Render Top 3 Featured Packages
-      renderFeaturedPackages();
-      if (window.TourstkAPI) {
-        await TourstkAPI.fetchAndSyncPackages();
-      }
-
-      // 2. Render Top 6 Large Destinations on Homepage
+    // 2. Render Top Featured Destinations on Homepage
+    function renderFeaturedDestinations() {
       const destGrid = document.getElementById('featured-destinations-grid');
-      if (destGrid && TOURSTK.destinations) {
-        destGrid.innerHTML = TOURSTK.destinations.slice(0, 6).map(d => `
-          <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col group">
-            <div class="relative h-60 bg-slate-100 overflow-hidden">
-              <img src="${d.image}" alt="${d.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
-              <div class="absolute top-3.5 left-3.5 bg-white/95 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-primary flex items-center gap-1 shadow-xs">
-                <span class="material-symbols-outlined text-sm text-emerald-700">${d.categoryIcon || 'place'}</span>
-                <span>${d.category}</span>
-              </div>
-              <div class="absolute bottom-3 right-3 bg-slate-950/80 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-semibold text-white">
-                ${d.difficulty}
-              </div>
+      const list = (window.TOURSTK && Array.isArray(window.TOURSTK.destinations)) ? window.TOURSTK.destinations : [];
+      if (!destGrid || list.length === 0) return;
+
+      destGrid.innerHTML = list.slice(0, 9).map(d => `
+        <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col group">
+          <div class="relative h-60 bg-slate-100 overflow-hidden">
+            <img src="${d.image}" alt="${d.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" onerror="this.src='images/spots/chandranath-hill.jpg'">
+            <div class="absolute top-3.5 left-3.5 bg-white/95 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-primary flex items-center gap-1 shadow-xs">
+              <span class="material-symbols-outlined text-sm text-emerald-700">${d.categoryIcon || 'place'}</span>
+              <span>${d.category}</span>
             </div>
-            <div class="p-6 flex flex-col flex-grow justify-between">
-              <div>
-                <div class="text-[11px] font-bold text-emerald-800 mb-1">${d.bnName}</div>
-                <h3 class="font-display text-xl font-bold text-slate-900 mb-2 group-hover:text-primary transition-colors">${d.name}</h3>
-                <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed mb-4">${d.shortDesc}</p>
-              </div>
-              <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
-                <span class="text-[11px] text-slate-400 font-semibold">${d.bestTime}</span>
-                <a href="/destination-detail?id=${d.id}" class="text-xs font-bold text-primary hover:underline flex items-center gap-1">
-                  <span>Explore Place</span>
-                  <span class="material-symbols-outlined text-sm">arrow_forward</span>
-                </a>
-              </div>
+            <div class="absolute bottom-3 right-3 bg-slate-950/80 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-semibold text-white">
+              ${d.difficulty}
             </div>
           </div>
-        `).join('');
+          <div class="p-6 flex flex-col flex-grow justify-between">
+            <div>
+              <div class="text-[11px] font-bold text-emerald-800 mb-1">${d.bnName}</div>
+              <h3 class="font-display text-xl font-bold text-slate-900 mb-2 group-hover:text-primary transition-colors">${d.name}</h3>
+              <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed mb-4">${d.shortDesc}</p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+              <span class="text-[11px] text-slate-400 font-semibold">${d.bestTime}</span>
+              <a href="/destination-detail?id=${d.id}" class="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+                <span>Explore Place</span>
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window.addEventListener('tourstk:destinations-updated', renderFeaturedDestinations);
+    window.addEventListener('tourstk:reviews-updated', () => {
+      if (typeof renderReviews === 'function') renderReviews();
+    });
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // 1. Initial Render
+      renderFeaturedPackages();
+      renderFeaturedDestinations();
+      if (typeof renderReviews === 'function') renderReviews();
+
+      // 2. Fetch latest live data from MongoDB Atlas
+      if (window.TourstkAPI) {
+        await Promise.all([
+          TourstkAPI.fetchAndSyncPackages(),
+          TourstkAPI.fetchAndSyncDestinations(),
+          TourstkAPI.fetchAndSyncReviews()
+        ]);
       }
+    });
 
       // 3. Render Reviews & Auto-Sliding Carousel Engine
       const reviewsTrack = document.getElementById('reviews-track');
@@ -786,11 +803,18 @@
       let totalReviewItems = 0;
 
       function getStoredReviews() {
+        const liveReviews = (window.TOURSTK && Array.isArray(window.TOURSTK.reviews)) ? window.TOURSTK.reviews : [];
         try {
           const custom = JSON.parse(localStorage.getItem('tourstk_custom_reviews') || '[]');
-          return [...custom, ...(TOURSTK.reviews || [])];
+          const combined = [...custom, ...liveReviews];
+          const uniqueMap = new Map();
+          combined.forEach(r => {
+            const key = (r.text || r.reviewText || '').slice(0, 30) + (r.name || r.customerName);
+            if (!uniqueMap.has(key)) uniqueMap.set(key, r);
+          });
+          return Array.from(uniqueMap.values());
         } catch(e) {
-          return TOURSTK.reviews || [];
+          return liveReviews;
         }
       }
 
@@ -1055,6 +1079,22 @@
             localStorage.setItem('tourstk_custom_reviews', JSON.stringify(custom));
           } catch(err) {
             console.error('Error saving review', err);
+          }
+
+          // Persist to MongoDB Atlas database & Broadcast live sync event
+          if (window.TourstkAPI) {
+            TourstkAPI.createReview({
+              customerName: name,
+              tourPackage: pkg,
+              rating: rating,
+              reviewText: text,
+              isApproved: true,
+            }).then(() => {
+              TourstkAPI.broadcastChange('REVIEW_CREATED', newRev);
+              TourstkAPI.fetchAndSyncReviews();
+            }).catch(err => {
+              console.warn('API review save warning, local saved:', err);
+            });
           }
 
           reviewForm.reset();

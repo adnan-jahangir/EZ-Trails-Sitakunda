@@ -34,6 +34,14 @@ const destinationSchema = new mongoose.Schema(
     image: { type: String },
     shortDesc: { type: String },
     description: { type: String },
+    gallery: [
+      {
+        type: { type: String, default: 'image' },
+        src: { type: String },
+        thumb: { type: String },
+        label: { type: String }
+      }
+    ],
     tags: [{ type: String }],
     thingsToDo: [{ type: String }],
     tips: [{ type: String }],

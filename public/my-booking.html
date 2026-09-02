@@ -131,14 +131,18 @@
   <script src="js/animations.js"></script>
   <script src="js/weather.js"></script>
   <script>
+    let activeTrackingQuery = null;
+
     async function trackTourstkBooking(e) {
-      e.preventDefault();
+      if (e && e.preventDefault) e.preventDefault();
       const id = document.getElementById('track-id').value.trim();
       const phone = document.getElementById('track-phone').value.trim();
 
+      activeTrackingQuery = { id, phone };
+
       const res = document.getElementById('booking-details-card');
       const notFound = document.getElementById('not-found-card');
-      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const submitBtn = document.querySelector('#track-form button[type="submit"]') || (e?.target ? e.target.querySelector('button[type="submit"]') : null);
 
       if (submitBtn) {
         submitBtn.disabled = true;
@@ -423,6 +427,13 @@
         </a>
       `;
     }
+
+    // Live update when Admin confirms, assigns guide, or updates note
+    window.addEventListener('tourstk:bookings-updated', () => {
+      if (activeTrackingQuery && (activeTrackingQuery.id || activeTrackingQuery.phone)) {
+        trackTourstkBooking();
+      }
+    });
   </script>
 
   <!-- COMPACT FLOATING QUICK ACTION DOCK (Call + Facebook + WhatsApp) -->
