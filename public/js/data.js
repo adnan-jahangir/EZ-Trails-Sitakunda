@@ -3,7 +3,7 @@
 // 12 Sitakunda Destinations with Local Real Downloaded Assets & Online CDNs
 // ==========================================================================
 
-const TOURSTK = {
+var TOURSTK = {
   // 12 Authentic Iconic Sitakunda Destinations
   destinations: [
     {
@@ -1182,3 +1182,8 @@ const BookingManager = {
     });
   }
 };
+
+if (typeof window !== 'undefined') {
+  window.TOURSTK = TOURSTK;
+  window.BookingManager = BookingManager;
+}

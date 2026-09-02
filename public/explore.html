@@ -420,19 +420,23 @@
     function renderExploreGrid() {
       const container = document.getElementById('destinations-grid');
       const countEl = document.getElementById('spots-count');
-      if (!container || !TOURSTK.destinations) return;
+      const allDests = (window.TOURSTK && Array.isArray(window.TOURSTK.destinations) && window.TOURSTK.destinations.length > 0)
+        ? window.TOURSTK.destinations
+        : ((typeof TOURSTK !== 'undefined' && Array.isArray(TOURSTK.destinations)) ? TOURSTK.destinations : []);
 
-      const searchInput = (document.getElementById('spot-search')?.value || document.getElementById('explore-search')?.value || '').toLowerCase();
+      if (!container) return;
+      if (allDests.length === 0) return;
 
-      const list = TOURSTK.destinations.filter(d => {
+      const searchInput = (document.getElementById('spot-search')?.value || document.getElementById('explore-search')?.value || '').toLowerCase().trim();
+
+      const list = allDests.filter(d => {
         const matchesCategory = activeCategory === 'all' || d.category === activeCategory;
-        const matchesSearch = !searchInput || 
-          d.name.toLowerCase().includes(searchInput) || 
-          (d.bnName && d.bnName.toLowerCase().includes(searchInput)) ||
-          d.shortDesc.toLowerCase().includes(searchInput) ||
-          (d.tags && d.tags.some(t => t.toLowerCase().includes(searchInput)));
+        const nameMatch = (d.name || '').toLowerCase().includes(searchInput);
+        const bnNameMatch = (d.bnName || '').toLowerCase().includes(searchInput);
+        const descMatch = (d.shortDesc || d.description || '').toLowerCase().includes(searchInput);
+        const tagsMatch = Array.isArray(d.tags) && d.tags.some(t => (t || '').toLowerCase().includes(searchInput));
 
-        return matchesCategory && matchesSearch;
+        return matchesCategory && (!searchInput || nameMatch || bnNameMatch || descMatch || tagsMatch);
       });
 
       if (countEl) countEl.textContent = list.length;
@@ -449,12 +453,11 @@
       }
 
       container.innerHTML = list.map(spot => {
-        const gallery = spot.gallery && spot.gallery.length > 0 ? spot.gallery : [
-          { type: 'image', src: spot.image, thumb: spot.image, label: 'Main View' },
-          { type: 'image', src: spot.fallbackImage || spot.image, thumb: spot.fallbackImage || spot.image, label: 'Scenic Landscape' },
-          { type: 'image', src: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80', thumb: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=300&q=80', label: 'Valley View' },
-          { type: 'video', src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4', thumb: spot.image, label: '4K Drone Tour' }
+        const spotId = spot.destinationId || spot.id || spot._id;
+        const gallery = Array.isArray(spot.gallery) && spot.gallery.length > 0 ? spot.gallery : [
+          { type: 'image', src: spot.image || 'images/spots/chandranath-hill.jpg', thumb: spot.image || 'images/spots/chandranath-hill.jpg', label: 'Main View' }
         ];
+        const mainImageSrc = (gallery[0] && (gallery[0].src || gallery[0])) || spot.image || 'images/spots/chandranath-hill.jpg';
 
         // Difficulty Dot
         const diffDot = spot.difficulty && (spot.difficulty.includes('Hard') || spot.difficulty.includes('Challenging'))
@@ -469,7 +472,7 @@
             <!-- TOP MEDIA CONTAINER -->
             <div>
               <!-- Main Feature Screen -->
-              <div class="relative h-60 sm:h-64 rounded-2xl overflow-hidden bg-slate-950 shadow-inner group/screen" id="main-media-box-${spot.id}">
+              <div class="relative h-60 sm:h-64 rounded-2xl overflow-hidden bg-slate-950 shadow-inner group/screen" id="main-media-box-${spotId}">
                 
                 <!-- Duration Badge on Top Left -->
                 <div class="absolute top-3.5 left-3.5 bg-black/65 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1 rounded-lg shadow-md z-10 flex items-center gap-1.5 border border-white/10">
@@ -484,12 +487,12 @@
                     <span>${spot.elevation || spot.category}</span>
                   </span>
                   
-                  <button type="button" onclick="openAddPhotoModal('${spot.id}')" title="Add More Images to ${spot.name}" class="px-2 py-1 rounded-lg bg-emerald-600/90 hover:bg-emerald-700 backdrop-blur-md text-white flex items-center gap-1 text-[10px] font-extrabold transition-all cursor-pointer shadow-sm border border-emerald-400/30 hover:scale-105">
+                  <button type="button" onclick="openAddPhotoModal('${spotId}')" title="Add More Images to ${spot.name}" class="px-2 py-1 rounded-lg bg-emerald-600/90 hover:bg-emerald-700 backdrop-blur-md text-white flex items-center gap-1 text-[10px] font-extrabold transition-all cursor-pointer shadow-sm border border-emerald-400/30 hover:scale-105">
                     <span class="material-symbols-outlined text-xs">add_photo_alternate</span>
                     <span class="hidden sm:inline">+ Add More</span>
                   </button>
 
-                  <button type="button" onclick="openMediaModal('${spot.id}')" title="Open 4K HD Lightbox" class="w-8 h-8 rounded-lg bg-black/60 hover:bg-black/80 backdrop-blur-md text-white flex items-center justify-center transition-all cursor-pointer border border-white/15 hover:scale-105">
+                  <button type="button" onclick="openMediaModal('${spotId}')" title="Open 4K HD Lightbox" class="w-8 h-8 rounded-lg bg-black/60 hover:bg-black/80 backdrop-blur-md text-white flex items-center justify-center transition-all cursor-pointer border border-white/15 hover:scale-105">
                     <span class="material-symbols-outlined text-sm">fullscreen</span>
                   </button>
                 </div>
@@ -501,15 +504,15 @@
                 </div>
 
                 <!-- Main Active Image -->
-                <img id="main-img-${spot.id}" src="${gallery[0].src}" alt="${spot.name}" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105">
+                <img id="main-img-${spotId}" src="${mainImageSrc}" alt="${spot.name}" class="w-full h-full object-cover transition-all duration-500 group-hover:scale-105" onerror="this.src='images/spots/chandranath-hill.jpg'">
 
                 <!-- Main Active Video -->
-                <video id="main-video-${spot.id}" class="w-full h-full object-cover hidden" controls playsinline>
-                  <source id="main-video-src-${spot.id}" src="" type="video/mp4">
+                <video id="main-video-${spotId}" class="w-full h-full object-cover hidden" controls playsinline>
+                  <source id="main-video-src-${spotId}" src="" type="video/mp4">
                 </video>
 
                 <!-- Video Floating Play Trigger Overlay -->
-                <button id="video-overlay-btn-${spot.id}" onclick="playCurrentCardVideo('${spot.id}')" class="absolute inset-0 bg-black/30 hover:bg-black/20 flex items-center justify-center z-10 hidden transition-all group-hover:scale-105">
+                <button id="video-overlay-btn-${spotId}" onclick="playCurrentCardVideo('${spotId}')" class="absolute inset-0 bg-black/30 hover:bg-black/20 flex items-center justify-center z-10 hidden transition-all group-hover:scale-105">
                   <span class="w-14 h-14 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-2xl ring-4 ring-white/40">
                     <span class="material-symbols-outlined text-3xl ml-0.5">play_arrow</span>
                   </span>
@@ -517,12 +520,13 @@
               </div>
 
               <!-- DYNAMIC THUMBNAIL STRIP & ADD MORE OPTION -->
-              <div class="grid grid-cols-4 sm:grid-cols-5 gap-2 mt-3" id="thumbs-${spot.id}">
+              <div class="grid grid-cols-4 sm:grid-cols-5 gap-2 mt-3" id="thumbs-${spotId}">
                 ${gallery.slice(0, 4).map((item, idx) => {
+                  const src = item.thumb || item.src || item;
                   if (item.type === 'video') {
                     return `
-                      <button type="button" onclick="switchCardMedia('${spot.id}', ${idx})" title="${item.label || 'Watch 4K Video'}" class="thumb-item-${spot.id} relative h-14 sm:h-16 rounded-xl overflow-hidden border-2 border-transparent opacity-85 hover:opacity-100 hover:border-emerald-400 transition-all cursor-pointer bg-slate-900 group/vid">
-                        <img src="${item.thumb || spot.image}" alt="Video preview" class="w-full h-full object-cover brightness-75 group-hover/vid:scale-110 transition-transform">
+                      <button type="button" onclick="switchCardMedia('${spotId}', ${idx})" title="${item.label || 'Watch 4K Video'}" class="thumb-item-${spotId} relative h-14 sm:h-16 rounded-xl overflow-hidden border-2 border-transparent opacity-85 hover:opacity-100 hover:border-emerald-400 transition-all cursor-pointer bg-slate-900 group/vid">
+                        <img src="${src}" alt="Video preview" class="w-full h-full object-cover brightness-75 group-hover/vid:scale-110 transition-transform">
                         <div class="absolute inset-0 flex items-center justify-center">
                           <span class="w-6 h-6 rounded-full bg-[#0e4d34] text-white flex items-center justify-center shadow-md">
                             <span class="material-symbols-outlined text-sm">play_arrow</span>
@@ -534,14 +538,14 @@
                   }
 
                   return `
-                    <button type="button" onclick="switchCardMedia('${spot.id}', ${idx})" title="${item.label || 'View Image'}" class="thumb-item-${spot.id} relative h-14 sm:h-16 rounded-xl overflow-hidden border-2 ${idx === 0 ? 'border-primary ring-2 ring-emerald-400/50' : 'border-transparent opacity-75 hover:opacity-100 hover:border-slate-300'} transition-all cursor-pointer">
-                      <img src="${item.thumb || item.src}" alt="${item.label || spot.name}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                    <button type="button" onclick="switchCardMedia('${spotId}', ${idx})" title="${item.label || 'View Image'}" class="thumb-item-${spotId} relative h-14 sm:h-16 rounded-xl overflow-hidden border-2 ${idx === 0 ? 'border-primary ring-2 ring-emerald-400/50' : 'border-transparent opacity-75 hover:opacity-100 hover:border-slate-300'} transition-all cursor-pointer">
+                      <img src="${src}" alt="${item.label || spot.name}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" onerror="this.src='images/spots/chandranath-hill.jpg'">
                     </button>
                   `;
                 }).join('')}
 
                 <!-- ADD MORE IMAGE CARD -->
-                <button type="button" onclick="openAddPhotoModal('${spot.id}')" title="Add More Images to ${spot.name}" class="relative h-14 sm:h-16 rounded-xl border-2 border-dashed border-emerald-400 hover:border-emerald-600 bg-emerald-50/70 hover:bg-emerald-100/90 flex flex-col items-center justify-center text-emerald-800 transition-all cursor-pointer group/add p-1 text-center">
+                <button type="button" onclick="openAddPhotoModal('${spotId}')" title="Add More Images to ${spot.name}" class="relative h-14 sm:h-16 rounded-xl border-2 border-dashed border-emerald-400 hover:border-emerald-600 bg-emerald-50/70 hover:bg-emerald-100/90 flex flex-col items-center justify-center text-emerald-800 transition-all cursor-pointer group/add p-1 text-center">
                   <span class="material-symbols-outlined text-base text-emerald-600 group-hover/add:scale-125 transition-transform">add_a_photo</span>
                   <span class="text-[9px] font-extrabold leading-tight mt-0.5 text-emerald-800">+ Add More</span>
                 </button>
@@ -556,7 +560,7 @@
                   </span>
                 </div>
                 <h3 class="font-display font-bold text-xl text-slate-900 mb-1.5 group-hover:text-primary transition-colors">${spot.name}</h3>
-                <p class="text-xs text-slate-600 leading-relaxed line-clamp-2">${spot.shortDesc}</p>
+                <p class="text-xs text-slate-600 leading-relaxed line-clamp-2">${spot.shortDesc || spot.description || ''}</p>
                 
                 <!-- DISCOVERY METRICS BAR -->
                 <div class="grid grid-cols-2 gap-2 mt-3.5 pt-3 border-t border-slate-100">
@@ -585,11 +589,11 @@
 
             <!-- Bottom Action Buttons -->
             <div class="pt-4 border-t border-slate-100 flex items-center justify-between gap-2.5 mt-5">
-              <a href="/destination-detail?id=${spot.id}" class="flex-1 text-center bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs py-2.5 rounded-xl transition-colors flex items-center justify-center gap-1">
+              <a href="/destination-detail?id=${spotId}" class="flex-1 text-center bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs py-2.5 rounded-xl transition-colors flex items-center justify-center gap-1">
                 <span>View Details</span>
                 <span class="material-symbols-outlined text-xs">arrow_forward</span>
               </a>
-              <a href="/booking?spot=${spot.id}" class="flex-1 text-center bg-primary hover:bg-primary-dark text-white font-bold text-xs py-2.5 rounded-xl transition-colors shadow-xs flex items-center justify-center gap-1">
+              <a href="/booking?spot=${spotId}" class="flex-1 text-center bg-primary hover:bg-primary-dark text-white font-bold text-xs py-2.5 rounded-xl transition-colors shadow-xs flex items-center justify-center gap-1">
                 <span>Book Trip</span>
                 <span class="material-symbols-outlined text-sm">travel_explore</span>
               </a>
@@ -604,7 +608,8 @@
     // INTERACTIVE MEDIA SWITCHER (PHOTOS & VIDEOS)
     // =========================================================================
     function switchCardMedia(spotId, itemIndex) {
-      const spot = (TOURSTK.destinations || []).find(d => d.id === spotId);
+      const allDests = (window.TOURSTK && window.TOURSTK.destinations) ? window.TOURSTK.destinations : (typeof TOURSTK !== 'undefined' ? TOURSTK.destinations : []);
+      const spot = allDests.find(d => d.id === spotId || d.destinationId === spotId || d._id === spotId);
       if (!spot || !spot.gallery || !spot.gallery[itemIndex]) return;
 
       const item = spot.gallery[itemIndex];
@@ -657,7 +662,8 @@
     // 4K THEATRE & FULLSCREEN LIGHTBOX MODAL
     // =========================================================================
     function openMediaModal(spotId, startIndex = 0) {
-      const spot = (TOURSTK.destinations || []).find(d => d.id === spotId);
+      const allDests = (window.TOURSTK && window.TOURSTK.destinations) ? window.TOURSTK.destinations : (typeof TOURSTK !== 'undefined' ? TOURSTK.destinations : []);
+      const spot = allDests.find(d => d.id === spotId || d.destinationId === spotId || d._id === spotId);
       if (!spot) return;
 
       currentModalSpotId = spotId;
@@ -744,7 +750,8 @@
     // ADD MORE PHOTO MODAL HANDLERS (ADMIN / EXPLORE)
     // =========================================================================
     function openAddPhotoModal(spotId) {
-      const spot = (TOURSTK.destinations || []).find(d => d.id === spotId || d.destinationId === spotId);
+      const allDests = (window.TOURSTK && window.TOURSTK.destinations) ? window.TOURSTK.destinations : (typeof TOURSTK !== 'undefined' ? TOURSTK.destinations : []);
+      const spot = allDests.find(d => d.id === spotId || d.destinationId === spotId || d._id === spotId);
       if (!spot) return;
 
       document.getElementById('add-photo-spot-id').value = spotId;
