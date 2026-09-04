@@ -1,15 +1,22 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="light" lang="en">
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Contact Us — Tourstk</title>
+  <title>About EZ Trails Sitakunda — Our Story, Mission & Contact | Safe Eco-Trekking</title>
+  <meta name="description" content="Discover the story of EZ Trails Sitakunda. We empower travelers with certified local guides, wilderness safety gear, vetted eco-resorts, and sustainable Leave-No-Trace tourism.">
+  <meta name="theme-color" content="#0e4d34">
+
+  <!-- Open Graph / Meta -->
+  <meta property="og:title" content="About EZ Trails Sitakunda — Safe, Sustainable & Guided Adventure">
+  <meta property="og:description" content="Meet Sitakunda's pioneering eco-adventure network. Certified local guides, transparent pricing, and 100% wilderness safety.">
+  <meta property="og:image" content="images/og-cover.jpg">
 
   <!-- Tailwind CSS & Fonts -->
   <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
 
   <script id="tailwind-config">
@@ -18,31 +25,58 @@
       theme: {
         extend: {
           colors: {
-            "primary": "#012d1d",
+            "primary": "#0e4d34",
+            "primary-dark": "#073824",
             "primary-container": "#1b4332",
-            "primary-light": "#059669",
+            "primary-light": "#10b981",
             "primary-surface": "#ecfdf5",
             "accent": "#d97706",
             "surface-dim": "#f8fafc",
-            "outline-variant": "#e2e8f0"
+            "outline-variant": "#e2e8f0",
+            "on-surface-variant": "#64748b"
           },
           fontFamily: {
             "display": ["Playfair Display", "Georgia", "serif"],
             "body": ["Plus Jakarta Sans", "sans-serif"]
           },
-          maxWidth: { "container-max": "1200px" }
+          maxWidth: { "container-max": "1240px" }
         }
       }
     }
   </script>
   <link rel="stylesheet" href="css/animations.css">
+  <style>
+    /* Clean custom select styling */
+    select.appearance-none,
+    select[class*="appearance-none"] {
+      background-image: none !important;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+      appearance: none !important;
+    }
+    .faq-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease-out, opacity 0.25s ease-in;
+      opacity: 0;
+    }
+    .faq-item.active .faq-content {
+      max-height: 400px;
+      opacity: 1;
+    }
+    .faq-item.active .faq-icon {
+      transform: rotate(180deg);
+    }
+  </style>
+  <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
 </head>
-<body class="bg-white text-slate-800 font-body antialiased selection:bg-emerald-100 selection:text-emerald-900">
+<body class="bg-slate-50/50 text-slate-800 font-body antialiased selection:bg-emerald-100 selection:text-emerald-900 min-h-screen flex flex-col">
 
-  <!-- 1. SLIM & SLEEK TOP NAVBAR -->
+  <!-- 1. TOP NAVBAR -->
   <nav class="w-full bg-white/95 backdrop-blur-md border-b border-slate-100 sticky top-0 z-50 shadow-2xs transition-all">
     <div class="max-w-container-max mx-auto px-4 sm:px-6 md:px-10 h-14 sm:h-16 flex justify-between items-center">
-      <!-- Authentic Official Brand Logo from Banner (with continuous live float & glow) -->
+      <!-- Authentic Official Brand Logo with continuous live float & glow -->
       <a href="/" class="flex items-center flex-shrink-0 group py-1" title="EZ Trails Sitakunda">
         <div class="official-brand-logo-wrapper relative flex items-center">
           <img src="images/ez_trails_official_logo.png" alt="EZ Trails Sitakunda" class="h-9 sm:h-11 w-auto object-contain transition-transform group-hover:scale-105" />
@@ -51,147 +85,480 @@
 
       <!-- Center Links -->
       <div class="hidden md:flex items-center gap-7 text-xs sm:text-[13.5px] font-semibold text-slate-600">
-        <a href="/" class="hover:text-primary transition-colors">Home</a>
-        <a href="/packages" class="hover:text-primary transition-colors">Packages</a>
-        <a href="/explore" class="hover:text-primary transition-colors">Explore</a>
-        <a href="/my-booking" class="hover:text-primary transition-colors">My Booking</a>
+        <a href="/" class="hover:text-primary transition-colors" id="nav-home">Home</a>
+        <a href="/packages" class="hover:text-primary transition-colors" id="nav-packages">Packages</a>
+        <a href="/explore" class="hover:text-primary transition-colors" id="nav-explore">Explore</a>
+        <a href="/my-booking" class="hover:text-primary transition-colors" id="nav-booking">My Booking</a>
+        <a href="/contact" class="text-primary font-bold transition-colors border-b-2 border-primary pb-0.5" id="nav-about">About Us</a>
       </div>
 
-      <!-- Right Action Button & Weather Pill -->
-      <div class="flex items-center gap-2">
+      <!-- Right Action Area: Lang Switcher, Weather Pill & Plan Trip -->
+      <div class="flex items-center gap-2.5">
+        <!-- Language Switcher Pill -->
+        <div class="flex items-center bg-slate-100/90 p-0.5 rounded-lg border border-slate-200/80 text-xs font-bold shadow-2xs">
+          <button type="button" onclick="setAboutLang('bn')" id="btn-lang-bn" class="px-2.5 py-1 rounded-md text-[11px] font-extrabold transition-all cursor-pointer" title="বাংলায় দেখুন">
+            বাংলা
+          </button>
+          <button type="button" onclick="setAboutLang('en')" id="btn-lang-en" class="px-2.5 py-1 rounded-md text-[11px] font-extrabold font-mono transition-all cursor-pointer bg-white text-emerald-950 shadow-2xs" title="Switch to English">
+            EN
+          </button>
+        </div>
+
         <div id="sitakunda-weather-pill" class="hidden lg:block"></div>
+
         <a href="/planner" class="flex bg-primary hover:bg-primary-dark text-white font-bold text-[11px] sm:text-xs px-3 sm:px-4 py-1.5 rounded-full shadow-xs transition-all items-center gap-1 flex-shrink-0">
           <span class="material-symbols-outlined text-sm sm:text-base">explore</span>
-          <span>Plan Trip</span>
+          <span id="nav-btn-plan">Plan Trip</span>
         </a>
       </div>
     </div>
   </nav>
 
-  <!-- Header -->
-  <header class="py-14 bg-slate-50 border-b border-slate-100 text-center">
-    <div class="max-w-xl mx-auto px-6">
-      <span class="text-xs font-bold uppercase tracking-widest text-emerald-700 block mb-2">Support & Office</span>
-      <h1 class="font-display text-3xl sm:text-4xl font-bold text-primary mb-3">Talk to Tourstk</h1>
-      <p class="text-sm text-slate-500">Need booking assistance, custom planning, or partner queries? We are here to help.</p>
+  <!-- 2. HERO / BRAND STORY HEADER -->
+  <header class="relative overflow-hidden bg-gradient-to-b from-white via-emerald-50/20 to-slate-50 border-b border-slate-200/80 pt-12 pb-16 sm:pt-16 sm:pb-24">
+    <!-- Ambient glowing backdrop blurs -->
+    <div class="absolute -top-24 -left-20 w-96 h-96 bg-emerald-100/60 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute top-10 right-0 w-80 h-80 bg-teal-100/40 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-container-max mx-auto px-4 sm:px-6 md:px-10 relative z-10 text-center">
+      <!-- Eyebrow Badge -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100/80 border border-emerald-200/90 text-emerald-900 text-xs font-black uppercase tracking-wider mb-6 shadow-2xs">
+        <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+        <span id="hero-badge">About EZ Trails Sitakunda</span>
+      </div>
+
+      <!-- Main Heading -->
+      <h1 class="font-display text-3xl sm:text-5xl md:text-6xl font-black text-slate-900 tracking-tight leading-[1.15] max-w-4xl mx-auto mb-6">
+        <span id="hero-title-prefix">Empowering Explorers.</span><br />
+        <span class="text-primary" id="hero-title-highlight">Preserving Sitakunda's Wild Splendor.</span>
+      </h1>
+
+      <!-- Subtitle Description -->
+      <p class="text-sm sm:text-base md:text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed mb-8" id="hero-subtitle">
+        EZ Trails is Sitakunda's premier eco-adventure and guided trekking network. We unite passionate travelers with certified indigenous trail guides, vetted cottage accommodations, seamless transport, and wilderness safety protocols — transforming rugged mountain trails into accessible, life-changing memories.
+      </p>
+
+      <!-- Quick Action Buttons -->
+      <div class="flex flex-wrap items-center justify-center gap-3.5">
+        <a href="#contact-section" class="px-6 py-3 rounded-xl bg-primary hover:bg-primary-dark text-white font-bold text-xs sm:text-sm shadow-md hover:shadow-lg transition-all flex items-center gap-2">
+          <span class="material-symbols-outlined text-base sm:text-lg">support_agent</span>
+          <span id="hero-btn-contact">Talk to Coordinator</span>
+        </a>
+        <a href="/packages" class="px-6 py-3 rounded-xl bg-white hover:bg-slate-100 text-slate-800 border border-slate-200 font-bold text-xs sm:text-sm shadow-2xs hover:shadow-xs transition-all flex items-center gap-2">
+          <span class="material-symbols-outlined text-base sm:text-lg text-emerald-700">package_2</span>
+          <span id="hero-btn-packages">Explore Tour Packages</span>
+        </a>
+        <a href="https://wa.me/8801939627110?text=Hello%20EZ%20Trails,%20I%20want%20to%20know%20more%20about%20your%20Sitakunda%20tours." target="_blank" class="px-5 py-3 rounded-xl bg-[#25d366] hover:bg-[#20ba59] text-white font-bold text-xs sm:text-sm shadow-md hover:shadow-lg transition-all flex items-center gap-2">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+          <span>WhatsApp Hotline</span>
+        </a>
+      </div>
     </div>
   </header>
 
-  <!-- Contact Details & Form -->
-  <section class="py-16 bg-white">
-    <div class="max-w-4xl mx-auto px-6">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-        <!-- Form -->
-        <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
-          <h2 class="font-display text-xl font-bold text-primary mb-1">Send a Message</h2>
-          <p class="text-xs text-slate-500 mb-6">We respond within a few hours on business days.</p>
+  <!-- 3. TRUST COUNTER METRICS -->
+  <section class="py-10 bg-white border-b border-slate-200/80">
+    <div class="max-w-container-max mx-auto px-4 sm:px-6 md:px-10">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <!-- Stat 1 -->
+        <div class="p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-emerald-300 hover:shadow-md transition-all text-center group">
+          <div class="w-12 h-12 mx-auto mb-3 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <span class="material-symbols-outlined text-2xl">hiking</span>
+          </div>
+          <div class="text-2xl sm:text-3xl font-black text-slate-900 font-display mb-1" id="stat-1-num">1,200+</div>
+          <div class="text-xs sm:text-sm font-bold text-slate-700" id="stat-1-title">Happy Explorers Guided</div>
+          <div class="text-[11px] text-slate-500 mt-1" id="stat-1-sub">0 Major Incidents across all trails</div>
+        </div>
 
-          <form onsubmit="handleContactMsg(event)" class="space-y-4">
-            <div>
-              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Your Name *</label>
-              <input type="text" required class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm focus:border-primary focus:ring-1 focus:ring-primary" placeholder="Full name">
+        <!-- Stat 2 -->
+        <div class="p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-emerald-300 hover:shadow-md transition-all text-center group">
+          <div class="w-12 h-12 mx-auto mb-3 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <span class="material-symbols-outlined text-2xl">reviews</span>
+          </div>
+          <div class="text-2xl sm:text-3xl font-black text-slate-900 font-display mb-1" id="stat-2-num">98.4%</div>
+          <div class="text-xs sm:text-sm font-bold text-slate-700" id="stat-2-title">5-Star Traveler Rating</div>
+          <div class="text-[11px] text-slate-500 mt-1" id="stat-2-sub">Verified real traveler reviews</div>
+        </div>
+
+        <!-- Stat 3 -->
+        <div class="p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-emerald-300 hover:shadow-md transition-all text-center group">
+          <div class="w-12 h-12 mx-auto mb-3 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <span class="material-symbols-outlined text-2xl">verified_user</span>
+          </div>
+          <div class="text-2xl sm:text-3xl font-black text-slate-900 font-display mb-1" id="stat-3-num">25+</div>
+          <div class="text-xs sm:text-sm font-bold text-slate-700" id="stat-3-title">Certified Trail Guides</div>
+          <div class="text-[11px] text-slate-500 mt-1" id="stat-3-sub">Wilderness first-aid & route trained</div>
+        </div>
+
+        <!-- Stat 4 -->
+        <div class="p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-emerald-300 hover:shadow-md transition-all text-center group">
+          <div class="w-12 h-12 mx-auto mb-3 rounded-2xl bg-teal-100 text-teal-800 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <span class="material-symbols-outlined text-2xl">nature_people</span>
+          </div>
+          <div class="text-2xl sm:text-3xl font-black text-slate-900 font-display mb-1" id="stat-4-num">100%</div>
+          <div class="text-xs sm:text-sm font-bold text-slate-700" id="stat-4-title">Leave-No-Trace Eco Focus</div>
+          <div class="text-[11px] text-slate-500 mt-1" id="stat-4-sub">Zero plastic trail cleanliness pledge</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. OUR ORIGIN STORY & VISION -->
+  <section class="py-16 sm:py-24 bg-white">
+    <div class="max-w-container-max mx-auto px-4 sm:px-6 md:px-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <!-- Left Column: Story Text -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-black uppercase tracking-wider">
+            <span class="material-symbols-outlined text-sm">history_edu</span>
+            <span id="story-badge">Our Origin Story</span>
+          </div>
+
+          <h2 class="font-display text-2xl sm:text-4xl font-black text-slate-900 leading-tight" id="story-title">
+            Born from the Ancient Ridges of Chandranath & Khaiyachora
+          </h2>
+
+          <div class="space-y-4 text-sm sm:text-base text-slate-600 leading-relaxed font-normal" id="story-paragraphs">
+            <p>
+              Sitakunda is one of Bangladesh's most majestic sanctuaries — where precipitous emerald mountains plunge into the coastal waters of the Bay of Bengal, cradling legendary multi-tier waterfalls, hidden cascades, and sacred shrines.
+            </p>
+            <p>
+              Yet, for years, adventurous travelers faced steep roadblocks: unmarked slippery routes, unreliable transport bargaining at bus stops, sudden monsoon flash floods, and a critical lack of emergency assistance on remote trails. Many visitors found their dream journey overshadowed by logistical anxiety.
+            </p>
+            <p>
+              In 2024, a team of native Sitakunda trail leaders, environmentalists, and outdoor veterans united to solve this fundamentally. We created <strong>EZ Trails Sitakunda</strong> with a singular mission: to make Sitakunda's raw, wild wonder accessible, comfortable, and unequivocally safe for every traveler — from first-time solo backpackers and university groups to families and corporate retreats.
+            </p>
+          </div>
+
+          <!-- Highlight Box -->
+          <div class="p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 flex items-start gap-4 shadow-2xs">
+            <div class="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span class="material-symbols-outlined text-xl">verified</span>
             </div>
             <div>
-              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Phone / WhatsApp *</label>
-              <input type="tel" required class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm focus:border-primary focus:ring-1 focus:ring-primary" placeholder="01XXXXXXXXX">
+              <h4 class="text-sm font-black text-primary mb-1" id="story-quote-title">Our Promise to You</h4>
+              <p class="text-xs sm:text-sm text-slate-700 leading-normal" id="story-quote-desc">
+                "We don't simply sell tickets or bus seats. We walk every trail beside you, carry your safety gear, share the folklore of ancient hills, and guarantee you return home with unforgettable stories, renewed energy, and total peace of mind."
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Visual Showcase Cards -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="relative rounded-3xl overflow-hidden shadow-xl border border-slate-200 bg-slate-900 group">
+            <img src="images/spots/chandranath-temple.jpg" alt="Chandranath Peak Sitakunda" class="w-full h-64 sm:h-72 object-cover transition-transform duration-700 group-hover:scale-105 opacity-90" onerror="this.src='images/og-cover.jpg'" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-6 text-white">
+              <span class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-400">Sacred Heights</span>
+              <h3 class="font-display text-xl font-bold">Chandranath Peak & Hill Range</h3>
+              <p class="text-xs text-slate-200 mt-1">1,152 ft elevation overlooking the mountain ridge and bay coastline.</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="relative rounded-2xl overflow-hidden shadow-md border border-slate-200 bg-slate-900 group">
+              <img src="images/spots/khaiyachora.jpg" alt="Khaiyachora Waterfall" class="w-full h-36 object-cover transition-transform duration-700 group-hover:scale-105 opacity-90" onerror="this.src='images/og-cover.jpg'" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-3.5 text-white">
+                <span class="text-[10px] font-bold text-emerald-300">Extreme Trek</span>
+                <h4 class="text-xs font-bold">Khaiyachora 9-Tier</h4>
+              </div>
+            </div>
+
+            <div class="relative rounded-2xl overflow-hidden shadow-md border border-slate-200 bg-slate-900 group">
+              <img src="images/spots/guliakhali-sea-beach.jpg" alt="Guliakhali Swamp Beach" class="w-full h-36 object-cover transition-transform duration-700 group-hover:scale-105 opacity-90" onerror="this.src='images/og-cover.jpg'" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-3.5 text-white">
+                <span class="text-[10px] font-bold text-emerald-300">Coastal Peace</span>
+                <h4 class="text-xs font-bold">Guliakhali Swamp Beach</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. OUR 4 PILLARS OF EXCELLENCE -->
+  <section class="py-16 sm:py-24 bg-slate-50 border-y border-slate-200/80">
+    <div class="max-w-container-max mx-auto px-4 sm:px-6 md:px-10">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100/80 text-emerald-900 text-xs font-black uppercase tracking-wider mb-3">
+          <span class="material-symbols-outlined text-sm">shield</span>
+          <span id="pillars-badge">Core Operating Values</span>
+        </div>
+        <h2 class="font-display text-2xl sm:text-4xl font-black text-slate-900" id="pillars-title">The 4 Pillars of EZ Trails</h2>
+        <p class="text-sm text-slate-500 mt-2" id="pillars-desc">Built upon safety, sustainability, community pride, and genuine hospitality.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Pillar 1 -->
+        <div class="bg-white p-7 rounded-3xl border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-emerald-300 transition-all flex flex-col">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center mb-5">
+            <span class="material-symbols-outlined text-2xl">health_and_safety</span>
+          </div>
+          <h3 class="text-base font-black text-slate-900 mb-2" id="p1-title">Uncompromising Trail Safety</h3>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed flex-grow" id="p1-desc">
+            We provide life jackets for deep waterfall pools, trekking poles for slippery mud slopes, and wilderness first-aid kits on every expedition. Our guides monitor real-time weather and flash-flood water levels before entering canyon gorges.
+          </p>
+          <div class="mt-4 pt-4 border-t border-slate-100 text-[11px] font-bold text-emerald-800 flex items-center gap-1" id="p1-tag">
+            <span class="material-symbols-outlined text-sm">check_circle</span> 100% Wilderness First-Aid Ready
+          </div>
+        </div>
+
+        <!-- Pillar 2 -->
+        <div class="bg-white p-7 rounded-3xl border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-emerald-300 transition-all flex flex-col">
+          <div class="w-12 h-12 rounded-2xl bg-teal-100 text-teal-800 flex items-center justify-center mb-5">
+            <span class="material-symbols-outlined text-2xl">compost</span>
+          </div>
+          <h3 class="text-base font-black text-slate-900 mb-2" id="p2-title">Leave-No-Trace Eco Ethics</h3>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed flex-grow" id="p2-desc">
+            Sitakunda's pristine springs, lush flora, and wildlife must be preserved for future generations. We enforce a zero-plastic dumping policy, equip our groups with waste collection bags, and never permit harm to forest habitats.
+          </p>
+          <div class="mt-4 pt-4 border-t border-slate-100 text-[11px] font-bold text-teal-800 flex items-center gap-1" id="p2-tag">
+            <span class="material-symbols-outlined text-sm">eco</span> Eco-Conscious Outdoor Standards
+          </div>
+        </div>
+
+        <!-- Pillar 3 -->
+        <div class="bg-white p-7 rounded-3xl border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-emerald-300 transition-all flex flex-col">
+          <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-800 flex items-center justify-center mb-5">
+            <span class="material-symbols-outlined text-2xl">groups</span>
+          </div>
+          <h3 class="text-base font-black text-slate-900 mb-2" id="p3-title">Empowering Local Indigenous Youth</h3>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed flex-grow" id="p3-desc">
+            100% of our mountain guides and field coordinators are native youth born in Sitakunda. By partnering with EZ Trails, tourism spending directly benefits rural families, traditional cooks, and locally owned cottage homestays.
+          </p>
+          <div class="mt-4 pt-4 border-t border-slate-100 text-[11px] font-bold text-indigo-800 flex items-center gap-1" id="p3-tag">
+            <span class="material-symbols-outlined text-sm">volunteer_activism</span> 100% Native Community Owned
+          </div>
+        </div>
+
+        <!-- Pillar 4 -->
+        <div class="bg-white p-7 rounded-3xl border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-emerald-300 transition-all flex flex-col">
+          <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center mb-5">
+            <span class="material-symbols-outlined text-2xl">currency_exchange</span>
+          </div>
+          <h3 class="text-base font-black text-slate-900 mb-2" id="p4-title">Zero Hidden Fees & Transparency</h3>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed flex-grow" id="p4-desc">
+            No unexpected broker commissions or unstated charges at the destination. Every package clearly outlines meals, private transport, guide fees, and resort rooms in advance. What you see is exactly what you get.
+          </p>
+          <div class="mt-4 pt-4 border-t border-slate-100 text-[11px] font-bold text-amber-800 flex items-center gap-1" id="p4-tag">
+            <span class="material-symbols-outlined text-sm">lock</span> Guaranteed Transparent Pricing
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. INTERACTIVE CONTACT & PHYSICAL HEADQUARTERS -->
+  <section class="py-16 sm:py-24 bg-white" id="contact-section">
+    <div class="max-w-container-max mx-auto px-4 sm:px-6 md:px-10">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100/80 text-emerald-900 text-xs font-black uppercase tracking-wider mb-3">
+          <span class="material-symbols-outlined text-sm">contact_support</span>
+          <span id="contact-badge">Direct Communication Desk</span>
+        </div>
+        <h2 class="font-display text-2xl sm:text-4xl font-black text-slate-900" id="contact-title">Connect with EZ Trails Sitakunda</h2>
+        <p class="text-sm text-slate-500 mt-2" id="contact-desc">Have a question about trails, customized dates, or corporate group bookings? We are here 7 days a week.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        <!-- Form Column (7 cols) -->
+        <div class="lg:col-span-7 bg-white p-7 sm:p-10 rounded-3xl border border-slate-200/90 shadow-[0_4px_25px_-5px_rgba(0,0,0,0.05)]">
+          <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
+            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center">
+              <span class="material-symbols-outlined text-xl">send</span>
             </div>
             <div>
-              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Message *</label>
-              <textarea required class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm focus:border-primary focus:ring-1 focus:ring-primary" rows="4" placeholder="How can we help you?"></textarea>
+              <h3 class="font-display text-lg font-bold text-slate-900" id="form-heading">Send Us a Direct Message</h3>
+              <p class="text-xs text-slate-500" id="form-subheading">Our coordinator responds via WhatsApp / Call within minutes.</p>
             </div>
-            <button type="submit" class="w-full bg-primary hover:bg-primary-container text-white font-bold py-3.5 rounded-xl text-sm shadow-xs transition-all flex items-center justify-center gap-2">
-              <span class="material-symbols-outlined text-lg">send</span>
-              Send Message
+          </div>
+
+          <form onsubmit="handleContactMsg(event)" class="space-y-4" id="main-contact-form">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5" id="lbl-name">Your Full Name <span class="text-rose-500">*</span></label>
+                <input type="text" id="cnt-name" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs sm:text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" placeholder="e.g. Tanvir Ahmed">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5" id="lbl-phone">WhatsApp / Phone Number <span class="text-rose-500">*</span></label>
+                <input type="tel" id="cnt-phone" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs sm:text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" placeholder="018XXXXXXXX">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5" id="lbl-topic">Inquiry Type / Topic</label>
+              <div class="relative">
+                <select id="cnt-topic" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs sm:text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all appearance-none cursor-pointer pr-10" style="background-image: none !important;">
+                  <option value="General Inquiry">General Inquiry & Advice</option>
+                  <option value="Tour Package Booking">Tour Package Booking Query</option>
+                  <option value="Custom Group / Corporate Trek">Custom Group / University / Corporate Trek</option>
+                  <option value="Hotel & Cottage Inquiry">Resort & Accommodation Inquiry</option>
+                  <option value="Feedback / Emergency Support">Feedback / Active Trek Support</option>
+                </select>
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3.5 pointer-events-none text-slate-400">
+                  <span class="material-symbols-outlined text-base">expand_more</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5" id="lbl-msg">Your Message / Query Details <span class="text-rose-500">*</span></label>
+              <textarea id="cnt-msg" required rows="4" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs sm:text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none" placeholder="Tell us your travel dates, group size, or questions about Sitakunda trails..."></textarea>
+            </div>
+
+            <button type="submit" id="btn-submit-contact" class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3.5 rounded-xl text-xs sm:text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98">
+              <span class="material-symbols-outlined text-base">send</span>
+              <span id="btn-submit-text">Send Message to Coordinator</span>
             </button>
           </form>
         </div>
 
-        <!-- Info Cards -->
-        <div class="space-y-4">
-          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+        <!-- Contact Info & Office Column (5 cols) -->
+        <div class="lg:col-span-5 space-y-4">
+          <!-- Office Address Card -->
+          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/90 shadow-2xs">
             <div class="flex items-center gap-3 mb-2 text-primary font-bold text-sm">
               <span class="material-symbols-outlined text-emerald-700">location_on</span>
-              Office Location
+              <span id="card-office-title">Physical Base & Office Hub</span>
             </div>
-            <p class="text-xs text-slate-700 font-semibold leading-relaxed">Sitakund Bus Station, Sitakunda, Chattogram, Bangladesh</p>
+            <p class="text-xs sm:text-sm text-slate-800 font-semibold leading-relaxed" id="card-office-desc">
+              Sitakund Bus Station, Sitakunda Highway, Chattogram, Bangladesh.
+            </p>
+            <p class="text-[11px] text-slate-500 mt-1" id="card-office-note">
+              Convenient pickup & briefing lounge right next to Dhaka-Chittagong Highway.
+            </p>
           </div>
 
-          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+          <!-- Hotline Card -->
+          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/90 shadow-2xs">
             <div class="flex items-center gap-3 mb-2 text-primary font-bold text-sm">
               <span class="material-symbols-outlined text-emerald-700">phone_in_talk</span>
-              Contact Numbers
+              <span id="card-phone-title">Official Hotline Numbers</span>
             </div>
-            <p class="text-xs text-slate-700 font-bold leading-relaxed flex flex-col gap-1">
-              <a href="tel:01939627110" class="hover:text-primary hover:underline flex items-center gap-1.5"><span class="material-symbols-outlined text-xs text-emerald-600">call</span> 01939627110 (Hotline)</a>
-              <a href="tel:01876418411" class="hover:text-primary hover:underline flex items-center gap-1.5"><span class="material-symbols-outlined text-xs text-emerald-600">call</span> 01876418411 (Support)</a>
-            </p>
+            <div class="text-xs sm:text-sm text-slate-800 font-bold space-y-2">
+              <div class="flex items-center justify-between">
+                <a href="tel:01939627110" class="hover:text-primary hover:underline flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-sm text-emerald-600">call</span> 01939627110
+                </a>
+                <span class="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800">24/7 Hotline</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <a href="tel:01876418411" class="hover:text-primary hover:underline flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-sm text-emerald-600">call</span> 01876418411
+                </a>
+                <span class="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-md bg-slate-200 text-slate-700">Support Desk</span>
+              </div>
+            </div>
           </div>
 
-          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+          <!-- Email Support Card -->
+          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/90 shadow-2xs">
             <div class="flex items-center gap-3 mb-2 text-primary font-bold text-sm">
               <span class="material-symbols-outlined text-emerald-700">mail</span>
-              Email Support
+              <span id="card-email-title">Email Correspondence</span>
             </div>
-            <p class="text-xs text-slate-500 leading-relaxed">
+            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
               <a href="mailto:eztrailsbd@gmail.com" class="font-bold text-emerald-800 hover:underline">eztrailsbd@gmail.com</a>
             </p>
+            <p class="text-[11px] text-slate-500 mt-1">For official partnerships, corporate requests, or PDF invoices.</p>
           </div>
 
-          <a href="https://wa.me/8801939627110?text=Hello%20EZ%20Trails%20Sitakunda,%20I%20want%20to%20know%20about%20your%20tour%20packages%20and%20booking." target="_blank" class="w-full bg-[#25d366] hover:bg-[#1eb956] text-white font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 text-xs shadow-xs transition-all">
-            <span class="material-symbols-outlined text-lg">chat</span>
-            Direct WhatsApp Chat (01939627110)
+          <!-- Instant WhatsApp Button Card -->
+          <a href="https://wa.me/8801939627110?text=Hello%20EZ%20Trails%20Sitakunda,%20I%20want%20to%20know%20more%20about%20your%20tour%20packages%20and%20booking." target="_blank" class="w-full bg-[#25d366] hover:bg-[#1eb956] text-white font-bold py-4 px-6 rounded-2xl flex items-center justify-center gap-2.5 text-xs sm:text-sm shadow-md hover:shadow-lg transition-all active:scale-98">
+            <svg class="w-5 h-5 fill-current flex-shrink-0" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+            <span id="card-wa-text">Chat with Ground Coordinator on WhatsApp</span>
           </a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="bg-white text-slate-500 border-t border-slate-100 py-12 text-center text-xs">
-    <div class="max-w-container-max mx-auto px-6">
-      © 2026 EZ Trails Sitakunda • Email: <a href="mailto:eztrailsbd@gmail.com" class="font-bold text-emerald-800 hover:underline">eztrailsbd@gmail.com</a> • Hotline: <a href="tel:01939627110" class="font-bold text-slate-700 hover:underline">01939627110</a> | <a href="tel:01876418411" class="font-bold text-slate-700 hover:underline">01876418411</a> • Office: Sitakund Bus Station
+  <!-- 7. FREQUENTLY ASKED QUESTIONS (FAQ) -->
+  <section class="py-16 sm:py-24 bg-slate-50 border-t border-slate-200/80">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100/80 text-emerald-900 text-xs font-black uppercase tracking-wider mb-3">
+          <span class="material-symbols-outlined text-sm">quiz</span>
+          <span id="faq-badge">Common Queries</span>
+        </div>
+        <h2 class="font-display text-2xl sm:text-3xl font-black text-slate-900" id="faq-title">Frequently Asked Questions</h2>
+        <p class="text-xs sm:text-sm text-slate-500 mt-2" id="faq-subtitle">Everything you need to know about traveling Sitakunda with EZ Trails.</p>
+      </div>
+
+      <div class="space-y-3.5" id="faq-container">
+        <!-- FAQ 1 -->
+        <div class="faq-item bg-white border border-slate-200 rounded-2xl p-5 shadow-2xs cursor-pointer transition-all hover:border-emerald-300" onclick="toggleFaq(this)">
+          <div class="flex items-center justify-between gap-3">
+            <h3 class="text-xs sm:text-sm font-bold text-slate-900" id="faq-q1">Why do I need a certified guide for Sitakunda waterfalls?</h3>
+            <span class="material-symbols-outlined text-slate-400 text-lg faq-icon transition-transform">expand_more</span>
+          </div>
+          <div class="faq-content text-xs sm:text-sm text-slate-600 mt-3 leading-relaxed" id="faq-a1">
+            Sitakunda's cascades (especially Khaiyachora, Napittachora, and Jhorjhori) involve narrow slippery rock crevices, deep natural plunge pools, and unpredictable water surges during rain. Certified EZ Trails guides know every footing, carry life jackets and first-aid kits, and prevent wrong trail detours.
+          </div>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="faq-item bg-white border border-slate-200 rounded-2xl p-5 shadow-2xs cursor-pointer transition-all hover:border-emerald-300" onclick="toggleFaq(this)">
+          <div class="flex items-center justify-between gap-3">
+            <h3 class="text-xs sm:text-sm font-bold text-slate-900" id="faq-q2">Is EZ Trails suitable for solo female travelers and families?</h3>
+            <span class="material-symbols-outlined text-slate-400 text-lg faq-icon transition-transform">expand_more</span>
+          </div>
+          <div class="faq-content text-xs sm:text-sm text-slate-600 mt-3 leading-relaxed" id="faq-a2">
+            Yes, 100%. We have tailored family-comfort packages and dedicated protocols for solo female adventurers. Our coordinators are thoroughly vetted, polite, and maintain zero tolerance for harassment, ensuring a safe, respectful, and dignified journey.
+          </div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="faq-item bg-white border border-slate-200 rounded-2xl p-5 shadow-2xs cursor-pointer transition-all hover:border-emerald-300" onclick="toggleFaq(this)">
+          <div class="flex items-center justify-between gap-3">
+            <h3 class="text-xs sm:text-sm font-bold text-slate-900" id="faq-q3">Where will the EZ Trails coordinator meet us?</h3>
+            <span class="material-symbols-outlined text-slate-400 text-lg faq-icon transition-transform">expand_more</span>
+          </div>
+          <div class="faq-content text-xs sm:text-sm text-slate-600 mt-3 leading-relaxed" id="faq-a3">
+            Our team receives you directly from your arrival point in Sitakunda — whether it's Sitakunda Bus Station, Sitakunda Railway Station, or the Highway Bypass Stand. We handle your luggage transition to the base station immediately.
+          </div>
+        </div>
+
+        <!-- FAQ 4 -->
+        <div class="faq-item bg-white border border-slate-200 rounded-2xl p-5 shadow-2xs cursor-pointer transition-all hover:border-emerald-300" onclick="toggleFaq(this)">
+          <div class="flex items-center justify-between gap-3">
+            <h3 class="text-xs sm:text-sm font-bold text-slate-900" id="faq-q4">How do I book or request a customized itinerary?</h3>
+            <span class="material-symbols-outlined text-slate-400 text-lg faq-icon transition-transform">expand_more</span>
+          </div>
+          <div class="faq-content text-xs sm:text-sm text-slate-600 mt-3 leading-relaxed" id="faq-a4">
+            You can book directly in 2 minutes on our <a href="/booking" class="text-emerald-800 font-bold hover:underline">Instant Booking Page</a>, build a custom plan via <a href="/planner" class="text-emerald-800 font-bold hover:underline">Trip Planner</a>, or simply message our coordinator on WhatsApp at <strong>01939627110</strong>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. OFFICIAL FOOTER -->
+  <footer class="bg-white text-slate-500 border-t border-slate-200/90 py-12 text-center text-xs mt-auto">
+    <div class="max-w-container-max mx-auto px-6 space-y-4">
+      <div class="flex flex-wrap items-center justify-center gap-6 font-bold text-slate-600 text-xs">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <a href="/packages" class="hover:text-primary transition-colors">All Packages</a>
+        <a href="/explore" class="hover:text-primary transition-colors">Destinations</a>
+        <a href="/planner" class="hover:text-primary transition-colors">Trip Planner</a>
+        <a href="/booking" class="hover:text-primary transition-colors">Instant Booking</a>
+        <a href="/contact" class="hover:text-primary transition-colors">About & Contact</a>
+      </div>
+      <p class="text-slate-500 max-w-2xl mx-auto text-[11px] leading-relaxed">
+        © 2026 EZ Trails Sitakunda. Empowering sustainable adventure and eco-tourism across Chandranath, Khaiyachora, Napittachora & Guliakhali.
+      </p>
+      <div class="text-[11px] text-slate-500 flex flex-wrap items-center justify-center gap-3">
+        <span>Email: <a href="mailto:eztrailsbd@gmail.com" class="font-bold text-emerald-800 hover:underline">eztrailsbd@gmail.com</a></span>
+        <span>•</span>
+        <span>Hotline: <a href="tel:01939627110" class="font-bold text-slate-700 hover:underline">01939627110</a> / <a href="tel:01876418411" class="font-bold text-slate-700 hover:underline">01876418411</a></span>
+        <span>•</span>
+        <span>Office: Sitakund Bus Station, Chattogram</span>
+      </div>
     </div>
   </footer>
 
-  <!-- Scripts -->
-  <script src="js/data.js"></script>
-  <script src="js/api.js"></script>
-  <script src="js/animations.js"></script>
-  <script src="js/weather.js"></script>
-  <script>
-    async function handleContactMsg(e) {
-      e.preventDefault();
-      const form = e.target;
-      const inputs = form.querySelectorAll('input, textarea');
-      const submitBtn = form.querySelector('button[type="submit"]');
-
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = 'Sending...';
-      }
-
-      const payload = {
-        name: inputs[0].value,
-        phone: inputs[1].value,
-        message: inputs[2].value,
-      };
-
-      try {
-        const res = await TourstkAPI.submitContact(payload);
-        alert(res.message || 'Thank you for contacting Tourstk! Our team will reach out to you shortly.');
-      } catch (err) {
-        alert('Thank you for contacting Tourstk! Our team will reach out to you shortly.');
-      } finally {
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = `<span class="material-symbols-outlined text-lg">send</span> Send Message`;
-        }
-        form.reset();
-      }
-    }
-  </script>
-
-  <!-- COMPACT FLOATING QUICK ACTION DOCK (Call + Facebook + WhatsApp) -->
+  <!-- 9. FLOATING ACTION DOCK -->
   <div class="fixed bottom-20 right-3.5 sm:bottom-6 sm:right-6 z-40 flex flex-col gap-2 items-center">
     <!-- Call Button -->
     <a href="tel:01939627110" class="touch-action-btn w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-emerald-800 hover:bg-emerald-900 text-white flex items-center justify-center shadow-lg hover:scale-105 transition-transform" title="Call Hotline: 01939627110">
@@ -208,12 +575,11 @@
       <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-300 rounded-full animate-ping"></span>
       <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border border-white"></span>
       <svg class="w-4 h-4 sm:w-5 sm:h-5 fill-white" viewBox="0 0 24 24">
-        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
-      </svg>
+        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
     </a>
   </div>
 
-  <!-- MOBILE APP-STYLE FIXED BOTTOM NAVIGATION BAR (4 Core Tabs) -->
+  <!-- 10. MOBILE BOTTOM NAVIGATION BAR -->
   <div class="md:hidden fixed bottom-0 inset-x-0 z-50 bg-white/95 backdrop-blur-lg border-t border-slate-200/80 mobile-bottom-nav">
     <div class="grid grid-cols-4 h-16 max-w-md mx-auto items-center px-2">
       <!-- Tab 1: Home -->
@@ -250,7 +616,286 @@
     </div>
   </div>
 
+  <!-- Scripts -->
+  <script src="js/animations.js"></script>
+  <script src="js/weather.js"></script>
+  <script>
+    // FAQ Accordion Toggle
+    function toggleFaq(el) {
+      const wasActive = el.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      if (!wasActive) {
+        el.classList.add('active');
+      }
+    }
+
+    // Contact Form Handler
+    async function handleContactMsg(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById('btn-submit-contact');
+      const isBn = currentAboutLang === 'bn';
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span class="material-symbols-outlined text-base animate-spin">refresh</span> <span>${isBn ? 'বার্তা পাঠানো হচ্ছে...' : 'Sending Message...'}</span>`;
+      }
+
+      const payload = {
+        name: document.getElementById('cnt-name')?.value || '',
+        phone: document.getElementById('cnt-phone')?.value || '',
+        topic: document.getElementById('cnt-topic')?.value || 'General Inquiry',
+        message: document.getElementById('cnt-msg')?.value || '',
+      };
+
+      try {
+        const res = await TourstkAPI.submitContact(payload);
+        const successMsg = isBn
+          ? 'ধন্যবাদ! আপনার বার্তাটি সফলভাবে পৌঁছিয়েছে। আমাদের সীতাকুণ্ড কো-অর্ডিনেটর খুব শীঘ্রই আপনার হোয়াটসঅ্যাপে যোগাযোগ করবেন।'
+          : (res.message || 'Thank you! Your message has been received. Our Sitakunda coordinator will connect with you shortly.');
+        alert(successMsg);
+        document.getElementById('main-contact-form')?.reset();
+      } catch (err) {
+        const fallbackMsg = isBn
+          ? 'ধন্যবাদ! আপনার বার্তাটি গৃহীত হয়েছে। জরুরি প্রয়োজনে আমাদের হোয়াটসঅ্যাপে (01939627110) সরাসরি যোগাযোগ করতে পারেন।'
+          : 'Thank you! Your message has been received. You can also reach our coordinator directly on WhatsApp (01939627110).';
+        alert(fallbackMsg);
+        document.getElementById('main-contact-form')?.reset();
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<span class="material-symbols-outlined text-base">send</span> <span>${isBn ? 'বার্তা পাঠান' : 'Send Message to Coordinator'}</span>`;
+        }
+      }
+    }
+
+    // ==========================================
+    // BILINGUAL LOCALIZATION LOGIC (EN / BN)
+    // ==========================================
+    let currentAboutLang = localStorage.getItem('eztrails_lang') || 'bn'; // default to Bengali for friendly local tone
+
+    function setAboutLang(lang) {
+      currentAboutLang = lang;
+      localStorage.setItem('eztrails_lang', lang);
+      applyAboutTranslations();
+    }
+    window.setAboutLang = setAboutLang;
+
+    function applyAboutTranslations() {
+      const isBn = currentAboutLang === 'bn';
+
+      // Lang Button states
+      const btnBn = document.getElementById('btn-lang-bn');
+      const btnEn = document.getElementById('btn-lang-en');
+      if (btnBn && btnEn) {
+        if (isBn) {
+          btnBn.className = 'px-2.5 py-1 rounded-md text-[11px] font-extrabold transition-all cursor-pointer bg-white text-emerald-950 shadow-2xs';
+          btnEn.className = 'px-2.5 py-1 rounded-md text-[11px] font-extrabold font-mono transition-all cursor-pointer text-slate-500 hover:text-slate-800';
+        } else {
+          btnEn.className = 'px-2.5 py-1 rounded-md text-[11px] font-extrabold font-mono transition-all cursor-pointer bg-white text-emerald-950 shadow-2xs';
+          btnBn.className = 'px-2.5 py-1 rounded-md text-[11px] font-extrabold transition-all cursor-pointer text-slate-500 hover:text-slate-800';
+        }
+      }
+
+      // Nav texts
+      const navHome = document.getElementById('nav-home');
+      const navPackages = document.getElementById('nav-packages');
+      const navExplore = document.getElementById('nav-explore');
+      const navBooking = document.getElementById('nav-booking');
+      const navAbout = document.getElementById('nav-about');
+      const navPlan = document.getElementById('nav-btn-plan');
+      if (navHome) navHome.textContent = isBn ? 'হোম' : 'Home';
+      if (navPackages) navPackages.textContent = isBn ? 'ট্যুর প্যাকেজ' : 'Packages';
+      if (navExplore) navExplore.textContent = isBn ? 'দর্শনীয় স্থান' : 'Explore';
+      if (navBooking) navBooking.textContent = isBn ? 'আমার বুকিং' : 'My Booking';
+      if (navAbout) navAbout.textContent = isBn ? 'আমাদের সম্পর্কে' : 'About Us';
+      if (navPlan) navPlan.textContent = isBn ? 'প্ল্যান করুন' : 'Plan Trip';
+
+      // Hero texts
+      const hBadge = document.getElementById('hero-badge');
+      const hPrefix = document.getElementById('hero-title-prefix');
+      const hHighlight = document.getElementById('hero-title-highlight');
+      const hSub = document.getElementById('hero-subtitle');
+      const hBtnContact = document.getElementById('hero-btn-contact');
+      const hBtnPkg = document.getElementById('hero-btn-packages');
+
+      if (hBadge) hBadge.textContent = isBn ? 'ইজেড ট্রেইলস সীতাকুণ্ড সম্পর্কে' : 'About EZ Trails Sitakunda';
+      if (hPrefix) hPrefix.textContent = isBn ? 'নিরাপদ পাহাড়ি রোমাঞ্চ।' : 'Empowering Explorers.';
+      if (hHighlight) hHighlight.textContent = isBn ? 'সীতাকুণ্ডের প্রকৃতির দায়িত্বশীল সংরক্ষণ।' : "Preserving Sitakunda's Wild Splendor.";
+      if (hSub) hSub.textContent = isBn
+        ? 'ইজেড ট্রেইলস (EZ Trails) সীতাকুণ্ডের প্রথম দায়িত্বশীল ইকো-অ্যাডভেঞ্চার ও ট্র্যাকিং প্ল্যাটফর্ম। প্রত্যয়িত স্থানীয় গাইড, জরুরি ট্র্যাকিং গিয়ার, নিশ্চিত ইকো-কটেজ ও সার্বক্ষণিক গ্রাউন্ড কো-অর্ডিনেশনের মাধ্যমে আমরা প্রতিটি ঝুঁকিপূর্ণ ট্রেইলকে রূপান্তর করি নিশ্চিন্ত ও জীবনের সেরা স্মৃতিতে।'
+        : "EZ Trails is Sitakunda's premier eco-adventure and guided trekking network. We unite passionate travelers with certified indigenous trail guides, vetted cottage accommodations, seamless transport, and wilderness safety protocols — transforming rugged mountain trails into accessible, life-changing memories.";
+      if (hBtnContact) hBtnContact.textContent = isBn ? 'কো-অর্ডিনেটরের সাথে কথা বলুন' : 'Talk to Coordinator';
+      if (hBtnPkg) hBtnPkg.textContent = isBn ? 'ট্যুর প্যাকেজগুলো দেখুন' : 'Explore Tour Packages';
+
+      // Stats
+      const s1Title = document.getElementById('stat-1-title');
+      const s1Sub = document.getElementById('stat-1-sub');
+      const s2Title = document.getElementById('stat-2-title');
+      const s2Sub = document.getElementById('stat-2-sub');
+      const s3Title = document.getElementById('stat-3-title');
+      const s3Sub = document.getElementById('stat-3-sub');
+      const s4Title = document.getElementById('stat-4-title');
+      const s4Sub = document.getElementById('stat-4-sub');
+      if (s1Title) s1Title.textContent = isBn ? 'নিরাপদে পরিচালিত পর্যটক' : 'Happy Explorers Guided';
+      if (s1Sub) s1Sub.textContent = isBn ? 'প্রতিটি ট্রেইলে শতভাগ সুরক্ষার রেকর্ড' : '0 Major Incidents across all trails';
+      if (s2Title) s2Title.textContent = isBn ? '৫-স্টার ইতিবাচক রেটিং' : '5-Star Traveler Rating';
+      if (s2Sub) s2Sub.textContent = isBn ? 'ভ্রমণকারীদের আসল প্রশংসাপত্র' : 'Verified real traveler reviews';
+      if (s3Title) s3Title.textContent = isBn ? 'প্রত্যয়িত পাহাড়ি গাইড' : 'Certified Trail Guides';
+      if (s3Sub) s3Sub.textContent = isBn ? 'ফার্স্ট-এইড ও আবহাওয়া সতর্কতায় প্রশিক্ষিত' : 'Wilderness first-aid & route trained';
+      if (s4Title) s4Title.textContent = isBn ? 'প্রকৃতি সংরক্ষণ ও পরিচ্ছন্নতা' : 'Leave-No-Trace Eco Focus';
+      if (s4Sub) s4Sub.textContent = isBn ? 'প্লাস্টিক ও বর্জ্যমুক্ত ট্রেইল ক্যাম্পেইন' : 'Zero plastic trail cleanliness pledge';
+
+      // Story
+      const stBadge = document.getElementById('story-badge');
+      const stTitle = document.getElementById('story-title');
+      const stP = document.getElementById('story-paragraphs');
+      const stQTitle = document.getElementById('story-quote-title');
+      const stQDesc = document.getElementById('story-quote-desc');
+      if (stBadge) stBadge.textContent = isBn ? 'আমাদের পথচলার গল্প' : 'Our Origin Story';
+      if (stTitle) stTitle.textContent = isBn ? 'চন্দ্রনাথ আর খৈয়াছড়ার গিরিখাত থেকে শুরু আমাদের যাত্রা' : 'Born from the Ancient Ridges of Chandranath & Khaiyachora';
+      if (stP) {
+        if (isBn) {
+          stP.innerHTML = `
+            <p>
+              পাহাড় আর সাগরের মোহনীয় মেলবন্ধনে সীতাকুণ্ড বাংলাদেশের অন্যতম সেরা প্রাকৃতিক স্বর্গ। এখানে রয়েছে প্রাচীন তীর্থস্থান চন্দ্রনাথের মেঘছোঁয়া চূড়া, ৯ ধাপের খৈয়াছড়া, নাপিত্তাছড়া কিংবা ঝরঝরির মতো রোমাঞ্চকর পাহাড়ি ঝর্ণা।
+            </p>
+            <p>
+              কিন্তু বছরের পর বছর পর্যটকদের পড়তে হতো নানা বিপত্তিতে — পিচ্ছিল পাথুরে খাদে দিকভ্রান্ত হওয়া, বর্ষার পাহাড়ি হড়কা বান (Flash Flood), বাস স্ট্যান্ডের অসাধু দালালের খপ্পরে পড়ে অতিরিক্ত খরচ এবং জরুরি সুরক্ষার অভাব। বহু ভ্রমণপিপাসুর সুন্দর ট্রিপ পরিণত হতো আতঙ্ক ও তিক্ত অভিজ্ঞতায়।
+            </p>
+            <p>
+              এই সংকটের স্থায়ী সমাধানে ২০২৪ সালে সীতাকুণ্ডের স্থানীয় ট্রেইল লিডার ও পরিবেশপ্রেমী তরুণদের উদ্যোগে গড়ে ওঠে <strong>ইজেড ট্রেইলস (EZ Trails Sitakunda)</strong>। আমাদের লক্ষ্য একটিই — সীতাকুণ্ডের প্রতিটি ঝর্ণা ও পাহাড়ের সৌন্দর্যকে পর্যটকদের কাছে সহজ, নিরাপদ ও শতভাগ আরামদায়ক করে তোলা; যেন পরিবার, বন্ধু বা সোলো ট্রাভেলার যে কেউই নিশ্চিন্তে ঘুরে যেতে পারেন।
+            </p>
+          `;
+        } else {
+          stP.innerHTML = `
+            <p>
+              Sitakunda is one of Bangladesh's most majestic sanctuaries — where precipitous emerald mountains plunge into the coastal waters of the Bay of Bengal, cradling legendary multi-tier waterfalls, hidden cascades, and sacred shrines.
+            </p>
+            <p>
+              Yet, for years, adventurous travelers faced steep roadblocks: unmarked slippery routes, unreliable transport bargaining at bus stops, sudden monsoon flash floods, and a critical lack of emergency assistance on remote trails. Many visitors found their dream journey overshadowed by logistical anxiety.
+            </p>
+            <p>
+              In 2024, a team of native Sitakunda trail leaders, environmentalists, and outdoor veterans united to solve this fundamentally. We created <strong>EZ Trails Sitakunda</strong> with a singular mission: to make Sitakunda's raw, wild wonder accessible, comfortable, and unequivocally safe for every traveler — from first-time solo backpackers and university groups to families and corporate retreats.
+            </p>
+          `;
+        }
+      }
+      if (stQTitle) stQTitle.textContent = isBn ? 'আমাদের অঙ্গীকার' : 'Our Promise to You';
+      if (stQDesc) stQDesc.textContent = isBn
+        ? '"আমরা শুধু কোনো প্যাকেজ বা গাড়ির সিট বিক্রি করি না। আমরা প্রতিটি ট্রেইলে আপনার পাশাপাশি হাঁটি, নিরাপত্তার সরঞ্জাম সঙ্গে রাখি, পাহাড়ি ঐতিহ্যের গল্প শোনাই এবং আপনাকে নিরাপদে হাসিমুখে বাড়ি ফিরিয়ে দিতে দায়বদ্ধ থাকি।"'
+        : '"We don\'t simply sell tickets or bus seats. We walk every trail beside you, carry your safety gear, share the folklore of ancient hills, and guarantee you return home with unforgettable stories, renewed energy, and total peace of mind."';
+
+      // Pillars
+      const pBadge = document.getElementById('pillars-badge');
+      const pTitle = document.getElementById('pillars-title');
+      const pDesc = document.getElementById('pillars-desc');
+      if (pBadge) pBadge.textContent = isBn ? 'আমাদের ৪টি মূল ভিত্তি' : 'Core Operating Values';
+      if (pTitle) pTitle.textContent = isBn ? 'ইজেড ট্রেইলসের ৪টি স্তম্ভ' : 'The 4 Pillars of EZ Trails';
+      if (pDesc) pDesc.textContent = isBn ? 'নিরাপত্তা, প্রকৃতি সংরক্ষণ, স্থানীয় কর্মসংস্থান ও স্বচ্ছ আতিথেয়তার প্রতিশ্রুতি।' : 'Built upon safety, sustainability, community pride, and genuine hospitality.';
+
+      const p1T = document.getElementById('p1-title');
+      const p1D = document.getElementById('p1-desc');
+      const p1Tg = document.getElementById('p1-tag');
+      if (p1T) p1T.textContent = isBn ? 'আপসহীন ট্রেইল নিরাপত্তা' : 'Uncompromising Trail Safety';
+      if (p1D) p1D.textContent = isBn ? 'গভীর ওয়াটারফল কূপে লাইফ জ্যাকেট, পিচ্ছিল পাহাড়ি খাড়াইয়ে ট্র্যাকিং পোল এবং প্রতিটি ট্রিপে ফার্স্ট-এইড কিট সরবরাহ করা হয়। আমাদের গাইডরা ট্রেইলে নামার আগে আবহাওয়া ও পানির প্রবাহ যাচাই করে নেয়।' : 'We provide life jackets for deep waterfall pools, trekking poles for slippery mud slopes, and wilderness first-aid kits on every expedition. Our guides monitor real-time weather and flash-flood water levels before entering canyon gorges.';
+      if (p1Tg) p1Tg.innerHTML = `<span class="material-symbols-outlined text-sm">check_circle</span> ${isBn ? 'জরুরি ফার্স্ট-এইড ও উদ্ধার প্রস্তুতি' : '100% Wilderness First-Aid Ready'}`;
+
+      const p2T = document.getElementById('p2-title');
+      const p2D = document.getElementById('p2-desc');
+      const p2Tg = document.getElementById('p2-tag');
+      if (p2T) p2T.textContent = isBn ? 'প্রকৃতি সংরক্ষণ ও নো-ট্রেইস পলিসি' : 'Leave-No-Trace Eco Ethics';
+      if (p2D) p2D.textContent = isBn ? 'সীতাকুণ্ডের নির্মল ঝর্ণা, পাহাড় ও বন্যপ্রাণী ভবিষ্যৎ প্রজন্মের জন্য অক্ষত রাখা আমাদের দায়িত্ব। আমরা প্লাস্টিক বর্জ্য ফেলা কঠোরভাবে নিরুৎসাহিত করি এবং ট্রেইল পরিচ্ছন্নতা অভিযান পরিচালনা করি।' : 'Sitakunda\'s pristine springs, lush flora, and wildlife must be preserved for future generations. We enforce a zero-plastic dumping policy, equip our groups with waste collection bags, and never permit harm to forest habitats.';
+      if (p2Tg) p2Tg.innerHTML = `<span class="material-symbols-outlined text-sm">eco</span> ${isBn ? 'দায়িত্বশীল ইকো-ট্যুরিজম' : 'Eco-Conscious Outdoor Standards'}`;
+
+      const p3T = document.getElementById('p3-title');
+      const p3D = document.getElementById('p3-desc');
+      const p3Tg = document.getElementById('p3-tag');
+      if (p3T) p3T.textContent = isBn ? 'স্থানীয় পাহাড়িদের ক্ষমতায়ন' : 'Empowering Local Indigenous Youth';
+      if (p3D) p3D.textContent = isBn ? 'আমাদের সকল ট্রেইল গাইড ও ফিল্ড কো-অর্ডিনেটর সীতাকুণ্ডের স্থানীয় সন্তান। আপনার ভ্রমণের মাধ্যমে সরাসরি উপকৃত হয় সীতাকুণ্ডের পাহাড়ি পরিবার, ক্ষুদ্র ব্যবসায়ী এবং গ্রামীণ কটেজ মালিকরা।' : '100% of our mountain guides and field coordinators are native youth born in Sitakunda. By partnering with EZ Trails, tourism spending directly benefits rural families, traditional cooks, and locally owned cottage homestays.';
+      if (p3Tg) p3Tg.innerHTML = `<span class="material-symbols-outlined text-sm">volunteer_activism</span> ${isBn ? 'শতভাগ স্থানীয় তরুণদের দ্বারা পরিচালিত' : '100% Native Community Owned'}`;
+
+      const p4T = document.getElementById('p4-title');
+      const p4D = document.getElementById('p4-desc');
+      const p4Tg = document.getElementById('p4-tag');
+      if (p4T) p4T.textContent = isBn ? 'লুকানো খরচহীন ১০০% স্বচ্ছতা' : 'Zero Hidden Fees & Transparency';
+      if (p4D) p4D.textContent = isBn ? 'সীতাকুণ্ড পৌঁছে কোনো অনাকাঙ্ক্ষিত খরচ বা দালালের অতিরিক্ত দাবি থাকবে না। খাবার, যাতায়াত, গাইড ফি এবং রুমের খরচ আগে থেকেই সুস্পষ্টভাবে নির্ধারিত।' : 'No unexpected broker commissions or unstated charges at the destination. Every package clearly outlines meals, private transport, guide fees, and resort rooms in advance. What you see is exactly what you get.';
+      if (p4Tg) p4Tg.innerHTML = `<span class="material-symbols-outlined text-sm">lock</span> ${isBn ? 'গ্যারান্টিযুক্ত স্বচ্ছ প্যাকেজ রেট' : 'Guaranteed Transparent Pricing'}`;
+
+      // Contact Form Texts
+      const cBadge = document.getElementById('contact-badge');
+      const cTitle = document.getElementById('contact-title');
+      const cDesc = document.getElementById('contact-desc');
+      const fHead = document.getElementById('form-heading');
+      const fSub = document.getElementById('form-subheading');
+      const lName = document.getElementById('lbl-name');
+      const lPhone = document.getElementById('lbl-phone');
+      const lTopic = document.getElementById('lbl-topic');
+      const lMsg = document.getElementById('lbl-msg');
+      const bSubText = document.getElementById('btn-submit-text');
+
+      if (cBadge) cBadge.textContent = isBn ? 'সরাসরি যোগাযোগ ডেস্ক' : 'Direct Communication Desk';
+      if (cTitle) cTitle.textContent = isBn ? 'ইজেড ট্রেইলসের সাথে যোগাযোগ করুন' : 'Connect with EZ Trails Sitakunda';
+      if (cDesc) cDesc.textContent = isBn ? 'ট্যুর প্যাকেজ, কাস্টম ডেট বা বড় টিমের আয়োজনের ব্যাপারে যেকোনো প্রশ্ন থাকলে আমাদের জানান।' : 'Have a question about trails, customized dates, or corporate group bookings? We are here 7 days a week.';
+      if (fHead) fHead.textContent = isBn ? 'বার্তা পাঠান' : 'Send Us a Direct Message';
+      if (fSub) fSub.textContent = isBn ? 'আমাদের কো-অর্ডিনেটর দ্রুত ফোন বা হোয়াটসঅ্যাপে যোগাযোগ করবেন।' : 'Our coordinator responds via WhatsApp / Call within minutes.';
+      if (lName) lName.innerHTML = `${isBn ? 'আপনার পূর্ণ নাম' : 'Your Full Name'} <span class="text-rose-500">*</span>`;
+      if (lPhone) lPhone.innerHTML = `${isBn ? 'হোয়াটসঅ্যাপ / মোবাইল নম্বর' : 'WhatsApp / Phone Number'} <span class="text-rose-500">*</span>`;
+      if (lTopic) lTopic.textContent = isBn ? 'অনুসন্ধানের বিষয় / টপিক' : 'Inquiry Type / Topic';
+      if (lMsg) lMsg.innerHTML = `${isBn ? 'আপনার বার্তা / প্রশ্ন' : 'Your Message / Query Details'} <span class="text-rose-500">*</span>`;
+      if (bSubText) bSubText.textContent = isBn ? 'বার্তা পাঠান' : 'Send Message to Coordinator';
+
+      // Office cards
+      const cOffT = document.getElementById('card-office-title');
+      const cOffD = document.getElementById('card-office-desc');
+      const cOffN = document.getElementById('card-office-note');
+      const cPhT = document.getElementById('card-phone-title');
+      const cEmT = document.getElementById('card-email-title');
+      const cWaT = document.getElementById('card-wa-text');
+      if (cOffT) cOffT.textContent = isBn ? 'অফিস ও মূল হাব' : 'Physical Base & Office Hub';
+      if (cOffD) cOffD.textContent = isBn ? 'সীতাকুণ্ড বাস স্টেশন, ঢাকা-চট্টগ্রাম হাইওয়ে, সীতাকুণ্ড, চট্টগ্রাম।' : 'Sitakund Bus Station, Sitakunda Highway, Chattogram, Bangladesh.';
+      if (cOffN) cOffN.textContent = isBn ? 'হাইওয়ের ঠিক পাশেই আমাদের ট্রাভেলার রিসিভিং ও ব্রিফিং লাউঞ্জ।' : 'Convenient pickup & briefing lounge right next to Dhaka-Chittagong Highway.';
+      if (cPhT) cPhT.textContent = isBn ? 'জরুরি হটলাইন নম্বর' : 'Official Hotline Numbers';
+      if (cEmT) cEmT.textContent = isBn ? 'ইমেইল যোগাযোগ' : 'Email Correspondence';
+      if (cWaT) cWaT.textContent = isBn ? 'হোয়াটসঅ্যাপে কো-অর্ডিনেটরের সাথে চ্যাট করুন' : 'Chat with Ground Coordinator on WhatsApp';
+
+      // FAQs
+      const fBadge = document.getElementById('faq-badge');
+      const fTitle = document.getElementById('faq-title');
+      const fSubt = document.getElementById('faq-subtitle');
+      if (fBadge) fBadge.textContent = isBn ? 'সাধারণ জিজ্ঞাসা' : 'Common Queries';
+      if (fTitle) fTitle.textContent = isBn ? 'সচরাচর জিজ্ঞাসিত প্রশ্নোত্তর (FAQ)' : 'Frequently Asked Questions';
+      if (fSubt) fSubt.textContent = isBn ? 'ইজেড ট্রেইলসের সাথে সীতাকুণ্ড ভ্রমণ সংক্রান্ত সকল তথ্য।' : 'Everything you need to know about traveling Sitakunda with EZ Trails.';
+
+      const q1 = document.getElementById('faq-q1');
+      const a1 = document.getElementById('faq-a1');
+      const q2 = document.getElementById('faq-q2');
+      const a2 = document.getElementById('faq-a2');
+      const q3 = document.getElementById('faq-q3');
+      const a3 = document.getElementById('faq-a3');
+      const q4 = document.getElementById('faq-q4');
+      const a4 = document.getElementById('faq-a4');
+
+      if (q1) q1.textContent = isBn ? 'সীতাকুণ্ডের ঝর্ণা ট্রেইলে অভিজ্ঞ গাইড কেন জরুরি?' : 'Why do I need a certified guide for Sitakunda waterfalls?';
+      if (a1) a1.textContent = isBn ? 'খৈয়াছড়া, নাপিত্তাছড়া কিংবা ঝরঝরির মতো ঝর্ণাগুলো খাড়া ও পিচ্ছিল পাথুরে গিরিখাতে অবস্থিত। বর্ষায় যেকোনো সময় হঠাৎ পাহাড়ি ঢল (হড়কা বান) নামতে পারে। আমাদের প্রশিক্ষিত গাইডরা পাহাড়ি পথের প্রতিটি ধাপ চেনে, সঙ্গে লাইফ জ্যাকেট ও ফার্স্ট-এইড কিট বহন করে এবং দুর্ঘটনা থেকে শতভাগ সুরক্ষা দেয়।' : 'Sitakunda\'s cascades (especially Khaiyachora, Napittachora, and Jhorjhori) involve narrow slippery rock crevices, deep natural plunge pools, and unpredictable water surges during rain. Certified EZ Trails guides know every footing, carry life jackets and first-aid kits, and prevent wrong trail detours.';
+
+      if (q2) q2.textContent = isBn ? 'ইজেড ট্রেইলস কি নারী ট্রাভেলার ও পরিবারের জন্য নিরাপদ?' : 'Is EZ Trails suitable for solo female travelers and families?';
+      if (a2) a2.textContent = isBn ? 'হ্যাঁ, শতভাগ নিরাপদ। আমাদের ফ্যামিলি-কমফোর্ট ট্রিপ এবং সোলো ফিমেল ট্রাভেলারদের জন্য আলাদা নিরাপত্তা ও শালীন পরিবেশ বজায় রাখা হয়। আমাদের কো-অর্ডিনেটর ও গাইডরা সুশিক্ষিত ও বিনয়ী।' : 'Yes, 100%. We have tailored family-comfort packages and dedicated protocols for solo female adventurers. Our coordinators are thoroughly vetted, polite, and maintain zero tolerance for harassment, ensuring a safe, respectful, and dignified journey.';
+
+      if (q3) q3.textContent = isBn ? 'সীতাকুণ্ডে আমাদের কোথায় রিসিভ করা হবে?' : 'Where will the EZ Trails coordinator meet us?';
+      if (a3) a3.textContent = isBn ? 'আপনি যে মাধ্যমেই আসুন না কেন — সীতাকুণ্ড বাস স্টেশন, সীতাকুণ্ড রেলস্টেশন কিংবা হাইওয়ে বাইপাস স্ট্যান্ড থেকে আমাদের কো-অর্ডিনেটর আপনাকে সরাসরি রিসিভ করে ফ্রেশ হওয়ার বেস স্টেশনে নিয়ে যাবেন।' : 'Our team receives you directly from your arrival point in Sitakunda — whether it\'s Sitakunda Bus Station, Sitakunda Railway Station, or the Highway Bypass Stand. We handle your luggage transition to the base station immediately.';
+
+      if (q4) q4.textContent = isBn ? 'কীভাবে বুকিং করব বা কাস্টম প্যাকেজ প্ল্যান বানাব?' : 'How do I book or request a customized itinerary?';
+      if (a4) a4.innerHTML = isBn
+        ? 'আমাদের ওয়েবসাইটের <a href="/booking" class="text-emerald-800 font-bold hover:underline">ইনস্ট্যান্ট বুকিং পেজ</a> থেকে মাত্র ২ মিনিটে বুকিং করতে পারেন, <a href="/planner" class="text-emerald-800 font-bold hover:underline">ট্রিপ প্ল্যানার</a> দিয়ে নিজের পছন্দমতো ট্যুর কাস্টমাইজ করতে পারেন অথবা সরাসরি আমাদের হটলাইন/হোয়াটসঅ্যাপে (<strong>01939627110</strong>) মেসেজ দিতে পারেন।'
+        : 'You can book directly in 2 minutes on our <a href="/booking" class="text-emerald-800 font-bold hover:underline">Instant Booking Page</a>, build a custom plan via <a href="/planner" class="text-emerald-800 font-bold hover:underline">Trip Planner</a>, or simply message our coordinator on WhatsApp at <strong>01939627110</strong>.';
+    }
+
+    // Auto-init on DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', () => {
+      applyAboutTranslations();
+    });
+  </script>
 </body>
 </html>
-
-

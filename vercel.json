@@ -40,6 +40,10 @@
       "destination": "/public/contact.html"
     },
     {
+      "source": "/about",
+      "destination": "/public/contact.html"
+    },
+    {
       "source": "/booking",
       "destination": "/public/booking.html"
     },

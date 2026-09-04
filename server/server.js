@@ -119,6 +119,11 @@ cleanRoutes.forEach(route => {
   });
 });
 
+// Alias /about directly to contact.html
+app.get(['/about', '/about.html'], (req, res) => {
+  res.sendFile(path.join(staticPath, 'contact.html'));
+});
+
 // Serve Frontend Static files from 'public' directory (with clean extensionless URL support)
 app.use(express.static(staticPath, { extensions: ['html', 'htm'] }));
 
