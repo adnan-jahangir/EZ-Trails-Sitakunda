@@ -41,10 +41,11 @@ app.use(
 // 2. CORS — Cross-Origin Resource Sharing
 app.use(cors());
 
-// 3. Rate Limiting — Global: 200 requests per 15 minutes per IP
+// 3. Rate Limiting — Global (Skipped for localhost dev / admin)
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 200,
+  max: process.env.NODE_ENV === 'production' ? 1000 : 10000,
+  skip: (req) => req.ip === '127.0.0.1' || req.ip === '::1' || req.ip === '::ffff:127.0.0.1' || req.headers['x-forwarded-for'] === '127.0.0.1',
   standardHeaders: true,
   legacyHeaders: false,
   message: {

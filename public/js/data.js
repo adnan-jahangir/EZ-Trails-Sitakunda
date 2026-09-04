@@ -1063,7 +1063,11 @@ var TOURSTK = {
       package: 'Sitakunda Classic Day Tour',
       rating: 5,
       initials: 'TH',
-      text: 'Tourstk made our Chandranath sunrise and Guliakhali trip completely hassle-free. The AC microbus was on time, the local food was great, and our guide knew the safest trail routes.'
+      text: 'Tourstk made our Chandranath sunrise and Guliakhali trip completely hassle-free. The AC microbus was on time, the local food was great, and our guide knew the safest trail routes.',
+      images: [
+        { url: 'images/spots/chandranath-hill.jpg' },
+        { url: 'images/spots/guliakhali-sea-beach.jpg' }
+      ]
     },
     {
       name: 'Nusrat Jahan & Family',
@@ -1071,7 +1075,11 @@ var TOURSTK = {
       package: 'Family Comfort Sitakunda Day Out',
       rating: 5,
       initials: 'NJ',
-      text: 'Traveled with my elderly parents and kids. Everything was smooth—no exhausting walks, direct car access to Eco Park, and the coordinator was super attentive.'
+      text: 'Traveled with my elderly parents and kids. Everything was smooth—no exhausting walks, direct car access to Eco Park, and the coordinator was super attentive.',
+      images: [
+        { url: 'images/spots/bhatiari-lake.jpg' },
+        { url: 'images/spots/dc-park.jpg' }
+      ]
     },
     {
       name: 'Rashedul Karim',
@@ -1079,7 +1087,12 @@ var TOURSTK = {
       package: 'Khaiyachora Extreme Waterfall Trek',
       rating: 5,
       initials: 'RK',
-      text: 'Our guide was certified and carried safety ropes. Khaiyachora 9-step climb was thrilling and safe. We will definitely book with Tourstk again!'
+      text: 'Our guide was certified and carried safety ropes. Khaiyachora 9-step climb was thrilling and safe. We will definitely book with Tourstk again!',
+      images: [
+        { url: 'images/spots/khaiyachora-waterfall.jpg' },
+        { url: 'images/spots/jhorjhori-trail.jpg' },
+        { url: 'images/spots/napittachora-trail.jpg' }
+      ]
     }
   ]
 };
@@ -1182,6 +1195,23 @@ const BookingManager = {
     });
   }
 };
+
+// Ensure destinations are sequence-sorted by category:
+// 1. Hills & Peaks -> 2. Waterfalls & Treks -> 3. Beaches & Coastlines -> 4. Lakes & Kayaking -> 5. Heritage & Springs
+if (typeof TOURSTK !== 'undefined' && Array.isArray(TOURSTK.destinations)) {
+  const _catSeq = [
+    'Hills & Peaks',
+    'Waterfalls & Treks',
+    'Beaches & Coastlines',
+    'Lakes & Kayaking',
+    'Heritage & Springs'
+  ];
+  TOURSTK.destinations.sort((a, b) => {
+    const ia = _catSeq.indexOf(a.category);
+    const ib = _catSeq.indexOf(b.category);
+    return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
+  });
+}
 
 if (typeof window !== 'undefined') {
   window.TOURSTK = TOURSTK;

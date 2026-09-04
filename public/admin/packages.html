@@ -2,95 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manage Packages — Tourstk Admin</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/design-system.css">
-  <link rel="stylesheet" href="../css/components.css">
-  <link rel="stylesheet" href="../css/layout.css">
-  <link rel="stylesheet" href="../css/pages.css">
-  <style>
-    .admin-nav{background:var(--color-surface);border-bottom:1px solid var(--color-border-light);padding:var(--space-2) 0;position:sticky;top:0;z-index:var(--z-sticky)}
-    .admin-nav-inner{max-width:var(--container-max);margin:0 auto;padding:0 var(--margin-mobile);display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);flex-wrap:wrap}
-    .admin-nav-links{display:flex;gap:var(--space-1);overflow-x:auto;padding-bottom:2px}
-    .admin-nav-link{padding:var(--space-1) var(--space-3);border-radius:var(--radius-md);font-size:var(--text-xs);font-weight:var(--weight-medium);color:var(--color-text-secondary);transition:all 0.15s;white-space:nowrap}
-    .admin-nav-link:hover{background:var(--color-sand);color:var(--color-text)}
-    .admin-nav-link.active{background:var(--color-primary-surface);color:var(--color-primary);font-weight:var(--weight-semibold)}
-    .table-wrapper{overflow-x:auto;width:100%;-webkit-overflow-scrolling:touch}
-  </style>
-</head>
-<body>
-  <nav class="admin-nav">
-    <div class="admin-nav-inner">
-      <a href="../index.html" class="navbar-logo">
-        <div class="navbar-logo-icon" style="width:32px;height:32px;font-size:16px"><span class="material-symbols-outlined" style="font-size:18px">landscape</span></div>
-        <div><span class="navbar-logo-text" style="font-size:var(--text-lg)">Tourstk</span><span class="navbar-logo-sub">Admin</span></div>
-      </a>
-      <div class="admin-nav-links">
-        <a href="index.html" class="admin-nav-link">Dashboard</a>
-        <a href="bookings.html" class="admin-nav-link">Bookings</a>
-        <a href="packages.html" class="admin-nav-link active">Packages</a>
-        <a href="custom-requests.html" class="admin-nav-link">Custom</a>
-      </div>
-      <a href="../index.html" class="btn btn-ghost btn-sm"><span class="material-symbols-outlined" style="font-size:16px">open_in_new</span> View Site</a>
-    </div>
-  </nav>
-
-  <section class="section-sm">
-    <div class="container">
-      <div class="flex justify-between items-center mb-6">
-        <h1 style="font-size:var(--text-2xl)">Package Management</h1>
-        <span class="text-sm text-muted">Packages are defined in data.js — this view is read-only for now</span>
-      </div>
-
-      <div class="table-wrapper">
-        <table class="admin-table" id="packages-table">
-          <thead>
-            <tr>
-              <th>Package</th>
-              <th>Type</th>
-              <th>Duration</th>
-              <th>Price</th>
-              <th>Max Travelers</th>
-              <th>Destinations</th>
-              <th>Inclusions</th>
-              <th>View</th>
-            </tr>
-          </thead>
-          <tbody id="packages-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-
-  <script src="../js/data.js"></script>
+  <meta http-equiv="refresh" content="0; url=index.html?tab=packages">
+  <title>Redirecting to Package Management...</title>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const tbody = document.getElementById('packages-tbody');
-      tbody.innerHTML = TOURSTK.packages.map(pkg => `
-        <tr>
-          <td>
-            <div style="display:flex;align-items:center;gap:var(--space-3)">
-              <img src="${pkg.image}" alt="${pkg.name}" style="width:48px;height:36px;border-radius:var(--radius-sm);object-fit:cover" onerror="this.style.background='var(--color-sand)'">
-              <div>
-                <div style="font-weight:var(--weight-semibold);font-size:var(--text-sm)">${pkg.name}</div>
-                ${pkg.badge ? `<span class="card-tag" style="font-size:9px;padding:1px 6px">${pkg.badge}</span>` : ''}
-              </div>
-            </div>
-          </td>
-          <td style="font-size:var(--text-xs)">${pkg.type}</td>
-          <td>${pkg.duration}</td>
-          <td style="font-weight:var(--weight-semibold)">৳${pkg.price.toLocaleString()}</td>
-          <td>${pkg.maxTravelers}</td>
-          <td style="font-size:var(--text-xs)">${pkg.destinations.length} places</td>
-          <td style="font-size:var(--text-xs)">${pkg.included.slice(0, 3).join(', ')}${pkg.included.length > 3 ? '...' : ''}</td>
-          <td><a href="../package-detail.html?id=${pkg.id}" class="btn btn-ghost btn-sm" target="_blank"><span class="material-symbols-outlined" style="font-size:16px">open_in_new</span></a></td>
-        </tr>
-      `).join('');
-    });
+    window.location.replace('index.html?tab=packages');
   </script>
+</head>
+<body style="font-family: sans-serif; text-align: center; padding: 50px;">
+  <p>Redirecting to Tourstk Package Management Hub...</p>
+  <p><a href="index.html?tab=packages">Click here if you are not redirected automatically.</a></p>
 </body>
 </html>

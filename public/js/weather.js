@@ -115,11 +115,12 @@
 
     const widget = document.createElement('div');
     widget.id = 'sitakunda-floating-weather';
-    widget.className = 'fixed bottom-6 left-6 z-40 font-body';
+    const hasBottomBar = !!(document.getElementById('mobile-sticky-summary-bar') || document.querySelector('.mobile-bottom-bar'));
+    widget.className = `fixed ${hasBottomBar ? 'bottom-20 lg:bottom-6' : 'bottom-6'} left-3 sm:left-6 z-30 font-body transition-all duration-300`;
 
     widget.innerHTML = `
       <!-- POPUP DETAILS CARD (Toggled on click) -->
-      <div id="weather-popup-card" class="hidden mb-3 w-80 bg-white/95 backdrop-blur-xl rounded-3xl border border-slate-200/80 shadow-2xl p-5 text-slate-800 transition-all duration-300 transform origin-bottom-left animate-in fade-in slide-in-from-bottom-3">
+      <div id="weather-popup-card" class="hidden mb-3 w-80 max-w-[calc(100vw-2rem)] bg-white/95 backdrop-blur-xl rounded-3xl border border-slate-200/80 shadow-2xl p-5 text-slate-800 transition-all duration-300 transform origin-bottom-left animate-in fade-in slide-in-from-bottom-3">
         <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
           <div class="flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
@@ -168,15 +169,20 @@
         </div>
       </div>
 
-      <!-- SLEEK CORNER PILL BUTTON (Always visible at bottom-left) -->
-      <button onclick="toggleWeatherPopup()" class="group flex items-center gap-2.5 bg-slate-900/90 hover:bg-slate-900 text-white px-4 py-2.5 rounded-full shadow-lg hover:shadow-2xl border border-white/20 backdrop-blur-md transition-all duration-300 hover:scale-105 cursor-pointer" title="Click for Sitakunda Live Weather & Trail Advisory">
-        <span class="material-symbols-outlined text-lg text-amber-400 group-hover:rotate-12 transition-transform">${weather.icon}</span>
-        <div class="text-left flex items-center gap-1.5 text-xs font-bold">
-          <span>${weather.temp}°C</span>
-          <span class="text-slate-400 font-normal hidden sm:inline">• Sitakunda</span>
-        </div>
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse ml-0.5"></span>
-      </button>
+      <!-- SLEEK CORNER PILL BUTTON (With dismiss button) -->
+      <div class="flex items-center gap-1.5">
+        <button onclick="toggleWeatherPopup()" class="group flex items-center gap-2 bg-slate-900/90 hover:bg-slate-900 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-full shadow-lg hover:shadow-2xl border border-white/20 backdrop-blur-md transition-all duration-300 hover:scale-105 cursor-pointer text-xs font-bold" title="Click for Sitakunda Live Weather & Trail Advisory">
+          <span class="material-symbols-outlined text-base sm:text-lg text-amber-400 group-hover:rotate-12 transition-transform">${weather.icon}</span>
+          <div class="text-left flex items-center gap-1.5">
+            <span>${weather.temp}°C</span>
+            <span class="text-slate-400 font-normal hidden sm:inline">• Sitakunda</span>
+          </div>
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse ml-0.5"></span>
+        </button>
+        <button type="button" onclick="document.getElementById('sitakunda-floating-weather').style.display='none'" class="w-6 h-6 rounded-full bg-slate-900/80 hover:bg-slate-900 text-slate-300 hover:text-white flex items-center justify-center text-[10px] transition-colors border border-white/10 shadow-sm cursor-pointer" title="Hide weather widget">
+          ✕
+        </button>
+      </div>
     `;
 
     document.body.appendChild(widget);

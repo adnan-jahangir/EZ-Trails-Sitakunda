@@ -154,7 +154,7 @@ const guideSchema = z.object({
 const reviewSchema = z.object({
   customerName: z.string().min(2, 'Name is required').max(100),
   tourPackage: z.string().max(200).optional(),
-  rating: z.number().int().min(1).max(5),
+  rating: z.coerce.number().int().min(1).max(5),
   reviewText: z.string().min(5, 'Review must be at least 5 characters').max(2000),
 });
 

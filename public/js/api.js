@@ -51,9 +51,11 @@ const TourstkAPI = {
   async request(endpoint, options = {}) {
     const url = `${this.baseUrl}${endpoint}`;
     const headers = {
-      'Content-Type': 'application/json',
       ...options.headers,
     };
+    if (!(typeof FormData !== 'undefined' && options.body instanceof FormData)) {
+      headers['Content-Type'] = headers['Content-Type'] || 'application/json';
+    }
 
     const token = this.getToken();
     if (token) {
@@ -322,10 +324,11 @@ const TourstkAPI = {
   },
 
   async createReview(data) {
+    const isFormData = typeof FormData !== 'undefined' && data instanceof FormData;
     return await this.request('/reviews', {
       method: 'POST',
-      body: JSON.stringify(data),
-      authRequired: true,
+      body: isFormData ? data : JSON.stringify(data),
+      authRequired: false,
     });
   },
 
@@ -486,7 +489,7 @@ const TourstkAPI = {
   async fetchAndSyncPackages() {
     try {
       const res = await this.getPackages();
-      if (res?.success && Array.isArray(res.data) && res.data.length > 0) {
+      if (res?.success && Array.isArray(res.data)) {
         const normalized = res.data.map(p => this.normalizePackage(p)).filter(Boolean);
         if (typeof window.TOURSTK !== 'undefined') {
           window.TOURSTK.packages = normalized;
@@ -541,6 +544,18 @@ const TourstkAPI = {
       const res = await this.getDestinations();
       if (res?.success && Array.isArray(res.data) && res.data.length > 0) {
         const normalized = res.data.map(d => this.normalizeDestination(d)).filter(Boolean);
+        const _catSeq = [
+          'Hills & Peaks',
+          'Waterfalls & Treks',
+          'Beaches & Coastlines',
+          'Lakes & Kayaking',
+          'Heritage & Springs'
+        ];
+        normalized.sort((a, b) => {
+          const ia = _catSeq.indexOf(a.category);
+          const ib = _catSeq.indexOf(b.category);
+          return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
+        });
         if (typeof window.TOURSTK !== 'undefined') {
           window.TOURSTK.destinations = normalized;
         }
@@ -618,6 +633,7 @@ const TourstkAPI = {
       reviewText: r.reviewText || r.text || '',
       role: r.role || 'Verified Traveler',
       initials: name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase(),
+      images: Array.isArray(r.images) ? r.images : [],
       createdAt: r.createdAt || new Date().toISOString(),
       isApproved: r.isApproved !== false,
     };
@@ -626,7 +642,7 @@ const TourstkAPI = {
   async fetchAndSyncReviews() {
     try {
       const res = await this.getReviews();
-      if (res?.success && Array.isArray(res.data) && res.data.length > 0) {
+      if (res?.success && Array.isArray(res.data)) {
         const normalized = res.data.map(r => this.normalizeReview(r)).filter(Boolean);
         if (typeof window.TOURSTK !== 'undefined') {
           window.TOURSTK.reviews = normalized;

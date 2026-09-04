@@ -315,11 +315,14 @@
 
           <!-- INTERACTIVE GALLERY & 4K CINEMA STAGE -->
           <div class="mb-12">
-            <!-- Main Display Screen with Ambient Backdrop (100% full photo visible, no cutting in half!) -->
-            <div class="rounded-3xl overflow-hidden shadow-xl border border-slate-200 relative group bg-slate-950 min-h-[380px] sm:min-h-[500px] max-h-[620px] flex items-center justify-center p-3 sm:p-5" id="dest-main-media-box">
+            <!-- Main Display Screen with Ambient Backdrop & Crisp Hero Stage -->
+            <div class="rounded-3xl overflow-hidden shadow-2xl border border-slate-200/90 relative group bg-slate-950 aspect-[16/10] sm:aspect-[16/9] md:h-[480px] w-full flex items-center justify-center p-3 sm:p-4 transition-all" id="dest-main-media-box">
               
-              <!-- Ambient Blurred Backdrop -->
-              <div id="dest-hero-ambient-blur" class="absolute inset-0 bg-cover bg-center blur-3xl opacity-40 scale-110 pointer-events-none transition-all duration-700" style="background-image: url('${initialMedia.thumb || initialMedia.src}');"></div>
+              <!-- Ambient Blurred Backdrop (Vibrant color-matched atmospheric glow) -->
+              <div id="dest-hero-ambient-blur" class="absolute inset-0 bg-cover bg-center blur-3xl opacity-80 scale-125 brightness-90 pointer-events-none transition-all duration-700" style="background-image: url('${initialMedia.thumb || initialMedia.src}');"></div>
+              
+              <!-- Frosted Glass Vignette Overlay (Soft depth) -->
+              <div class="absolute inset-0 bg-slate-950/30 backdrop-blur-[2px] pointer-events-none z-0"></div>
 
               <!-- Duration Badge on Top Left -->
               <div class="absolute top-4 left-4 bg-black/70 backdrop-blur-md text-white text-xs font-bold px-3.5 py-1.5 rounded-xl shadow-md z-20 flex items-center gap-1.5 border border-white/10">
@@ -327,15 +330,27 @@
                 <span>${dest.duration || '2 Days • 1 Night'}</span>
               </div>
 
-              <!-- Main Image Element (object-contain ensures complete photo is shown, no harsh crop or zoom pixelation) -->
-              <img id="dest-hero-main-img" src="${initialMedia.src}" alt="${dest.name}" class="relative z-10 max-h-[360px] sm:max-h-[480px] w-auto max-w-full object-contain rounded-2xl shadow-2xl transition-all duration-500">
+              <!-- Top Right Controls (Fit / Fill Toggle & Fullscreen Lightbox) -->
+              <div class="absolute top-4 right-4 z-20 flex items-center gap-2">
+                <button type="button" onclick="toggleHeroFitMode()" id="hero-fit-toggle-btn" class="bg-black/60 hover:bg-black/85 backdrop-blur-md text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow-md flex items-center gap-1.5 border border-white/20 transition-all cursor-pointer" title="Toggle between Sharp View & Fill Screen">
+                  <span class="material-symbols-outlined text-sm" id="hero-fit-icon">crop_free</span>
+                  <span id="hero-fit-text" class="hidden sm:inline">Fill Screen</span>
+                </button>
+                <button type="button" onclick="openHeroLightbox()" class="bg-black/60 hover:bg-black/85 backdrop-blur-md text-white text-xs font-bold w-8 h-8 rounded-xl shadow-md flex items-center justify-center border border-white/20 transition-all cursor-pointer" title="View Fullscreen Original Quality">
+                  <span class="material-symbols-outlined text-base">fullscreen</span>
+                </button>
+              </div>
+
+              <!-- Main Image Element (100% Crisp Native Clarity, with sleek glass card framing) -->
+              <img id="dest-hero-main-img" src="${initialMedia.src}" alt="${dest.name}" class="relative z-10 max-h-[350px] sm:max-h-[440px] w-auto max-w-[95%] object-contain rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.6)] border border-white/15 transition-all duration-500 cursor-pointer hover:scale-[1.01]" style="image-rendering: -webkit-optimize-contrast;" onclick="openHeroLightbox()">
               
               <!-- Main Video Element -->
-              <video id="dest-hero-main-video" class="relative z-10 max-h-[360px] sm:max-h-[480px] w-auto max-w-full object-contain rounded-2xl shadow-2xl hidden" controls playsinline>
+              <video id="dest-hero-main-video" class="relative z-10 max-h-[350px] sm:max-h-[440px] w-auto max-w-[95%] object-contain rounded-2xl shadow-2xl hidden" controls playsinline>
                 <source id="dest-hero-video-src" src="" type="video/mp4">
               </video>
 
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent pointer-events-none z-10"></div>
+              <!-- Subtle Gradient Overlay for High Contrast Badges -->
+              <div id="dest-hero-gradient" class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-slate-950/20 pointer-events-none z-10 transition-opacity duration-300"></div>
               
               <div class="absolute bottom-6 left-6 flex items-center gap-3 z-20">
                 <span class="bg-white/90 backdrop-blur-md text-primary text-xs font-bold px-4 py-2 rounded-full shadow-sm">
@@ -464,9 +479,10 @@
               </div>
             </div>
 
-            <!-- Leaflet Map Container (Responsive & Compact on Mobile) -->
-            <div class="rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200 shadow-md relative h-[250px] sm:h-[350px] md:h-[430px] mb-8">
-              <div id="dest-map" class="w-full h-full z-10"></div>
+            <!-- Interactive Map Container -->
+            <div class="rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200/90 shadow-xl relative h-[320px] sm:h-[420px] md:h-[480px] mb-8 group">
+              <!-- Live Leaflet Map Container -->
+              <div id="dest-map" class="w-full h-full"></div>
             </div>
 
             <!-- Nearby Spots Grid -->
@@ -478,7 +494,7 @@
 
               <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
                 ${nearbySpots.slice(0, 4).map(spot => `
-                  <div class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-2xs hover:shadow-md transition-all flex flex-col group">
+                  <div class="spot-card bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-2xs hover:shadow-md transition-all flex flex-col group">
                     <div class="relative h-24 sm:h-36 bg-slate-100 overflow-hidden">
                       <img src="${spot.image}" alt="${spot.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                       <span class="absolute top-2 left-2 bg-white/90 backdrop-blur-xs text-primary font-bold text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-full shadow-xs">
@@ -528,13 +544,36 @@
           zoom: isMobile ? 11 : 12,
           scrollWheelZoom: false
         });
+        window.activeDestMap = map;
+        window.activeDestCenter = [currentLat, currentLng];
 
-        // CartoDB Voyager Clean High-Resolution Map Tiles
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-          attribution: '&copy; OpenStreetMap &copy; CARTO',
-          subdomains: 'abcd',
+        // Clean, High-Resolution OpenStreetMap Street View (100% Free - Zero API Key Needed!)
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors',
           maxZoom: 19
         }).addTo(map);
+
+        // Add Floating Bottom-Left Directions & Recenter Control
+        const navControl = L.control({ position: 'bottomleft' });
+        navControl.onAdd = function() {
+          const div = L.DomUtil.create('div', 'leaflet-nav-control-box');
+          L.DomEvent.disableClickPropagation(div);
+          L.DomEvent.disableScrollPropagation(div);
+          div.innerHTML = `
+            <div class="hidden sm:flex items-center gap-2 select-none mb-1">
+              <a href="https://www.google.com/maps/dir/?api=1&destination=${currentLat},${currentLng}" target="_blank" class="bg-white/95 hover:bg-white text-slate-800 text-[11px] font-bold px-3.5 py-2 rounded-xl shadow-md border border-slate-200 flex items-center gap-1.5 hover:text-primary transition-all">
+                <span class="material-symbols-outlined text-sm text-emerald-600">directions</span>
+                <span>Google Maps Directions</span>
+              </a>
+              <button type="button" onclick="recenterMap()" class="bg-white/95 hover:bg-white text-slate-800 text-[11px] font-bold px-3 py-2 rounded-xl shadow-md border border-slate-200 flex items-center gap-1.5 hover:text-primary transition-all cursor-pointer" title="Recenter on this spot">
+                <span class="material-symbols-outlined text-sm text-primary">my_location</span>
+                <span>Recenter</span>
+              </button>
+            </div>
+          `;
+          return div;
+        };
+        navControl.addTo(map);
 
         // Pin each of the 14 destinations on the Map
         TOURSTK.destinations.forEach(spot => {
@@ -603,6 +642,10 @@
       ];
 
       }, 100);
+
+      if (window.TourstkAnimations) {
+        setTimeout(window.TourstkAnimations.refresh, 40);
+      }
     }
 
     window.addEventListener('tourstk:destinations-updated', renderDestinationDetails);
@@ -660,6 +703,64 @@
         }
       }
     }
+
+    let heroFitMode = 'fit'; // 'fit' (100% native clarity, no pixelation) or 'fill' (edge-to-edge)
+
+    function toggleHeroFitMode() {
+      const img = document.getElementById('dest-hero-main-img');
+      const ambient = document.getElementById('dest-hero-ambient-blur');
+      const icon = document.getElementById('hero-fit-icon');
+      const text = document.getElementById('hero-fit-text');
+      if (!img) return;
+
+      if (heroFitMode === 'fit') {
+        heroFitMode = 'fill';
+        img.className = 'absolute inset-0 w-full h-full object-cover transition-all duration-500 cursor-pointer';
+        if (ambient) ambient.className = 'absolute inset-0 bg-cover bg-center blur-2xl opacity-50 scale-110 pointer-events-none transition-all duration-700';
+        if (icon) icon.textContent = 'fit_screen';
+        if (text) text.textContent = 'Sharp View';
+      } else {
+        heroFitMode = 'fit';
+        img.className = 'relative z-10 max-h-[350px] sm:max-h-[440px] w-auto max-w-[95%] object-contain rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.6)] border border-white/15 transition-all duration-500 cursor-pointer hover:scale-[1.01]';
+        img.style.imageRendering = '-webkit-optimize-contrast';
+        if (ambient) ambient.className = 'absolute inset-0 bg-cover bg-center blur-3xl opacity-80 scale-125 brightness-90 pointer-events-none transition-all duration-700';
+        if (icon) icon.textContent = 'crop_free';
+        if (text) text.textContent = 'Fill Screen';
+      }
+    }
+
+    function openHeroLightbox() {
+      const mainImg = document.getElementById('dest-hero-main-img');
+      if (!mainImg || !mainImg.src) return;
+      
+      let lightbox = document.getElementById('dest-hero-lightbox');
+      if (!lightbox) {
+        lightbox = document.createElement('div');
+        lightbox.id = 'dest-hero-lightbox';
+        lightbox.className = 'fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 transition-all animate-in fade-in duration-200';
+        lightbox.onclick = (e) => {
+          if (e.target === lightbox || e.target.closest('#lightbox-close-btn')) {
+            lightbox.classList.add('hidden');
+          }
+        };
+        lightbox.innerHTML = `
+          <button type="button" id="lightbox-close-btn" class="absolute top-5 right-5 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer z-50 shadow-lg">
+            <span class="material-symbols-outlined text-2xl">close</span>
+          </button>
+          <img id="dest-lightbox-img" src="${mainImg.src}" class="max-w-[95vw] max-h-[90vh] object-contain rounded-2xl shadow-2xl" alt="Preview">
+        `;
+        document.body.appendChild(lightbox);
+      } else {
+        const lbImg = document.getElementById('dest-lightbox-img');
+        if (lbImg) lbImg.src = mainImg.src;
+        lightbox.classList.remove('hidden');
+      }
+    }
+
+    window.recenterMap = function() {
+      if (!window.activeDestMap || !window.activeDestCenter) return;
+      window.activeDestMap.setView(window.activeDestCenter, window.innerWidth < 640 ? 12 : 13, { animate: true });
+    };
   </script>
 </body>
 </html>

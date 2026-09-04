@@ -522,6 +522,7 @@
           </div>
         </div>
       `;
+      if (window.TourstkAnimations) setTimeout(window.TourstkAnimations.refresh, 30);
     }
 
     window.addEventListener('tourstk:packages-updated', renderPackageDetails);

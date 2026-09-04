@@ -1269,6 +1269,9 @@
           loadReviews(),
           loadRooms()
         ]);
+        const urlParams = new URLSearchParams(window.location.search);
+        const reqTab = urlParams.get('tab');
+        if (reqTab) switchTab(reqTab);
       } else {
         showLoginGateway();
       }
@@ -2141,20 +2144,22 @@
         if (editId) {
           // UPDATE EXISTING PACKAGE
           await TourstkAPI.updatePackage(editId, payload);
+          alert('Package updated in MongoDB!');
         } else {
           // CREATE NEW PACKAGE
-          payload.packageId = title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Math.floor(100 + Math.random() * 900);
+          const cleanSlug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'pkg';
+          payload.packageId = `${cleanSlug}-${Date.now().toString(36)}`;
+          payload.isActive = true;
           await TourstkAPI.createPackage(payload);
+          alert('Package saved & published to MongoDB Atlas!');
         }
         closeModal('modal-package');
         await loadPackages();
         await TourstkAPI.fetchAndSyncPackages();
         TourstkAPI.broadcastChange('PACKAGE_UPDATED');
       } catch (err) {
-        alert(editId ? 'Package updated!' : 'Package saved!');
-        closeModal('modal-package');
-        await loadPackages();
-        TourstkAPI.broadcastChange('PACKAGE_UPDATED');
+        console.error('Package save error:', err);
+        alert('Failed to save package: ' + (err.message || 'Please verify admin session'));
       }
     }
 
@@ -2594,14 +2599,18 @@
       let reviews = [];
       try {
         const res = await TourstkAPI.getReviews();
-        if (res?.success) reviews = res.data;
+        if (res?.success && Array.isArray(res.data)) reviews = res.data;
       } catch (e) {}
 
       if (!reviews || reviews.length === 0) {
-        reviews = [
-          { customerName: 'Fahim Rahman (Dhaka)', tourPackage: 'Sitakunda Adventure Tour', rating: 5, reviewText: 'Amazing 2 days tour! The sunrise at Chandranath peak was breathtaking.' },
-          { customerName: 'Sadia Chowdhury', tourPackage: 'Student Group Tour', rating: 5, reviewText: 'Best budget-friendly trip with friends! Trek coordinator helped us throughout.' },
-        ];
+        grid.innerHTML = `
+          <div class="col-span-full py-12 text-center text-slate-400 bg-white rounded-2xl border border-slate-200">
+            <span class="material-symbols-outlined text-3xl mb-1 text-slate-300">rate_review</span>
+            <p class="font-bold text-sm text-slate-600">No customer reviews found</p>
+            <p class="text-xs text-slate-400 mt-1">All reviews removed or none submitted yet.</p>
+          </div>
+        `;
+        return;
       }
 
       grid.innerHTML = reviews.map(r => `
@@ -2615,7 +2624,7 @@
             <p class="text-xs text-slate-600 italic">"${r.reviewText}"</p>
           </div>
           <div class="flex justify-end pt-3 border-t border-slate-100 mt-3">
-            <button onclick="deleteReviewItem('${r._id || r.customerName}')" class="text-rose-600 hover:bg-rose-50 p-1.5 rounded-lg flex items-center gap-1 text-xs font-bold">
+            <button onclick="deleteReviewItem('${r._id || r.customerName}', '${(r.customerName || '').replace(/'/g, "\\'")}')" class="text-rose-600 hover:bg-rose-50 p-1.5 rounded-lg flex items-center gap-1 text-xs font-bold cursor-pointer transition-colors">
               <span class="material-symbols-outlined text-base">delete</span>
               Delete
             </button>
@@ -2649,11 +2658,21 @@
       TourstkAPI.broadcastChange('REVIEW_UPDATED');
     }
 
-    async function deleteReviewItem(id) {
-      if (!confirm('Delete this review?')) return;
+    async function deleteReviewItem(id, name) {
+      if (!confirm(`Delete review by "${name || 'Customer'}"?`)) return;
       try {
         await TourstkAPI.deleteReview(id);
-      } catch (e) {}
+      } catch (e) {
+        console.warn('API review delete error:', e);
+      }
+
+      // Also remove from local storage if saved locally
+      try {
+        const custom = JSON.parse(localStorage.getItem('tourstk_custom_reviews') || '[]');
+        const filtered = custom.filter(r => (r._id !== id && (r.customerName || r.name) !== (name || id)));
+        localStorage.setItem('tourstk_custom_reviews', JSON.stringify(filtered));
+      } catch(e) {}
+
       await loadReviews();
       await TourstkAPI.fetchAndSyncReviews();
       TourstkAPI.broadcastChange('REVIEW_UPDATED');

@@ -6,6 +6,12 @@ const reviewSchema = new mongoose.Schema(
     tourPackage: { type: String, default: 'Sitakunda Adventure Tour' },
     rating: { type: Number, default: 5, min: 1, max: 5 },
     reviewText: { type: String, required: true },
+    images: [
+      {
+        url: { type: String, required: true },
+        publicId: { type: String, default: '' },
+      },
+    ],
     isApproved: { type: Boolean, default: true },
   },
   { timestamps: true }

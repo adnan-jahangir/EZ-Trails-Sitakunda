@@ -20,7 +20,8 @@
       theme: {
         extend: {
           colors: {
-            "primary": "#012d1d",
+            "primary": "#0e4d34",
+            "primary-dark": "#073824",
             "primary-container": "#1b4332",
             "primary-light": "#059669",
             "primary-surface": "#ecfdf5",
@@ -38,6 +39,25 @@
     }
   </script>
   <link rel="stylesheet" href="css/animations.css">
+  <style>
+    @media (max-width: 1023px) {
+      #sitakunda-floating-weather {
+        bottom: 5.25rem !important;
+        left: 0.75rem !important;
+        z-index: 30 !important;
+      }
+    }
+    /* Eliminate duplicate dropdown arrows injected by Tailwind forms plugin on custom selects */
+    select.appearance-none,
+    select[class*="appearance-none"],
+    #cust-package,
+    #cust-pickup {
+      background-image: none !important;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+      appearance: none !important;
+    }
+  </style>
   <script src="js/data.js"></script>
   <script src="js/api.js"></script>
 </head>
@@ -208,7 +228,7 @@
                 </label>
                 <div class="relative">
                   <span class="material-symbols-outlined absolute left-3.5 top-3.5 text-slate-400 text-lg pointer-events-none">location_on</span>
-                  <select class="w-full bg-slate-50 border border-slate-200 focus:border-primary rounded-2xl pl-10 pr-10 py-3 text-xs sm:text-sm font-semibold text-slate-800 focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none transition-colors cursor-pointer appearance-none" id="cust-pickup">
+                  <select class="w-full bg-slate-50 border border-slate-200 focus:border-primary rounded-2xl pl-10 pr-10 py-3 text-xs sm:text-sm font-semibold text-slate-800 focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none transition-colors cursor-pointer appearance-none !bg-none" id="cust-pickup" style="background-image: none !important;">
                     <option value="Sitakunda Bus Station" selected>📍 Sitakunda Bus Station</option>
                     <option value="Sitakunda Highway Bypass Stand">📍 Sitakunda Highway Bypass Stand</option>
                     <option value="Sitakunda Railway Station">📍 Sitakunda Railway Station</option>
@@ -254,7 +274,7 @@
                   </a>
                 </div>
                 <div class="relative">
-                  <select id="cust-package" onchange="onPackageSelectChange()" class="w-full bg-slate-50 border border-slate-200 focus:border-primary rounded-2xl px-4 py-3.5 text-xs font-bold text-slate-800 focus:bg-white focus:ring-4 focus:ring-primary/10 outline-none transition-all cursor-pointer appearance-none pr-10">
+                  <select id="cust-package" onchange="onPackageSelectChange()" class="w-full bg-slate-50 border border-slate-200 focus:border-primary rounded-2xl px-4 py-3.5 text-xs font-bold text-slate-800 focus:bg-white focus:ring-4 focus:ring-primary/10 outline-none transition-all cursor-pointer appearance-none !bg-none pr-10" style="background-image: none !important;">
                     <!-- Populated via JS -->
                   </select>
                   <div class="absolute inset-y-0 right-0 flex items-center pr-3.5 pointer-events-none text-slate-400">
@@ -283,10 +303,10 @@
 
                 <!-- Quick Presets -->
                 <div class="grid grid-cols-4 gap-1.5 text-center">
-                  <button type="button" id="btn-preset-1" onclick="setBookingTravelers(1)" class="book-preset-btn py-1.5 rounded-xl border border-slate-200 text-[11px] font-bold text-slate-600 hover:border-primary hover:text-primary transition-all">1 Solo</button>
-                  <button type="button" id="btn-preset-2" onclick="setBookingTravelers(2)" class="book-preset-btn active py-1.5 rounded-xl border-2 border-primary bg-primary text-white text-[11px] font-bold transition-all">2 Duo</button>
-                  <button type="button" id="btn-preset-4" onclick="setBookingTravelers(4)" class="book-preset-btn py-1.5 rounded-xl border border-slate-200 text-[11px] font-bold text-slate-600 hover:border-primary hover:text-primary transition-all">4 Group</button>
-                  <button type="button" id="btn-preset-8" onclick="setBookingTravelers(8)" class="book-preset-btn py-1.5 rounded-xl border border-slate-200 text-[11px] font-bold text-slate-600 hover:border-primary hover:text-primary transition-all">8+ Team</button>
+                  <button type="button" id="btn-preset-1" data-count="1" onclick="setBookingTravelers(1)" class="book-preset-btn py-1.5 rounded-xl border border-slate-200 text-[11px] font-bold text-slate-600 hover:border-primary hover:text-primary transition-all">1 Solo</button>
+                  <button type="button" id="btn-preset-2" data-count="2" onclick="setBookingTravelers(2)" class="book-preset-btn active py-1.5 rounded-xl border-2 border-primary bg-primary text-white text-[11px] font-bold transition-all">2 Duo</button>
+                  <button type="button" id="btn-preset-4" data-count="4" onclick="setBookingTravelers(4)" class="book-preset-btn py-1.5 rounded-xl border border-slate-200 text-[11px] font-bold text-slate-600 hover:border-primary hover:text-primary transition-all">4 Group</button>
+                  <button type="button" id="btn-preset-8" data-count="8" onclick="setBookingTravelers(8)" class="book-preset-btn py-1.5 rounded-xl border border-slate-200 text-[11px] font-bold text-slate-600 hover:border-primary hover:text-primary transition-all">8+ Team</button>
                 </div>
               </div>
             </div>
@@ -637,7 +657,7 @@
       </div>
 
       <!-- COMPACT MOBILE STICKY LIVE BOTTOM BAR (Shows on mobile / tablet screens) -->
-      <div id="mobile-sticky-summary-bar" class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 px-4 py-2.5 shadow-[0_-8px_30px_rgba(0,0,0,0.12)] flex items-center justify-between transition-all">
+      <div id="mobile-sticky-summary-bar" class="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200/90 px-4 py-2.5 shadow-[0_-8px_30px_rgba(0,0,0,0.12)] flex items-center justify-between transition-all">
         <div>
           <div class="flex items-center gap-1.5">
             <span class="text-[10px] font-extrabold uppercase text-slate-400 tracking-wider" id="i18n-mob-summary-lbl">সর্বমোট</span>
@@ -649,7 +669,7 @@
           </div>
         </div>
         <div class="flex items-center gap-2">
-          <button type="button" onclick="scrollToPaymentOrSubmit()" class="bg-gradient-to-r from-[#012d1d] via-[#044c31] to-[#012d1d] text-white font-extrabold text-xs px-4 py-2.5 rounded-xl shadow-md active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer">
+          <button type="button" id="mobile-submit-btn" onclick="scrollToPaymentOrSubmit(event)" class="bg-gradient-to-r from-[#012d1d] via-[#044c31] to-[#012d1d] text-white font-extrabold text-xs px-4 py-2.5 rounded-xl shadow-md active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer">
             <span class="material-symbols-outlined text-base">check_circle</span>
             <span id="i18n-mob-submit-btn">বুকিং নিশ্চিত করুন</span>
           </button>
@@ -858,8 +878,10 @@
       localStorage.setItem('ez_lang', lang);
       applyBookingTranslations();
       populatePackageDropdown();
+      if (typeof renderRoomCards === 'function') renderRoomCards();
       calculateBookingPrice();
     }
+    window.setBookingLang = setBookingLang;
 
     function applyBookingTranslations() {
       const isBn = currentLang === 'bn';
@@ -965,10 +987,10 @@
       if (lblPkg) lblPkg.textContent = isBn ? 'নির্বাচিত ট্যুর প্যাকেজ' : 'Selected Tour Package';
       if (linkDetails) linkDetails.textContent = isBn ? 'খাবারের মেন্যু ও ট্রিপের বিবরণ' : 'View Meal Plan & Tour Details';
       if (lblTravelers) lblTravelers.textContent = isBn ? 'ভ্রমণকারীর সংখ্যা' : 'Number of Travelers';
-      if (p1) p1.textContent = isBn ? '১ জন (একক)' : '1 Solo';
-      if (p2) p2.textContent = isBn ? '২ জন (জোড়া)' : '2 Duo';
-      if (p4) p4.textContent = isBn ? '৪ জন (গ্রুপ)' : '4 Group';
-      if (p8) p8.textContent = isBn ? '৮+ জন (টিম)' : '8+ Team';
+      if (p1) p1.textContent = isBn ? '১ জন' : '1 Solo';
+      if (p2) p2.textContent = isBn ? '২ জন' : '2 Duo';
+      if (p4) p4.textContent = isBn ? '৪ জন' : '4 Group';
+      if (p8) p8.textContent = isBn ? '৮+ জন' : '8+ Team';
 
       // Step 3 Texts
       const s3Title = document.getElementById('i18n-step3-title');
@@ -1239,7 +1261,7 @@
       }
       if (subtitle) {
         if (isBn) {
-          subtitle.textContent = bookingTravelerCount === 1 ? 'একক ভ্রমণকারী' : bookingTravelerCount === 2 ? 'দম্পতি / দুই বন্ধু' : bookingTravelerCount <= 5 ? 'ছোট গ্রুপ' : 'বড় টিম / গ্রুপ';
+          subtitle.textContent = bookingTravelerCount === 1 ? 'সোলো ট্রাভেলার' : bookingTravelerCount === 2 ? 'দম্পতি / ২ জন বন্ধু' : bookingTravelerCount <= 5 ? 'ছোট দল' : 'বড় টিম';
         } else {
           subtitle.textContent = bookingTravelerCount === 1 ? 'Solo Explorer' : bookingTravelerCount === 2 ? 'Couple / Duo' : bookingTravelerCount <= 5 ? 'Small Group' : 'Team / Group';
         }
@@ -1259,7 +1281,7 @@
 
       // Update preset buttons
       document.querySelectorAll('.book-preset-btn').forEach(btn => {
-        const val = parseInt(btn.textContent.trim().split(' ')[0]) || 0;
+        const val = parseInt(btn.getAttribute('data-count')) || parseInt(btn.id.replace('btn-preset-', '')) || 0;
         if (val === bookingTravelerCount || (val === 8 && bookingTravelerCount >= 8)) {
           btn.className = 'book-preset-btn active py-1.5 rounded-xl border-2 border-primary bg-primary text-white text-[11px] font-bold transition-all';
         } else {
@@ -1444,30 +1466,6 @@
       document.body.style.overflow = 'hidden';
     }
 
-      // Render amenities
-      const amenList = document.getElementById('modal-room-amenities');
-      if (amenList) {
-        const list = isBn ? (room.bnAmenities || room.amenities) : room.amenities;
-        amenList.innerHTML = list.map(a => `
-          <li class="flex items-center gap-2 text-slate-700 text-xs font-semibold">
-            <span class="material-symbols-outlined text-base text-emerald-700">check_circle</span>
-            <span>${a}</span>
-          </li>
-        `).join('');
-      }
-
-      const selectBtn = document.getElementById('modal-room-select-btn');
-      if (selectBtn) {
-        selectBtn.onclick = () => {
-          selectRoomType(key);
-          closeRoomModal();
-        };
-      }
-
-      modal.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-    }
-
     function closeRoomModal() {
       const modal = document.getElementById('room-preview-modal');
       if (modal) {
@@ -1589,16 +1587,67 @@
       updateSummary();
     }
 
-    function scrollToPaymentOrSubmit() {
-      const step4 = document.getElementById('booking-step-4');
-      if (step4) {
-        step4.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        const trxInput = document.getElementById('cust-trxid');
-        if (trxInput && !trxInput.value) {
-          setTimeout(() => trxInput.focus(), 500);
+    function scrollToPaymentOrSubmit(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      const form = document.getElementById('book-form');
+      if (!form) return;
+
+      // Check required inputs in step 1 first
+      const nameInput = document.getElementById('cust-name');
+      const phoneInput = document.getElementById('cust-phone');
+      const dateInput = document.getElementById('cust-date');
+      const trxInput = document.getElementById('cust-trxid');
+      const senderInput = document.getElementById('cust-sender-num');
+      const paidInput = document.getElementById('cust-paid-amount');
+
+      if (!nameInput?.value.trim()) {
+        nameInput?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => nameInput?.focus(), 350);
+        form.reportValidity();
+        return;
+      }
+      if (!phoneInput?.value.trim()) {
+        phoneInput?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => phoneInput?.focus(), 350);
+        form.reportValidity();
+        return;
+      }
+      if (!dateInput?.value) {
+        dateInput?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => dateInput?.focus(), 350);
+        form.reportValidity();
+        return;
+      }
+
+      // Check step 4 inputs
+      if (!trxInput?.value.trim() || !senderInput?.value.trim() || !paidInput?.value) {
+        const step4 = document.getElementById('booking-step-4');
+        if (step4) {
+          step4.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          if (!trxInput?.value.trim()) {
+            setTimeout(() => trxInput?.focus(), 400);
+          } else if (!senderInput?.value.trim()) {
+            setTimeout(() => senderInput?.focus(), 400);
+          } else if (!paidInput?.value) {
+            setTimeout(() => paidInput?.focus(), 400);
+          }
         }
+        form.reportValidity();
+        return;
+      }
+
+      // If form is valid, trigger submission
+      if (form.checkValidity()) {
+        if (typeof form.requestSubmit === 'function') {
+          form.requestSubmit();
+        } else {
+          submitTourBooking(new Event('submit'));
+        }
+      } else {
+        form.reportValidity();
       }
     }
+    window.scrollToPaymentOrSubmit = scrollToPaymentOrSubmit;
 
     function switchPaymentMethod(method) {
       selectedPaymentMethod = method;
