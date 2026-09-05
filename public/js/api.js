@@ -14,29 +14,40 @@ const TourstkAPI = {
   tokenKey: 'tourstk_admin_jwt',
   userKey: 'tourstk_admin_user',
 
-  // Auth Helpers (Tab-Session Based Authentication)
+  // Auth Helpers (Persistent + Session Token Storage)
   getToken() {
-    return sessionStorage.getItem(this.tokenKey) || localStorage.getItem(this.tokenKey);
+    try {
+      return localStorage.getItem(this.tokenKey) || sessionStorage.getItem(this.tokenKey);
+    } catch (e) {
+      return null;
+    }
   },
 
   setAuth(token, user) {
-    sessionStorage.setItem(this.tokenKey, token);
-    sessionStorage.setItem(this.userKey, JSON.stringify(user));
-    // Clear localStorage to avoid permanent cross-tab leaks
-    localStorage.removeItem(this.tokenKey);
-    localStorage.removeItem(this.userKey);
+    try {
+      localStorage.setItem(this.tokenKey, token);
+      localStorage.setItem(this.userKey, JSON.stringify(user));
+    } catch (e) {}
+    try {
+      sessionStorage.setItem(this.tokenKey, token);
+      sessionStorage.setItem(this.userKey, JSON.stringify(user));
+    } catch (e) {}
   },
 
   clearAuth() {
-    sessionStorage.removeItem(this.tokenKey);
-    sessionStorage.removeItem(this.userKey);
-    localStorage.removeItem(this.tokenKey);
-    localStorage.removeItem(this.userKey);
+    try {
+      localStorage.removeItem(this.tokenKey);
+      localStorage.removeItem(this.userKey);
+    } catch (e) {}
+    try {
+      sessionStorage.removeItem(this.tokenKey);
+      sessionStorage.removeItem(this.userKey);
+    } catch (e) {}
   },
 
   getAdminUser() {
     try {
-      const data = sessionStorage.getItem(this.userKey) || localStorage.getItem(this.userKey);
+      const data = localStorage.getItem(this.userKey) || sessionStorage.getItem(this.userKey);
       return data ? JSON.parse(data) : null;
     } catch (e) {
       return null;
@@ -44,7 +55,7 @@ const TourstkAPI = {
   },
 
   isAuthenticated() {
-    return !!this.getToken();
+    return Boolean(this.getToken());
   },
 
   // Base Fetch wrapper with headers & error handling
@@ -85,10 +96,10 @@ const TourstkAPI = {
       }
 
       if (!res.ok) {
-        if (res.status === 401 && endpoint.startsWith('/admin') || (options.authRequired && res.status === 401)) {
+        if (res.status === 401 && (endpoint.startsWith('/admin') || options.authRequired)) {
           this.clearAuth();
-          if (window.location.pathname.includes('/tourstk-hq') || window.location.pathname.includes('/admin')) {
-            window.location.href = '/tourstk-hq?auth=required';
+          if (typeof window !== 'undefined' && typeof window.showLoginGateway === 'function') {
+            window.showLoginGateway();
           }
         }
         throw new Error(data.message || `Request failed with status ${res.status}`);
@@ -103,31 +114,14 @@ const TourstkAPI = {
 
   // =================== AUTHENTICATION ===================
   async loginAdmin(email, password) {
-    try {
-      const res = await this.request('/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ email, password }),
-      });
-      if (res.success && res.data?.token) {
-        this.setAuth(res.data.token, res.data);
-      }
-      return res;
-    } catch (err) {
-      // Local fallback for offline/static environments
-      const cleanEmail = String(email || '').toLowerCase().trim();
-      if (cleanEmail === 'admin@tourstk.com' && password === 'admin123456') {
-        const mockAdmin = {
-          _id: 'local_master_id',
-          name: 'EZ Trails Sitakunda SuperAdmin',
-          email: cleanEmail,
-          role: 'superadmin',
-          token: 'local_master_jwt_token',
-        };
-        this.setAuth(mockAdmin.token, mockAdmin);
-        return { success: true, data: mockAdmin };
-      }
-      throw err;
+    const res = await this.request('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    });
+    if (res.success && res.data?.token) {
+      this.setAuth(res.data.token, res.data);
     }
+    return res;
   },
 
   async verifyAuth() {

@@ -103,7 +103,7 @@
       </div>
 
       <!-- Login Form -->
-      <form onsubmit="handleAdminLoginForm(event)" autocomplete="off" class="space-y-4 text-xs">
+      <form id="admin-login-form" onsubmit="event.preventDefault(); handleAdminLoginForm(event); return false;" autocomplete="off" class="space-y-4 text-xs">
         <div>
           <label class="block font-bold text-slate-700 mb-1.5">Admin Email Address</label>
           <div class="relative">
@@ -116,17 +116,8 @@
           <label class="block font-bold text-slate-700 mb-1.5">Admin Password</label>
           <div class="relative">
             <span class="material-symbols-outlined absolute left-3.5 top-3 text-slate-400 text-lg">lock</span>
-            <input type="password" id="login-password" required autocomplete="new-password" placeholder="Enter password" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-3.5 py-3 text-xs text-slate-900 font-semibold focus:bg-white focus:ring-2 focus:ring-emerald-700 focus:border-emerald-700">
+            <input type="password" id="login-password" required autocomplete="current-password" placeholder="Enter password" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-3.5 py-3 text-xs text-slate-900 font-semibold focus:bg-white focus:ring-2 focus:ring-emerald-700 focus:border-emerald-700">
           </div>
-        </div>
-
-        <!-- Quick Credentials Helper -->
-        <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-[11px] text-emerald-950 flex items-center justify-between gap-2 my-2">
-          <div>
-            <div class="font-bold flex items-center gap-1 text-emerald-900"><span class="material-symbols-outlined text-sm">verified_user</span> Default Admin Credentials:</div>
-            <div class="text-[10px] text-slate-600 mt-0.5 font-mono"><strong>Email:</strong> eztrailsbd@gmail.com • <strong>Pass:</strong> admin123456</div>
-          </div>
-          <button type="button" onclick="fillAdminCredentials()" class="bg-emerald-900 hover:bg-emerald-950 text-white font-bold px-2.5 py-1.5 rounded-lg text-[10px] flex-shrink-0 cursor-pointer shadow-xs transition-colors">Auto Fill</button>
         </div>
 
         <button type="submit" id="btn-login-submit" class="w-full bg-emerald-900 hover:bg-emerald-950 text-white font-bold py-3.5 rounded-xl text-xs sm:text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer mt-3">
@@ -1595,24 +1586,16 @@
       updateAuthUI();
     }
 
-    function fillDefaultCredentials() {
-      const emailInput = document.getElementById('login-email');
-      const passInput = document.getElementById('login-password');
-      if (emailInput) emailInput.value = 'admin@tourstk.com';
-      if (passInput) passInput.value = 'admin123456';
-    }
-
-    function fillAdminCredentials() {
-      const emailInput = document.getElementById('login-email');
-      const passInput = document.getElementById('login-password');
-      if (emailInput) emailInput.value = 'eztrailsbd@gmail.com';
-      if (passInput) passInput.value = 'admin123456';
-    }
+    window.showLoginGateway = showLoginGateway;
+    window.hideLoginGateway = hideLoginGateway;
 
     async function handleAdminLoginForm(e) {
-      e.preventDefault();
-      const email = document.getElementById('login-email').value.trim();
-      const password = document.getElementById('login-password').value;
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      const email = (document.getElementById('login-email')?.value || '').trim();
+      const password = document.getElementById('login-password')?.value || '';
       const submitBtn = document.getElementById('btn-login-submit');
       const btnText = document.getElementById('login-btn-text');
       const errBox = document.getElementById('login-error-box');
@@ -1621,54 +1604,36 @@
       if (errBox) errBox.classList.add('hidden');
       if (submitBtn) {
         submitBtn.disabled = true;
-        btnText.textContent = 'Verifying Credentials...';
+        if (btnText) btnText.textContent = 'Verifying...';
       }
 
       try {
         const res = await TourstkAPI.loginAdmin(email, password);
         if (res.success) {
           hideLoginGateway();
-          await Promise.allSettled([
-            loadBookings(),
-            loadPackages(),
-            loadDestinations(),
-            loadGuides(),
-            loadCustomRequests(),
-            loadReviews(),
-            loadRooms()
-          ]);
-          return;
+          loadBookings().catch(() => {});
+          loadPackages().catch(() => {});
+          loadDestinations().catch(() => {});
+          loadGuides().catch(() => {});
+          loadCustomRequests().catch(() => {});
+          loadReviews().catch(() => {});
+          loadRooms().catch(() => {});
+          return false;
         } else {
           throw new Error(res.message || 'Invalid email or password');
         }
       } catch (err) {
-        const cleanEmail = email.toLowerCase().trim();
-        const cleanPass = password.replace(/\s+/g, '');
-        const isMaster = (cleanEmail === 'admin@tourstk.com' || cleanEmail === 'eztrailsbd@gmail.com') && 
-                         (password === 'admin123456' || cleanPass === 'ymvxgmfzcmnisxri');
-        if (isMaster) {
-          hideLoginGateway();
-          await Promise.allSettled([
-            loadBookings(),
-            loadPackages(),
-            loadDestinations(),
-            loadGuides(),
-            loadCustomRequests(),
-            loadReviews(),
-            loadRooms()
-          ]);
-          return;
-        }
         if (errBox && errMsg) {
-          errMsg.textContent = err.message || 'Invalid email or password. Use: eztrailsbd@gmail.com / admin123456';
+          errMsg.textContent = err.message || 'Invalid email or password';
           errBox.classList.remove('hidden');
         }
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
-          btnText.textContent = 'Sign In to Admin Hub';
+          if (btnText) btnText.textContent = 'Sign In to Admin Hub';
         }
       }
+      return false;
     }
 
     function handleAuthButtonClick() {
