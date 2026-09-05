@@ -8,92 +8,44 @@
       "destination": "/api"
     },
     {
-      "source": "/",
-      "destination": "/public/index.html"
-    },
-    {
-      "source": "/index",
-      "destination": "/public/index.html"
-    },
-    {
-      "source": "/index.html",
-      "destination": "/public/index.html"
-    },
-    {
-      "source": "/packages",
-      "destination": "/public/packages.html"
-    },
-    {
-      "source": "/explore",
-      "destination": "/public/explore.html"
-    },
-    {
-      "source": "/my-booking",
-      "destination": "/public/my-booking.html"
-    },
-    {
-      "source": "/planner",
-      "destination": "/public/planner.html"
-    },
-    {
-      "source": "/contact",
-      "destination": "/public/contact.html"
-    },
-    {
-      "source": "/about",
-      "destination": "/public/contact.html"
-    },
-    {
-      "source": "/booking",
-      "destination": "/public/booking.html"
-    },
-    {
-      "source": "/package-detail",
-      "destination": "/public/package-detail.html"
-    },
-    {
-      "source": "/destination-detail",
-      "destination": "/public/destination-detail.html"
-    },
-    {
-      "source": "/admin",
-      "destination": "/public/404.html"
-    },
-    {
-      "source": "/admin/(.*)",
-      "destination": "/public/404.html"
-    },
-    {
       "source": "/tourstk-hq",
-      "destination": "/public/admin/index.html"
+      "destination": "/tourstk-hq/index.html"
     },
     {
       "source": "/tourstk-hq/",
-      "destination": "/public/admin/index.html"
+      "destination": "/tourstk-hq/index.html"
     },
     {
       "source": "/tourstk-hq/index",
-      "destination": "/public/admin/index.html"
+      "destination": "/tourstk-hq/index.html"
     },
     {
       "source": "/tourstk-hq/bookings",
-      "destination": "/public/admin/bookings.html"
+      "destination": "/tourstk-hq/bookings.html"
     },
     {
       "source": "/tourstk-hq/packages",
-      "destination": "/public/admin/packages.html"
+      "destination": "/tourstk-hq/packages.html"
     },
     {
       "source": "/tourstk-hq/custom-requests",
-      "destination": "/public/admin/custom-requests.html"
+      "destination": "/tourstk-hq/custom-requests.html"
     },
     {
       "source": "/tourstk-hq/(.*)",
-      "destination": "/public/admin/index.html"
+      "destination": "/tourstk-hq/$1"
     },
     {
-      "source": "/(.*)",
-      "destination": "/public/$1"
+      "source": "/admin",
+      "destination": "/404.html"
+    },
+    {
+      "source": "/admin/(.*)",
+      "destination": "/404.html"
+    },
+    {
+      "source": "/about",
+      "destination": "/contact.html"
     }
   ]
 }

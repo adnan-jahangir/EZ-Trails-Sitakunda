@@ -89,6 +89,10 @@ app.use(['/admin', '/public/admin'], (req, res) => {
 
 // 🛡️ SECRET ADMIN HQ ROUTE: Only accessible via the secret slug "/tourstk-hq"
 app.get(['/tourstk-hq', '/tourstk-hq/', '/tourstk-hq/index', '/tourstk-hq/index.html'], (req, res) => {
+  const hqIndex = path.join(staticPath, 'tourstk-hq', 'index.html');
+  if (require('fs').existsSync(hqIndex)) {
+    return res.sendFile(hqIndex);
+  }
   const adminIndex = path.join(staticPath, 'admin', 'index.html');
   if (require('fs').existsSync(adminIndex)) {
     return res.sendFile(adminIndex);
@@ -99,13 +103,17 @@ app.get(['/tourstk-hq', '/tourstk-hq/', '/tourstk-hq/index', '/tourstk-hq/index.
 const adminSubRoutes = ['bookings', 'packages', 'custom-requests'];
 adminSubRoutes.forEach(sub => {
   app.get([`/tourstk-hq/${sub}`, `/tourstk-hq/${sub}.html`], (req, res) => {
-    const targetFile = path.join(staticPath, 'admin', `${sub}.html`);
-    if (require('fs').existsSync(targetFile)) {
-      return res.sendFile(targetFile);
+    const hqFile = path.join(staticPath, 'tourstk-hq', `${sub}.html`);
+    if (require('fs').existsSync(hqFile)) {
+      return res.sendFile(hqFile);
     }
-    const adminIndex = path.join(staticPath, 'admin', 'index.html');
-    if (require('fs').existsSync(adminIndex)) {
-      return res.sendFile(adminIndex);
+    const adminFile = path.join(staticPath, 'admin', `${sub}.html`);
+    if (require('fs').existsSync(adminFile)) {
+      return res.sendFile(adminFile);
+    }
+    const fallback = path.join(staticPath, 'tourstk-hq', 'index.html');
+    if (require('fs').existsSync(fallback)) {
+      return res.sendFile(fallback);
     }
     res.status(404).sendFile(path.join(staticPath, '404.html'));
   });
