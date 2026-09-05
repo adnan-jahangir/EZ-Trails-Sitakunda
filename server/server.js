@@ -82,8 +82,13 @@ const publicPath = path.join(__dirname, '../public');
 const fallbackPath = path.join(__dirname, '..');
 const staticPath = require('fs').existsSync(publicPath) ? publicPath : fallbackPath;
 
-// Explicit Admin Route Handlers (guarantees /admin, /admin/, /admin/bookings etc. resolve cleanly with HTTP 200)
-app.get(['/admin', '/admin/', '/admin/index', '/admin/index.html'], (req, res) => {
+// 🔒 BLOCK PUBLIC /admin ACCESS: Return 404 Not Found for any public /admin probe
+app.use(['/admin', '/public/admin'], (req, res) => {
+  res.status(404).sendFile(path.join(staticPath, '404.html'));
+});
+
+// 🛡️ SECRET ADMIN HQ ROUTE: Only accessible via the secret slug "/tourstk-hq"
+app.get(['/tourstk-hq', '/tourstk-hq/', '/tourstk-hq/index', '/tourstk-hq/index.html'], (req, res) => {
   const adminIndex = path.join(staticPath, 'admin', 'index.html');
   if (require('fs').existsSync(adminIndex)) {
     return res.sendFile(adminIndex);
@@ -93,7 +98,7 @@ app.get(['/admin', '/admin/', '/admin/index', '/admin/index.html'], (req, res) =
 
 const adminSubRoutes = ['bookings', 'packages', 'custom-requests'];
 adminSubRoutes.forEach(sub => {
-  app.get([`/admin/${sub}`, `/admin/${sub}.html`], (req, res) => {
+  app.get([`/tourstk-hq/${sub}`, `/tourstk-hq/${sub}.html`], (req, res) => {
     const targetFile = path.join(staticPath, 'admin', `${sub}.html`);
     if (require('fs').existsSync(targetFile)) {
       return res.sendFile(targetFile);
@@ -208,7 +213,7 @@ const startServer = async () => {
     console.log(`🚀 Tourstk API Server is running on port: ${PORT}`);
     console.log(`🛡️  Security: Helmet ✅ | Rate Limiter ✅ | CORS ✅ | Zod ✅`);
     console.log(`🌐 Local Web & API: http://localhost:${PORT}`);
-    console.log(`📋 Admin Dashboard: http://localhost:${PORT}/admin/index.html`);
+    console.log(`📋 Admin Dashboard (Secret): http://localhost:${PORT}/tourstk-hq`);
     console.log(`🩺 Health Check: http://localhost:${PORT}/api/health`);
     console.log(`====================================================`);
   });

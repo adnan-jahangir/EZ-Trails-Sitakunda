@@ -15,9 +15,11 @@ const createCustomRequest = async (req, res, next) => {
       groupSize,
       groupType,
       selectedSpots,
+      destinations,
       preferences,
       specialRequests,
       estimatedBudget,
+      budget,
     } = req.body;
 
     if (!customerName || !phone) {
@@ -34,6 +36,11 @@ const createCustomRequest = async (req, res, next) => {
       exists = await CustomRequest.findOne({ requestId: uniqueId });
     }
 
+    const finalBudget = estimatedBudget !== undefined ? estimatedBudget : budget;
+    const finalSpots = (Array.isArray(selectedSpots) && selectedSpots.length > 0)
+      ? selectedSpots
+      : (Array.isArray(destinations) ? destinations : []);
+
     const newRequest = await CustomRequest.create({
       requestId: uniqueId,
       customerName,
@@ -43,10 +50,10 @@ const createCustomRequest = async (req, res, next) => {
       travelDate,
       groupSize: Number(groupSize) || 2,
       groupType: groupType || 'Friends',
-      selectedSpots: selectedSpots || [],
+      selectedSpots: finalSpots,
       preferences: preferences || {},
       specialRequests,
-      estimatedBudget: Number(estimatedBudget) || 0,
+      estimatedBudget: Number(finalBudget) || 0,
       status: 'New',
     });
 
@@ -116,8 +123,31 @@ const updateCustomRequest = async (req, res, next) => {
   }
 };
 
+// @desc    Delete custom trip request (Admin)
+// @route   DELETE /api/custom-requests/:id
+// @access  Private (Admin)
+const deleteCustomRequest = async (req, res, next) => {
+  try {
+    const idParam = req.params.id;
+    if (!idParam || !isValidObjectId(idParam)) {
+      return res.status(400).json({ success: false, message: 'Invalid request ID format' });
+    }
+
+    const reqItem = await CustomRequest.findById(idParam);
+    if (!reqItem) {
+      return res.status(404).json({ success: false, message: 'Request not found' });
+    }
+
+    await reqItem.deleteOne();
+    res.json({ success: true, message: 'Custom trip request removed successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createCustomRequest,
   getCustomRequests,
   updateCustomRequest,
+  deleteCustomRequest,
 };

@@ -31,6 +31,7 @@ const destinationSchema = new mongoose.Schema(
     },
     lat: { type: Number },
     lng: { type: Number },
+    mapUrl: { type: String },
     image: { type: String },
     shortDesc: { type: String },
     description: { type: String },

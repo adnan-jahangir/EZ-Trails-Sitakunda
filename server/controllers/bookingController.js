@@ -105,7 +105,15 @@ const createBooking = async (req, res, next) => {
 
     // 📬 Background Asynchronous Email / Notification Queue Dispatch
     try {
-      emailQueue.sendBookingConfirmation(newBooking);
+      if (process.env.VERCEL) {
+        await Promise.allSettled([
+          emailQueue.sendBookingConfirmation(newBooking),
+          emailQueue.sendAdminNewBookingAlert(newBooking),
+        ]);
+      } else {
+        emailQueue.sendBookingConfirmation(newBooking);
+        emailQueue.sendAdminNewBookingAlert(newBooking);
+      }
     } catch (e) {
       console.warn('[Queue Warning] Email dispatch failed silently:', e.message);
     }
@@ -126,11 +134,12 @@ const createBooking = async (req, res, next) => {
 const trackBooking = async (req, res, next) => {
   try {
     const { identifier } = req.params;
-    const cleanId = (identifier || '').trim();
+    const queryParam = req.query.code || req.query.phone || req.query.id || req.query.identifier;
+    const cleanId = (identifier || queryParam || '').trim();
     if (!cleanId || cleanId.length > 50) {
       return res.status(400).json({
         success: false,
-        message: 'Invalid search identifier',
+        message: 'Invalid search identifier. Please provide a Booking ID or Phone Number.',
       });
     }
 
@@ -245,12 +254,20 @@ const getBookingById = async (req, res, next) => {
 // @access  Private (Admin)
 const updateBookingStatus = async (req, res, next) => {
   try {
-    const { status, paymentStatus, paidAmount, trxId, adminNotes, assignedGuide, assignedVehicle } = req.body;
+    const { status, paymentStatus, paidAmount, trxId, adminNotes, notes, assignedGuide, assignedVehicle } = req.body;
 
     const booking = await findBookingFlexible(req.params.id);
 
     if (!booking) {
       return res.status(404).json({ success: false, message: `Booking "${req.params.id}" not found` });
+    }
+
+    if (!booking.payment) {
+      booking.payment = {
+        method: 'bkash',
+        paymentStatus: 'Pending Verification',
+        paidAmount: 0,
+      };
     }
 
     const previousSnapshot = {
@@ -262,15 +279,57 @@ const updateBookingStatus = async (req, res, next) => {
       assignedVehicle: booking.assignedVehicle,
     };
 
-    if (status) booking.status = status;
-    if (paymentStatus) booking.payment.paymentStatus = paymentStatus;
+    if (status) {
+      const statusMap = {
+        'pending': 'Pending',
+        'confirmed': 'Confirmed',
+        'in-progress': 'In-Progress',
+        'completed': 'Completed',
+        'cancelled': 'Cancelled',
+        'canceled': 'Cancelled',
+      };
+      booking.status = statusMap[String(status).toLowerCase()] || status;
+    }
+    if (paymentStatus) {
+      const payMap = {
+        'unpaid': 'Unpaid',
+        'pending': 'Pending Verification',
+        'pending verification': 'Pending Verification',
+        'partial': 'Partial',
+        'paid': 'Paid',
+        'refunded': 'Refunded',
+      };
+      booking.payment.paymentStatus = payMap[String(paymentStatus).toLowerCase()] || paymentStatus;
+    }
     if (paidAmount !== undefined) booking.payment.paidAmount = Number(paidAmount);
     if (trxId !== undefined) booking.payment.trxId = trxId;
-    if (adminNotes !== undefined) booking.adminNotes = adminNotes;
+    const finalNotes = adminNotes !== undefined ? adminNotes : notes;
+    if (finalNotes !== undefined) booking.adminNotes = finalNotes;
     if (assignedGuide !== undefined) booking.assignedGuide = assignedGuide;
     if (assignedVehicle !== undefined) booking.assignedVehicle = assignedVehicle;
 
     const updated = await booking.save();
+
+    // 📬 Dispatch Customer Notification Email on Status Change
+    try {
+      if (updated.email) {
+        if (updated.status === 'Confirmed' && previousSnapshot.status !== 'Confirmed') {
+          if (process.env.VERCEL) {
+            await emailQueue.sendCustomerBookingConfirmed(updated);
+          } else {
+            emailQueue.sendCustomerBookingConfirmed(updated);
+          }
+        } else if (updated.status === 'Cancelled' && previousSnapshot.status !== 'Cancelled') {
+          if (process.env.VERCEL) {
+            await emailQueue.sendCustomerBookingCancelled(updated, updated.adminNotes);
+          } else {
+            emailQueue.sendCustomerBookingCancelled(updated, updated.adminNotes);
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('[Email Queue Warning] Failed sending customer status update email:', e.message);
+    }
 
     // Record audit log
     logAction({

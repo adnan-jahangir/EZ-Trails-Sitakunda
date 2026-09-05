@@ -14,167 +14,403 @@ const Review = require('../models/Review');
 
 const initialPackages = [
   {
-    packageId: 'sitakunda-adventure-tour',
-    title: 'Sitakunda Adventure Tour',
-    bnTitle: 'সীতাকুণ্ড অ্যাডভেঞ্চার ট্যুর',
-    tagline: 'The flagship complete experience covering Chandranath peak, coastal sea breeze and scenic trails.',
+    packageId: 'adventure-squad-1',
+    title: 'Adventure Squad 1 (2 Days • 1 Night)',
+    bnTitle: 'অ্যাডভেঞ্চার স্কোয়াড ১ (২ দিন • ১ রাত)',
+    tagline: 'Experience waterfalls, mountains, and sea beach in Sitakunda over 2 days and 1 night.',
+    bnTagline: 'দুই দিনে উপভোগ করুন সীতাকুণ্ডের ঝর্ণা, পাহাড় ও সমুদ্রের অসাধারণ সৌন্দর্য।',
     category: '2 Days • 1 Night',
     duration: '2 Days • 1 Night',
+    bnDuration: '২ দিন • ১ রাত',
     days: 2,
     nights: 1,
-    price: 3490,
-    originalPrice: 4200,
-    badge: 'Popular',
+    price: 2799,
+    originalPrice: 3499,
+    priceNote: 'per person all-inclusive',
+    bnPriceNote: 'জনপ্রতি সর্বমোট',
+    badge: 'Adventure Special',
+    bnBadge: 'অ্যাডভেঞ্চার স্পেশাল',
     difficulty: 'Moderate',
+    bnDifficulty: 'মাঝারি',
     groupSize: 'Min 4 Travelers',
+    minTravelers: 'Min 4 Travelers',
+    bnMinTravelers: 'ন্যূনতম ৪ জন',
     image: 'images/spots/chandranath-hill.jpg',
-    spots: ['chandranath-hill', 'guliakhali-sea-beach', 'sitakunda-eco-park'],
-    inclusions: [
-      'Dedicated AC local transport (Sitakunda pickup & return)',
-      'Overnight Deluxe Room / Resort stay (Twin share)',
-      'All meals included (Breakfast, Lunch, Dinner BBQ)',
-      'Certified local mountain & beach guide',
+    spots: [
+      'ruposhi-waterfall',
+      'sahasradhara-waterfall',
+      'akilpur-beach',
+      'banshbaria-sea-beach',
+      'chandranath-hill',
+      'sitakunda-eco-park',
+      'guliakhali-sea-beach'
     ],
-    exclusions: ['Personal shopping & tips', 'Train/Bus tickets from Dhaka/Chittagong'],
-    highlights: ['Chandranath Peak Hike', 'Guliakhali Green Beach Sunset', 'Live BBQ Dinner'],
+    inclusions: [
+      'Comfortable Hotel Stay (1 Night)',
+      'Local transport transfers between destinations',
+      'Experienced friendly tour guide',
+      'Entry tickets & spot access fees',
+      'Full Meals: 2 Breakfasts, 2 Lunches, 1 Dinner & Evening Snacks'
+    ],
+    bnIncluded: [
+      '১ রাত হোটেলে থাকার সুব্যবস্থা',
+      'স্পটসমূহে যাতায়াতের জন্য অভ্যন্তরীণ গাড়ি সুবিধা',
+      'অভিজ্ঞ ও আন্তরিক ট্যুর গাইড',
+      'স্পটসমূহের এন্ট্রি টিকিট',
+      'খাবার: ২ বেলা সকালের নাস্তা, ২ বেলা দুপুরের খাবার, ১ বেলা রাতের খাবার এবং সান্ধ্যকালীন নাস্তা'
+    ],
+    exclusions: [
+      'Travel tickets to/from Sitakunda from your city',
+      'Personal shopping or expenses outside package',
+      'Any extra expense not mentioned in the itinerary'
+    ],
+    bnExcluded: [
+      'নিজ শহর থেকে সীতাকুণ্ড আসা ও যাওয়ার খরচ',
+      'ব্যক্তিগত কেনাকাটা বা নিজস্ব খরচ',
+      'প্যাকেজে উল্লেখ নেই এমন কোনো খরচ EZ Trails বহন করবে না'
+    ],
+    whatToPack: [
+      'Non-slip grip trekking shoes or sandals',
+      'Light backpack & extra set of dry clothes',
+      'Reusable water bottle & ORS saline',
+      'Power bank & waterproof mobile pouch'
+    ],
+    bnWhatToPack: [
+      'গ্রিপযুক্ত ট্র্যাকিং জুতো বা মজবুত চটি',
+      'হালকা ব্যাকপ্যাক ও অতিরিক্ত সুতি শুকনো কাপড়',
+      'পানির বোতল ও রিহাইড্রেশন স্যালাইন',
+      'পাওয়ার ব্যাংক ও মোবাইলের ওয়াটারপ্রুফ পাউচ'
+    ],
+    meals: [
+      {
+        time: 'Day 1 • 09:00 AM',
+        bnTime: '১ম দিন • সকাল ০৯:০০',
+        title: 'Morning Breakfast',
+        bnTitle: 'সকালের নাস্তা',
+        icon: '🌅',
+        items: ['Fresh Paratha', 'Egg Omelette', 'Hot Dal', 'Special Tea'],
+        bnItems: ['পরোটা', 'ডিম ভাজি', 'ডাল', 'চা'],
+        note: 'Freshly served at Sitakunda bazaar restaurant',
+        bnNote: 'সীতাকুণ্ডে আগমন পরবর্তী ফ্রেশ হয়ে সকালের নাস্তা'
+      },
+      {
+        time: 'Day 1 • 03:00 PM',
+        bnTime: '১ম দিন • দুপুর ০৩:০০',
+        title: 'Traditional Lunch',
+        bnTitle: 'দুপুরের খাবার',
+        icon: '☀️',
+        items: ['Steamed Rice', 'Deshi Chicken Curry', 'Dal', 'Fresh Salad'],
+        bnItems: ['ভাত', 'দেশি মুরগি / মুরগির মাংস', 'ডাল', 'সালাদ'],
+        note: 'After exploring Ruposhi & Sahasradhara waterfalls',
+        bnNote: 'ঝর্ণা ভ্রমণ শেষে তৃপ্তিদায়ক দুপুরের আহার'
+      },
+      {
+        time: 'Day 1 • 07:00 PM',
+        bnTime: '১ম দিন • সন্ধ্যা ০৭:০০',
+        title: 'Evening Snacks',
+        bnTitle: 'সান্ধ্যকালীন নাস্তা',
+        icon: '☕',
+        items: ['Hot Tea', 'Crispy Snacks / Biscuits / Noodles'],
+        bnItems: ['গরম চা', 'হালকা নাস্তা / স্ন্যাক্স'],
+        note: 'After Akilpur & Banshbaria sunset stroll',
+        bnNote: 'সমুদ্র সৈকতে সূর্যাস্ত উপভোগ করে ফেরার পর'
+      },
+      {
+        time: 'Day 1 • 10:00 PM',
+        bnTime: '১ম দিন • রাত ১০:০০',
+        title: 'Dinner Feast',
+        bnTitle: 'রাতের খাবার',
+        icon: '🌙',
+        items: ['Hot Khichuri / Rice', 'Egg / Chicken Bhuna', 'Salad'],
+        bnItems: ['খিচুড়ি অথবা ভাত', 'ডিম / মুরগি ভুনা', 'সালাদ'],
+        note: 'Followed by relaxing overnight sleep at the hotel',
+        bnNote: 'হোটেলে ফ্রেশ হয়ে স্বস্তিদায়ক রাতের খাবার'
+      },
+      {
+        time: 'Day 2 • 06:00 AM',
+        bnTime: '২য় দিন • সকাল ০৬:০০',
+        title: 'Early Breakfast',
+        bnTitle: 'ভোরের নাস্তা',
+        icon: '🌄',
+        items: ['Paratha', 'Egg / Bhaji', 'Hot Tea'],
+        bnItems: ['পরোটা', 'ডিম / সবজি ভাজি', 'চা'],
+        note: 'Energy boost before Chandranath Hill trek',
+        bnNote: 'চন্দ্রনাথ পাহাড় ট্র্যাকিং শুরুর প্রাক্কালে'
+      },
+      {
+        time: 'Day 2 • 01:30 PM',
+        bnTime: '২য় দিন • দুপুর ০১:৩০',
+        title: 'Grand Lunch',
+        bnTitle: 'দুপুরের খাবার',
+        icon: '🍲',
+        items: ['Steamed Rice', 'Mejbani Beef or Fish/Chicken', 'Thick Dal', 'Salad'],
+        bnItems: ['ভাত', 'গরুর মাংস অথবা মাছ/মুরগি', 'ঘন ডাল', 'সালাদ'],
+        note: 'Hearty meal after hiking and eco park tour',
+        bnNote: 'চন্দ্রনাথ ও ইকোপার্ক ভ্রমণ শেষে দুপুরের ভুরিভোজ'
+      }
+    ],
+    scheduleDays: [
+      {
+        dayNumber: 'D1',
+        dayLabel: 'DAY 1',
+        bnDayLabel: '১ম দিন',
+        title: 'Waterfalls & Sunset Coastlines',
+        bnTitle: 'ঝর্ণার রোমাঞ্চ ও সমুদ্রের হাতছানি',
+        timeline: [
+          { time: '09:00 AM', bnTime: 'সকাল ০৯:০০', text: 'Arrival at Sitakunda & energetic morning breakfast', bnText: 'সীতাকুণ্ডে আগমন ও সকালের ব্রেকফাস্ট' },
+          { time: '10:00 AM', bnTime: 'সকাল ১০:০০', text: 'Journey to mesmerizing Ruposhi Waterfall & Sahasradhara Waterfall', bnText: 'রূপসী ঝর্ণা ও সহস্রধারা ঝর্ণার উদ্দেশ্যে যাত্রা' },
+          { time: '03:00 PM', bnTime: 'বিকেল ০৩:০০', text: 'Return to town and enjoy satisfying traditional lunch', bnText: 'ফিরে এসে দুপুরের তৃপ্তিদায়ক খাবার' },
+          { time: '04:00 PM', bnTime: 'বিকেল ০৪:০০', text: 'Scenic coastal tour to Akilpur Beach & Banshbaria Sea Pier, evening snacks on return', bnText: 'আকিলপুর ও বাঁশবাড়িয়া সি বিচের উদ্দেশ্যে যাত্রা, সন্ধ্যায় ফিরে এসে নাস্তা' },
+          { time: '10:00 PM', bnTime: 'রাত ১০:০০', text: 'Delicious dinner and overnight rest at the hotel', bnText: 'রাতের খাবার গ্রহণ ও হোটেলে রাত্রিযাপন' }
+        ]
+      },
+      {
+        dayNumber: 'D2',
+        dayLabel: 'DAY 2',
+        bnDayLabel: '২য় দিন',
+        title: 'Mountain Ascent, Eco Park & Tidal Beach',
+        bnTitle: 'পাহাড় চূড়া, সবুজ বনানী ও গোধূলির গুলিয়াখালী',
+        timeline: [
+          { time: '06:00 AM', bnTime: 'সকাল ০৬:০০', text: 'Early morning breakfast and journey towards historic Chandranath Hill', bnText: 'সকালের নাস্তা ও চন্দ্রনাথ পাহাড়ের উদ্দেশ্যে যাত্রা' },
+          { time: '07:00 AM', bnTime: 'সকাল ০৭:০০', text: 'Chandranath peak trail hike to witness panoramic cloud-draped mountain views', bnText: 'পাহাড় চূড়ার উদ্দেশ্যে ট্র্যাকিং শুরু' },
+          { time: '12:00 PM', bnTime: 'দুপুর ১২:০০', text: 'Trek down and visit lush Sitakunda Botanical Garden & Eco Park', bnText: 'পাহাড় থেকে নেমে এসে সীতাকুণ্ড ইকোপার্ক ভ্রমণ' },
+          { time: '01:30 PM', bnTime: 'দুপুর ০১:৩০', text: 'Wholesome local lunch feast', bnText: 'দুপুরের খাবার গ্রহণ' },
+          { time: '03:30 PM', bnTime: 'বিকেল ০৩:৩০', text: 'Trip to scenic Guliakhali Sea Beach with mangrove coastal canals', bnText: 'গুলিয়াখালী সি বিচের উদ্দেশ্যে যাত্রা' },
+          { time: '06:30 PM', bnTime: 'সন্ধ্যা ০৬:৩০', text: 'Tour wraps up with sweet Sitakunda memories, safe journey back home', bnText: 'ট্যুর সমাপ্তি ও নিজ গন্তব্যের উদ্দেশ্যে বিদায়' }
+        ]
+      }
+    ],
+    highlights: [
+      'Ruposhi & Sahasradhara Waterfalls Trail',
+      'Akilpur Beach & Banshbaria Sea Walk',
+      'Chandranath Hill 1,150 ft Peak Trek',
+      'Sitakunda Eco Park Exploration',
+      'Iconic Guliakhali Mangrove Beach',
+      'Hotel Night Stay & 6 Full Meals Included'
+    ],
     featured: true,
-    isActive: true,
+    isActive: true
   },
   {
     packageId: 'day-sitakunda-escape',
     title: '1 Day Sitakunda Escape',
-    bnTitle: '১ দিন সীতাকুণ্ড এস্কেপ ডে-ট্যুর',
-    tagline: 'The best day-trip itinerary for busy travelers seeking maximum adventure in minimal time.',
+    bnTitle: '১ দিন সীতাকুণ্ড এস্কেপ',
+    tagline: 'Experience the breathtaking cascades and coastal sea breeze of Sitakunda in just one action-packed day.',
+    bnTagline: 'একদিনেই উপভোগ করুন সীতাকুণ্ডের ঝর্ণা ও সমুদ্রের অসাধারণ সৌন্দর্য। আমাদের এই প্যাকেজে থাকছে জনপ্রিয় কয়েকটি দর্শনীয় স্থান, খাবার, লোকাল ট্রান্সপোর্ট ও অভিজ্ঞ গাইড।',
     category: '1 Day',
     duration: '1 Day',
+    bnDuration: '১ দিন',
     days: 1,
     nights: 0,
-    price: 1590,
-    originalPrice: 2000,
-    badge: 'Best Seller',
+    price: 1299,
+    originalPrice: 1599,
+    priceNote: 'per person all-inclusive',
+    bnPriceNote: 'জনপ্রতি সর্বমোট',
+    badge: 'Day Tour Escape',
+    bnBadge: 'ডে ট্যুর এস্কেপ',
     difficulty: 'Moderate',
+    bnDifficulty: 'মাঝারি ট্রেইল',
     groupSize: 'Min 4 Travelers',
-    image: 'images/spots/guliakhali-sea-beach.jpg',
-    spots: ['chandranath-hill', 'guliakhali-sea-beach', 'sitakunda-eco-park'],
-    inclusions: [
-      'Dedicated AC local transport (Sitakunda pickup & return)',
-      'Traditional local feast style buffet lunch',
-      'Certified local trekking guide for hill trails',
-      'All forest reserve entry tickets & parking permits',
+    minTravelers: 'Min 4 Travelers',
+    bnMinTravelers: 'ন্যূনতম ৪ জন',
+    image: 'images/spots/ruposhi-jhorna.jpg',
+    spots: [
+      'ruposhi-jhorna',
+      'chagalkanda-waterfall',
+      'sahasradhara-waterfall',
+      'akilpur-sea-beach',
+      'banshbaria-sea-beach'
     ],
-    exclusions: ['Dinner & personal snacks', 'Personal medical expenses'],
-    highlights: ['Chandranath Morning Climb', 'Eco Park Walk', 'Guliakhali Sunset'],
+    inclusions: [
+      'Entry tickets for all mentioned spots (Ruposhi, Chagalkanda, Sahasradhara 2, Beaches)',
+      'Dedicated reserved local transport throughout the day (Sitakunda arrival to return)',
+      'Certified & experienced local tour guide for waterfall trails and beach tour',
+      'Tour safety, security supervision and on-trail group coordination',
+      '2 Wholesome meals: Morning Egg Khichuri & Afternoon Chicken Lunch'
+    ],
+    bnIncluded: [
+      'উল্লেখিত স্পটের এন্ট্রি ফি ও প্রবেশ টিকিট (রূপসী ঝর্ণা, ছাগলকান্দা, সহস্রধারা ২ ও বিচসমূহ)',
+      'সারাদিনের সকল স্পটে যাতায়াতের জন্য সংরক্ষিত লোকাল ট্রান্সপোর্ট',
+      'ঝর্ণা ও সৈকত ট্রেইলের অভিজ্ঞ ও আন্তরিক ট্যুর গাইড',
+      'ভ্রমণকালীন সার্বিক নিরাপত্তা ও দিকনির্দেশনা',
+      '২ বেলার পুষ্টিকর খাবার: সকালের ডিম খিচুড়ি এবং দুপুরের তৃপ্তিদায়ক মুরগির মাংসের লাঞ্চ'
+    ],
+    exclusions: [
+      'Highway bus or train tickets from Dhaka/Chittagong to Sitakunda',
+      'Any personal expense not explicitly mentioned in the package (EZ Trails will not bear unauthorized costs)',
+      'Personal shopping, souvenirs, or additional snacks/beverages outside package'
+    ],
+    bnExcluded: [
+      'নিজ জেলা বা ঢাকা/চট্টগ্রাম থেকে সীতাকুণ্ড আসা-যাওয়ার মূল বাস/ট্রেন টিকিট',
+      'প্যাকেজে উল্লেখ নেই এমন কোনো খরচ EZ Trails বহন করবে না',
+      'ব্যক্তিগত কেনাকাটা বা প্যাকেজ বহির্ভূত অতিরিক্ত খাবার/পানীয়'
+    ],
+    whatToPack: [
+      'Anti-slip grip shoes or rubber sandals for wet waterfall canyon trails',
+      'Light day backpack with 1 extra set of dry cotton clothes and towel',
+      'Waterproof mobile pouch and power bank for photography',
+      'Reusable water bottle and ORS hydration saline'
+    ],
+    bnWhatToPack: [
+      'ঝর্ণার পিচ্ছিল পাথর ও পাহাড়ে হাঁটার জন্য গ্রিপযুক্ত ট্র্যাকিং জুতো বা রাবার স্যান্ডেল',
+      'হালকা ডে-ব্যাকপ্যাক, গামছা ও অতিরিক্ত ১ সেট সহজে শুকায় এমন সুতি কাপড়',
+      'মোবাইলের ওয়াটারপ্রুফ পাউচ ও পাওয়ার ব্যাংক',
+      'ব্যক্তিগত পানির বোতল ও ওআরএস স্যালাইন'
+    ],
+    meals: [
+      {
+        time: 'Day 1 • 09:00 AM',
+        bnTime: '১ম দিন • সকাল ০৯:০০',
+        title: 'Morning Breakfast',
+        bnTitle: 'সকালের নাস্তা (ডিম খিচুড়ি)',
+        icon: '🌅',
+        items: ['Authentic Egg Khichuri (Dim Khichuri)', 'Traditional Pickle', 'Salad & Mineral Water'],
+        bnItems: ['ডিম খিচুড়ি', 'আচার', 'সালাদ ও খাবার পানি'],
+        note: 'Freshly cooked authentic egg khichuri after arrival in Sitakunda',
+        bnNote: 'সীতাকুণ্ডে আগমন পরবর্তী ফ্রেশ হয়ে সকালের নাস্তায় গরম গরম ডিম খিচুড়ি'
+      },
+      {
+        time: 'Day 1 • 03:00 PM',
+        bnTime: '১ম দিন • দুপুর ০৩:০০',
+        title: 'Afternoon Lunch',
+        bnTitle: 'দুপুরের খাবার (ভাত, ডাল, সবজি/ভর্তা ও মুরগি)',
+        icon: '☀️',
+        items: ['Steamed Rice', 'Deshi Chicken Curry', 'Thick Dal', 'Seasonal Vegetable / Vorta', 'Salad'],
+        bnItems: ['সুগন্ধি সাদা ভাত', 'দেশি মুরগির মাংসের তরকারি', 'ঘন ডাল', 'সবজি / ভর্তা', 'সালাদ'],
+        note: 'After exploring Ruposhi & Chagalkanda waterfalls',
+        bnNote: 'ঝর্ণা ভ্রমণ শেষে সীতাকুণ্ডে ফিরে এসে তৃপ্তিদায়ক দুপুরের খাবার'
+      }
+    ],
+    scheduleDays: [
+      {
+        dayNumber: 'D1',
+        dayLabel: 'DAY 1',
+        bnDayLabel: '১ম দিন',
+        title: 'Waterfalls Exploration & Coastal Sunset',
+        bnTitle: 'ঝর্ণার রোমাঞ্চ, তৃপ্তিদায়ক আহার ও সমুদ্রের হাতছানি',
+        timeline: [
+          { time: '09:00 AM', bnTime: 'সকাল ০৯:০০', text: 'Arrival at Sitakunda & Morning Breakfast with delicious Egg Khichuri', bnText: 'সীতাকুণ্ডে আগমন ও সকালের নাস্তা (ডিম খিচুড়ি)' },
+          { time: '10:00 AM', bnTime: 'সকাল ১০:০০', text: 'Journey to Ruposhi Waterfall, Chagalkanda Waterfall & Sahasradhara 2', bnText: 'রূপশী ঝর্ণা, ছাগলকান্দা ঝর্ণার ও সহস্রধারা ২ এর উদ্দেশ্যে যাত্রা' },
+          { time: '03:00 PM', bnTime: 'বিকেল ০৩:০০', text: 'Return to Sitakunda and enjoy satisfying traditional lunch (Rice, Dal, Vegetable/Vorta & Chicken)', bnText: 'সীতাকুণ্ডে ফিরে দুপুরের খাবার' },
+          { time: '04:00 PM', bnTime: 'বিকেল ০৪:০০', text: 'Scenic coastal excursion to Akilpur & Banshbaria Sea Beaches', bnText: 'আকিলপুর ও বাঁশবাড়িয়া সি বিচের উদ্দেশ্যে যাত্রা' },
+          { time: '06:00 PM', bnTime: 'সন্ধ্যা ০৬:০০', text: 'Return to Sitakunda and tour concludes with sweet memories', bnText: 'সীতাকুণ্ডে ফিরে ট্যুর সমাপ্তি' }
+        ]
+      }
+    ],
+    highlights: [
+      'Ruposhi, Chagalkanda & Sahasradhara 2 Cascades',
+      'Akilpur Beach & Banshbaria Sea Pier Sunset',
+      'Egg Khichuri Breakfast & Chicken Lunch Feast',
+      'Dedicated Reserved Local Transport',
+      'Experienced Tour Guide & Safety Coordination',
+      '100% No Hidden Charges Guarantee'
+    ],
     featured: true,
     isActive: true,
   },
   {
-    packageId: 'weekend-2d1n-adventure',
-    title: '2 Days 1 Night Adventure',
-    bnTitle: '২ দিন ১ রাত অ্যাডভেঞ্চার ট্রেইল',
-    tagline: 'Balanced weekend getaway tailored for active friends and nature enthusiasts.',
-    category: '2 Days • 1 Night',
-    duration: '2 Days • 1 Night',
-    days: 2,
+    packageId: 'jhum-ghor-bbq-night',
+    title: 'Jhum Ghor BBQ Night',
+    bnTitle: 'ঝুম ঘর BBQ নাইট 🔥',
+    tagline: 'Starlit friendly gathering, live charcoal BBQ, and relaxing overnight stay in a traditional hilltop Jhum Ghor amidst serene nature.',
+    bnTagline: 'প্রকৃতির মাঝে রাতের আড্ডা, BBQ আর বন্ধুদের সাথে একসাথে থাকার দারুণ আয়োজন! 🌙',
+    category: 'Overnight • BBQ',
+    duration: 'Overnight • 1 Night',
+    bnDuration: '১ রাত (ওভারনাইট)',
+    days: 1,
     nights: 1,
-    price: 3200,
-    originalPrice: 3800,
-    badge: 'Adventure',
-    difficulty: 'Moderate',
-    groupSize: 'Min 4 Travelers',
-    image: 'images/spots/khaiyachora-waterfall.jpg',
-    spots: ['khaiyachora-waterfall', 'chandranath-hill', 'guliakhali-sea-beach'],
+    price: 599,
+    originalPrice: 799,
+    priceNote: 'per person (Min 2 days advance booking)',
+    bnPriceNote: 'জনপ্রতি (কমপক্ষে ২ দিন আগে বুকিং)',
+    badge: 'Campfire Special',
+    bnBadge: 'ক্যাম্পফায়ার স্পেশাল 🔥',
+    difficulty: 'Easy / Relaxing',
+    bnDifficulty: 'খুব সহজ ও আরামদায়ক',
+    groupSize: 'Max 15 Travelers',
+    minTravelers: 'Max 15 Travelers',
+    bnMinTravelers: 'সর্বোচ্চ ১৫ জনের ক্যাপাসিটি',
+    image: 'images/spots/jhum-bari-camp.jpg',
+    spots: ['jhum-bari'],
     inclusions: [
-      'Round-trip local transport from Sitakunda',
-      'Overnight eco-resort stay (Twin share)',
-      '4 Full meals including night BBQ',
-      'Khaiyachora waterfall guide & trekking gears',
+      'Overnight stay in authentic hilltop bamboo Jhum Ghor cottage',
+      'Live Charcoal BBQ Dinner (BBQ Chicken, Paratha, Salad/Sauce, Drinks)',
+      'Evening campfire arrangement and starlit gathering (আড্ডা)',
+      'Safe, secure, and serene hillside nature environment',
+      'Intimate squad experience with max 15 travelers capacity',
+      '100% Transparent pricing: Guaranteed NO hidden charges'
     ],
-    exclusions: ['Bus tickets to Sitakunda', 'Emergency rescue expenses'],
-    highlights: ['9-Tier Khaiyachora Waterfall', 'Campfire BBQ', 'Guliakhali Photography'],
+    bnIncluded: [
+      'ঐতিহ্যবাহী পাহাড়ি বাঁশের ঝুম ঘরে (Jhum Ghor) আরামদায়ক রাত্রিযাপন',
+      'লাইভ বারবিকিউ ডিনার (কয়লার ফ্রেশ BBQ চিকেন, পরোটা, সালাদ/সস ও পানীয়)',
+      'সন্ধ্যায় ক্যাম্পফায়ার ও বন্ধুদের সাথে খোলা আকাশের নিচে জমজমাট আড্ডা',
+      'সম্পূর্ণ নিরাপদ, মার্জিত ও নিরিবিলি প্রাকৃতিক পরিবেশ',
+      'সর্বোচ্চ ১৫ জনের ক্যাপাসিটি (বন্ধু বা পরিবারের একান্ত সময় কাটানোর দারুণ আয়োজন)',
+      'স্বচ্ছ ভ্রমণ পলিসি: EZ Trails-এর কোনো হিডেন চার্জ নেই'
+    ],
+    exclusions: [
+      'Transportation to and from Jhum Ghor base/Sitakunda',
+      'Any personal expense or extra snacks outside BBQ menu',
+      'Personal medications and individual tips'
+    ],
+    bnExcluded: [
+      'সীতাকুণ্ড বা নিজস্ব স্থান থেকে ঝুম ঘরে যাতায়াত খরচ',
+      'BBQ মেন্যুর বাইরে অতিরিক্ত খাবার বা ব্যক্তিগত খরচ',
+      'ব্যক্তিগত ওষুধ ও নিজস্ব টিপস'
+    ],
+    whatToPack: [
+      'Light shawl or warm hoodie for the breezy night hill climate',
+      'Power bank and camera for nighttime photos and memories',
+      'Personal toiletries and necessary medications',
+      'Comfortable walking footwear or sandals'
+    ],
+    bnWhatToPack: [
+      'রাতের পাহাড়ি মিষ্টি ঠান্ডার জন্য হালকা চাদর বা হুডি',
+      'মোবাইলের জন্য পাওয়ার ব্যাংক ও ক্যামেরা',
+      'ব্যক্তিগত প্রসাধন সামগ্রী ও প্রয়োজনীয় ওষুধপত্র',
+      'পাহাড়ে হাঁটার উপযোগী আরামদায়ক স্যান্ডেল বা জুতো'
+    ],
+    meals: [
+      {
+        time: 'Night • 08:30 PM',
+        bnTime: 'রাত ০৮:৩০',
+        title: 'Live Charcoal BBQ Dinner',
+        bnTitle: 'লাইভ বারবিকিউ ডিনার ও নাস্তা',
+        icon: '🍖',
+        items: ['Charcoal Grilled BBQ Chicken', 'Fresh Crispy Paratha', 'Special Dipping Sauce & Salad', 'Chilled Refreshing Beverage (Drink)'],
+        bnItems: ['কয়লার ফ্রেশ BBQ চিকেন', 'গরম পরোটা', 'সালাদ ও স্পেশাল সস', 'ঠান্ডা পানীয়'],
+        note: 'Freshly grilled live BBQ served hot with parathas and dipping sauce in the serene hills',
+        bnNote: 'প্রকৃতির মাঝে কয়লার আগুনে তৈরি ফ্রেশ বারবিকিউ চিকেন, গরম পরোটা, সালাদ/সস ও পানীয়'
+      }
+    ],
+    scheduleDays: [
+      {
+        dayNumber: 'D1',
+        dayLabel: 'SCHEDULE',
+        bnDayLabel: 'সময়সূচি',
+        title: 'Check-in, Evening আড্ডা, BBQ Night & Jhum Ghor Overnight Stay',
+        bnTitle: 'চেক-ইন, সান্ধ্যকালীন আড্ডা, BBQ নাইট ও ঝুম ঘরে রাত্রিযাপন',
+        timeline: [
+          { time: '04:00 PM', bnTime: 'বিকেল ০৪:০০', text: 'Check-in: Arrival at hilltop Jhum Ghor, freshen up, and welcome to serene nature.', bnText: 'Check-in (বিকেল ৪:০০টা): ঝুম ঘরে আগমন ও পাহাড়ি শান্ত ছিমছাম পরিবেশে অভ্যর্থনা।' },
+          { time: '06:00 PM', bnTime: 'সন্ধ্যা ০৬:০০', text: 'Evening: Sunset over the green ridges, campfire lighting, and lively friendly gathering (আড্ডা).', bnText: 'Evening: সূর্যাস্ত উপভোগ, ক্যাম্পফায়ার ও বন্ধুদের সাথে জমজমাট আড্ডা।' },
+          { time: '08:30 PM', bnTime: 'রাত ০৮:৩০', text: 'BBQ Night: Live charcoal grilling begins! Enjoy hot BBQ chicken, parathas, sauce, salad & drinks.', bnText: 'BBQ Night: কয়লার ফ্রেশ বারবিকিউ চিকেন, পরোটা, সালাদ/সস ও পানীয় সহযোগে দারুণ ভোজ।' },
+          { time: '11:00 PM', bnTime: 'রাত ১১:০০', text: 'Overnight: Peaceful rest and overnight stay in authentic bamboo Jhum Ghor under the starry sky.', bnText: 'Overnight: তারার নিচে ঐতিহ্যবাহী বাঁশের ঝুম ঘরে রাত্রিযাপন ও পাহাড়ি নিস্তব্ধতা উপভোগ।' },
+          { time: '10:00 AM', bnTime: 'পরদিন সকাল ১০:০০', text: 'Check-out (Next Day 10:00 AM): Fresh morning mountain breeze, sweet memories & Check-out.', bnText: 'Check-out (পরদিন সকাল ১০:০০টা): পাহাড়ি স্নিগ্ধ সকালের সৌন্দর্য ও মিষ্টি স্মৃতি নিয়ে চেক-আউট।' }
+        ]
+      }
+    ],
+    highlights: [
+      'Authentic Bamboo Jhum Ghor Overnight Stay',
+      'Live Charcoal BBQ Chicken Dinner (Paratha, Sauce, Drinks)',
+      'Evening Campfire & Relaxing Starlit আড্ডা',
+      'Safe, Secure & Peaceful Hilltop Environment',
+      'Maximum 15 Guests Capacity for Private Squad Comfort',
+      'Advance Booking Required (Min 2 Days Prior)',
+      '100% Transparent Policy: No Hidden Charges'
+    ],
     featured: true,
     isActive: true,
-  },
-  {
-    packageId: 'family-tour',
-    title: 'Family Tour',
-    bnTitle: 'পারিবারিক রিলাক্সেশন ট্যুর',
-    tagline: 'Carefully curated easy-paced itinerary with priority comfort, family-safe trails and delicious meals.',
-    category: '2 Days • 1 Night',
-    duration: '2 Days • 1 Night',
-    days: 2,
-    nights: 1,
-    price: 3850,
-    originalPrice: 4500,
-    badge: 'Family Safe',
-    difficulty: 'Easy',
-    groupSize: 'Min 4 Travelers',
-    image: 'images/spots/bhatiari-lake.jpg',
-    spots: ['sitakunda-eco-park', 'bhatiari-lake', 'banshbaria-sea-beach'],
-    inclusions: [
-      'Private dedicated AC vehicle throughout the tour',
-      'Premium family resort rooms',
-      'Mild hygienic family buffet meals',
-      'Senior and child friendly boat rides',
-    ],
-    exclusions: ['Personal medication', 'Extra ordered food outside package'],
-    highlights: ['Bhatiari Lake Boating', 'Eco Park Deer Reserve', 'Banshbaria Sea Pier Walk'],
-    featured: false,
-    isActive: true,
-  },
-  {
-    packageId: 'couple-tour',
-    title: 'Couple Tour (Private)',
-    bnTitle: 'কাপল প্রাইভেট রিট্রিট',
-    tagline: 'Private and memorable retreat with peaceful scenic destinations, flexible schedules, and private comfort.',
-    category: '2 Days • 1 Night',
-    duration: '2 Days • 1 Night',
-    days: 2,
-    nights: 1,
-    price: 4200,
-    originalPrice: 5000,
-    badge: 'Honeymoon Special',
-    difficulty: 'Easy',
-    groupSize: 'Min 2 Travelers',
-    image: 'images/spots/banshbaria-sea-beach.jpg',
-    spots: ['bhatiari-lake', 'guliakhali-sea-beach', 'mohamaya-lake'],
-    inclusions: [
-      'Private AC Sedan car for couple throughout',
-      'Premium Deluxe Couple Room with hill/lake view',
-      'Candlelight BBQ dinner setup & private boating',
-      'Discreet personal tour coordinator',
-    ],
-    exclusions: ['Personal shopping & tips'],
-    highlights: ['Private Candlelight Dinner', 'Mohamaya Lake Kayaking', 'Guliakhali Sunset Walk'],
-    featured: false,
-    isActive: true,
-  },
-  {
-    packageId: 'student-group-tour',
-    title: 'Student Group Thrill Tour',
-    bnTitle: 'স্টুডেন্ট গ্রুপ থ্রিল ট্যুর',
-    tagline: 'High energy, budget-friendly thrill pack designed specially for college and university student groups.',
-    category: '2 Days • 1 Night',
-    duration: '2 Days • 1 Night',
-    days: 2,
-    nights: 1,
-    price: 1450,
-    originalPrice: 1900,
-    badge: 'Budget Thrill',
-    difficulty: 'Moderate',
-    groupSize: 'Min 8 Travelers',
-    image: 'images/spots/mohamaya-lake.jpg',
-    spots: ['chandranath-hill', 'khaiyachora-waterfall', 'mohamaya-lake', 'guliakhali-sea-beach'],
-    inclusions: [
-      'Group local transport',
-      'Dormitory / Group tent camping setup',
-      'All local meals & campfire dinner',
-      'Experienced trek leader for group safety',
-    ],
-    exclusions: ['Individual expenses', 'Travel to Sitakunda'],
-    highlights: ['Camping Under Stars', 'Waterfall Stream Hike', 'Group Kayaking Battle'],
-    featured: false,
-    isActive: true,
-  },
+  }
 ];
 
 const initialDestinations = [

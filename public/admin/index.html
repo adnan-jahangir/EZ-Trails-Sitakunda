@@ -127,7 +127,7 @@
       </form>
 
       <div class="mt-6 pt-4 border-t border-slate-100 text-center">
-        <a href="../index.html" class="inline-flex items-center gap-1 text-[11px] font-bold text-slate-500 hover:text-emerald-800 transition-colors">
+        <a href="/" class="inline-flex items-center gap-1 text-[11px] font-bold text-slate-500 hover:text-emerald-800 transition-colors">
           <span class="material-symbols-outlined text-sm">arrow_back</span>
           <span>Back to Live Website</span>
         </a>
@@ -630,126 +630,531 @@
     </div>
   </div>
 
-  <!-- MODAL: ADD / EDIT PACKAGE -->
-  <div id="modal-package" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-3 sm:p-4">
-    <div class="bg-white rounded-2xl sm:rounded-3xl max-w-lg w-full p-4 sm:p-6 shadow-2xl max-h-[92vh] overflow-y-auto">
-      <div class="flex justify-between items-center pb-3 sm:pb-4 border-b border-slate-100 mb-4">
-        <h3 class="font-display text-lg sm:text-xl font-bold text-slate-900" id="modal-package-title">Add Tour Package</h3>
-        <button onclick="closeModal('modal-package')" class="text-slate-400 hover:text-slate-700 p-1 cursor-pointer">
-          <span class="material-symbols-outlined">close</span>
+  <!-- MODAL: ADD / EDIT PACKAGE (NON-IT FRIENDLY MULTI-TAB RICH EDITOR) -->
+  <div id="modal-package" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-2 sm:p-4">
+    <div class="bg-white rounded-2xl sm:rounded-3xl max-w-3xl w-full p-4 sm:p-6 shadow-2xl max-h-[94vh] flex flex-col">
+      <!-- Modal Header -->
+      <div class="flex justify-between items-center pb-3 border-b border-slate-100 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <span class="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
+            <span class="material-symbols-outlined text-xl">luggage</span>
+          </span>
+          <div>
+            <h3 class="font-display text-base sm:text-lg font-bold text-slate-900" id="modal-package-title">Add Tour Package</h3>
+            <p class="text-[11px] text-slate-500 font-medium">সহজ ও বিস্তারিত প্যাকেজ এডিটর — সাধারণ তথ্য লিখলেই ওয়েবসাইটে সুন্দরভাবে সাজিয়ে যাবে</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeModal('modal-package')" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg hover:bg-slate-100 cursor-pointer">
+          <span class="material-symbols-outlined text-xl">close</span>
         </button>
       </div>
-      <form onsubmit="handleSavePackage(event)" class="space-y-3.5 text-xs">
+
+      <!-- Tab Navigation Bar -->
+      <div class="flex items-center gap-1.5 py-2.5 border-b border-slate-100 overflow-x-auto shrink-0 scrollbar-none" id="pkg-modal-tabs">
+        <button type="button" onclick="switchPkgModalTab('basic')" id="pkg-tab-btn-basic" class="pkg-modal-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-primary text-white shadow-2xs flex items-center gap-1.5 shrink-0">
+          <span class="material-symbols-outlined text-sm">badge</span>
+          <span>১. মূল তথ্য ও দাম</span>
+        </button>
+        <button type="button" onclick="switchPkgModalTab('schedule')" id="pkg-tab-btn-schedule" class="pkg-modal-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-slate-600 hover:bg-slate-100 flex items-center gap-1.5 shrink-0">
+          <span class="material-symbols-outlined text-sm">schedule</span>
+          <span>২. সময়সূচী ও শিডিউল</span>
+        </button>
+        <button type="button" onclick="switchPkgModalTab('meals')" id="pkg-tab-btn-meals" class="pkg-modal-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-slate-600 hover:bg-slate-100 flex items-center gap-1.5 shrink-0">
+          <span class="material-symbols-outlined text-sm">restaurant</span>
+          <span>৩. খাবারের মেন্যু</span>
+        </button>
+        <button type="button" onclick="switchPkgModalTab('inclusions')" id="pkg-tab-btn-inclusions" class="pkg-modal-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-slate-600 hover:bg-slate-100 flex items-center gap-1.5 shrink-0">
+          <span class="material-symbols-outlined text-sm">checklist</span>
+          <span>৪. সুবিধা ও প্যাকিং</span>
+        </button>
+        <button type="button" onclick="switchPkgModalTab('spots')" id="pkg-tab-btn-spots" class="pkg-modal-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-slate-600 hover:bg-slate-100 flex items-center gap-1.5 shrink-0">
+          <span class="material-symbols-outlined text-sm">map</span>
+          <span>৫. দর্শনীয় স্পট</span>
+        </button>
+      </div>
+
+      <!-- Modal Body (Scrollable Form) -->
+      <form onsubmit="handleSavePackage(event)" class="overflow-y-auto flex-1 py-3 text-xs pr-1 space-y-4">
         <input type="hidden" id="pkg-edit-id">
         <input type="hidden" id="pkg-edit-slug">
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Package Title *</label>
-          <input type="text" id="pkg-title" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+
+        <!-- TAB 1: BASIC INFO & PRICING -->
+        <div id="pkg-tab-basic" class="pkg-tab-panel space-y-3.5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">প্যাকেজের নাম (English) *</label>
+              <input type="text" id="pkg-title" required placeholder="e.g. Adventure Squad | 2Day 1Night" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs focus:bg-white focus:border-primary">
+            </div>
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">প্যাকেজের নাম (বাংলা)</label>
+              <input type="text" id="pkg-bn-title" placeholder="যেমন: ঝুম ঘর BBQ নাইট 🔥" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs focus:bg-white focus:border-primary">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">সময়কাল / মেয়াদ *</label>
+              <input type="text" id="pkg-duration" placeholder="যেমন: 2 Days • 1 Night" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+            </div>
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">অফার প্রাইস (BDT) *</label>
+              <input type="number" id="pkg-price" required placeholder="যেমন: 1999" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-emerald-800">
+            </div>
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">পূর্বের মূল মূল্য (ঐচ্ছিক)</label>
+              <input type="number" id="pkg-orig-price" placeholder="যেমন: 2499 (ছাড় দেখাতে)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">হাইলাইট ব্যাজ</label>
+              <input type="text" id="pkg-badge" placeholder="যেমন: Popular, Best Seller, Campfire Special" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+            </div>
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">গ্রুপ সাইজ / ক্যাপাসিটি</label>
+              <input type="text" id="pkg-group" placeholder="যেমন: সর্বোচ্চ ১৫ জন / Min 4" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+            </div>
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">ট্র্যাকিং ডিফিকাল্টি</label>
+              <select id="pkg-difficulty" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold">
+                <option value="Easy">Easy (সহজ ও আরামদায়ক)</option>
+                <option value="Moderate" selected>Moderate (মাঝারি ট্রেইল)</option>
+                <option value="Challenging">Challenging (রোমাঞ্চকর ও কঠিন)</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">প্যাকেজের প্রধান ছবি (কভার ফটো)</label>
+            <div class="flex gap-2 items-center">
+              <input type="text" id="pkg-image" value="images/spots/chandranath-hill.jpg" class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs" oninput="document.getElementById('pkg-preview-img').src=this.value">
+              <label class="bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-800 px-3 py-2 rounded-xl text-xs font-bold cursor-pointer flex items-center gap-1 shrink-0">
+                <span class="material-symbols-outlined text-base">cloud_upload</span> ছবি আপলোড
+                <input type="file" id="pkg-file-input" accept="image/*" class="hidden" onchange="handleImageFileUpload(this, 'pkg-image', 'pkg-preview-img')">
+              </label>
+              <img id="pkg-preview-img" src="images/spots/chandranath-hill.jpg" class="w-9 h-9 rounded-lg object-cover border border-slate-200 shrink-0" onerror="this.src='images/spots/chandranath-hill.jpg'">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">সংক্ষিপ্ত বিবরণ (English Tagline)</label>
+              <textarea id="pkg-desc" rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs" placeholder="Short highlights in English..."></textarea>
+            </div>
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">সংক্ষিপ্ত বিবরণ (বাংলা ট্যাগলাইন)</label>
+              <textarea id="pkg-bn-desc" rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs" placeholder="প্রকৃতির মাঝে রাতের আড্ডা, BBQ আর বন্ধুদের সাথে দারুণ সময়..."></textarea>
+            </div>
+          </div>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Duration *</label>
-            <input type="text" id="pkg-duration" placeholder="e.g. 2 Days • 1 Night" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+
+        <!-- TAB 2: SCHEDULE & TIMELINE -->
+        <div id="pkg-tab-schedule" class="pkg-tab-panel hidden space-y-4">
+          <div class="bg-amber-50/80 border border-amber-200 rounded-xl p-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+            <div class="flex items-center gap-2 text-amber-950">
+              <span class="material-symbols-outlined text-amber-700 text-lg">magic_button</span>
+              <span class="text-[11px] font-medium leading-tight">ফেসবুক পোস্টের শিডিউল লেখা থাকলে এক ক্লিকে এখানে পেস্ট করলেই অটোমেটিক বসে যাবে!</span>
+            </div>
+            <button type="button" onclick="openPasteSchedulePrompt()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold text-[11px] px-3 py-1.5 rounded-lg shadow-2xs shrink-0 flex items-center gap-1 cursor-pointer">
+              <span class="material-symbols-outlined text-xs">content_paste</span>
+              <span>পোস্ট পেস্ট করুন</span>
+            </button>
           </div>
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Price (BDT) *</label>
-            <input type="number" id="pkg-price" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+
+          <!-- Day 1 Schedule -->
+          <div class="border border-slate-200 rounded-2xl p-3.5 bg-slate-50/50 space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded-lg bg-emerald-800 text-white font-extrabold text-xs flex items-center justify-center">১</span>
+                <input type="text" id="pkg-d1-title" value="সীতাকুণ্ড আগমন ও ট্রেইল ট্রেকিং" placeholder="১ম দিনের মূল শিরোনাম" class="font-bold text-xs bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-slate-800 w-64">
+              </div>
+              <button type="button" onclick="addTimelineRow(1)" class="text-xs font-bold text-emerald-800 bg-white hover:bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg flex items-center gap-1 cursor-pointer shadow-2xs">
+                <span class="material-symbols-outlined text-sm">add_circle</span>
+                <span>+ সময় যোগ করুন</span>
+              </button>
+            </div>
+            <div id="pkg-timeline-d1-container" class="space-y-2">
+              <!-- Timeline rows for Day 1 injected dynamically -->
+            </div>
+          </div>
+
+          <!-- Day 2 Schedule (Optional toggle) -->
+          <div class="border border-slate-200 rounded-2xl p-3.5 bg-slate-50/50 space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <input type="checkbox" id="pkg-d2-enable" class="rounded text-primary focus:ring-0 w-4 h-4 cursor-pointer" onchange="toggleDay2Visibility()">
+                <label for="pkg-d2-enable" class="font-bold text-xs text-slate-800 cursor-pointer flex items-center gap-1.5">
+                  <span class="w-6 h-6 rounded-lg bg-slate-700 text-white font-extrabold text-xs flex items-center justify-center">২</span>
+                  <span>২য় দিন যোগ করুন (Day 2)</span>
+                </label>
+                <input type="text" id="pkg-d2-title" value="চন্দ্রনাথ চূড়া ও সমুদ্র সৈকত দর্শন" placeholder="২য় দিনের শিরোনাম" class="font-bold text-xs bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-slate-800 w-60 hidden">
+              </div>
+              <button type="button" id="pkg-d2-add-btn" onclick="addTimelineRow(2)" class="text-xs font-bold text-emerald-800 bg-white hover:bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg flex items-center gap-1 cursor-pointer shadow-2xs hidden">
+                <span class="material-symbols-outlined text-sm">add_circle</span>
+                <span>+ সময় যোগ করুন</span>
+              </button>
+            </div>
+            <div id="pkg-timeline-d2-container" class="space-y-2 hidden">
+              <!-- Timeline rows for Day 2 injected dynamically -->
+            </div>
           </div>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Badge</label>
-            <input type="text" id="pkg-badge" placeholder="e.g. Popular, Best Seller" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+
+        <!-- TAB 3: FOOD & MEALS MENU -->
+        <div id="pkg-tab-meals" class="pkg-tab-panel hidden space-y-3.5">
+          <div class="p-3 bg-emerald-50/70 border border-emerald-200 rounded-xl text-emerald-950 flex items-center gap-2">
+            <span class="material-symbols-outlined text-emerald-700 text-lg">restaurant_menu</span>
+            <span class="text-[11px] font-medium">প্রতিটি বেলার খাবারের আইটেমগুলো কমা (,) দিয়ে লিখুন। খালি রাখলে সেই বেলার মেন্যু গ্রাহককে দেখানো হবে না।</span>
           </div>
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Group Size</label>
-            <input type="text" id="pkg-group" placeholder="e.g. Min 4 Travelers" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+
+          <div class="space-y-3">
+            <div class="p-3.5 bg-white border border-slate-200 rounded-2xl shadow-2xs">
+              <div class="flex items-center gap-2 mb-1.5">
+                <span class="text-base">🌅</span>
+                <label class="font-bold text-slate-800">সকালের নাস্তা (Breakfast Menu)</label>
+              </div>
+              <input type="text" id="pkg-meal-breakfast" placeholder="যেমন: গরম পরোটা, ডিম ভাজি, বুটের ডাল ভুনা, গরম চা" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+            </div>
+
+            <div class="p-3.5 bg-white border border-slate-200 rounded-2xl shadow-2xs">
+              <div class="flex items-center gap-2 mb-1.5">
+                <span class="text-base">☀️</span>
+                <label class="font-bold text-slate-800">দুপুরের খাবার (Lunch Menu)</label>
+              </div>
+              <input type="text" id="pkg-meal-lunch" placeholder="যেমন: সুগন্ধি সাদা ভাত, পাহাড়ি মোরগ / মেজবানি মাংস, ঘন ডাল ও সালাদ" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+            </div>
+
+            <div class="p-3.5 bg-white border border-slate-200 rounded-2xl shadow-2xs">
+              <div class="flex items-center gap-2 mb-1.5">
+                <span class="text-base">🌙</span>
+                <label class="font-bold text-slate-800">রাতের খাবার / বারবিকিউ (Dinner / BBQ Menu)</label>
+              </div>
+              <input type="text" id="pkg-meal-dinner" placeholder="যেমন: কয়লার ফ্রেশ BBQ চিকেন, পরোটা, স্পেশাল সস ও সালাদ, ঠান্ডা পানীয়" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+            </div>
           </div>
         </div>
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Package Image (Path / URL or Upload)</label>
-          <div class="flex gap-2">
-            <input type="text" id="pkg-image" value="images/spots/chandranath-hill.jpg" class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
-            <label class="bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 px-3 py-2 rounded-xl text-xs font-bold cursor-pointer flex items-center gap-1">
-              <span class="material-symbols-outlined text-base">cloud_upload</span> Upload
-              <input type="file" id="pkg-file-input" accept="image/*" class="hidden" onchange="handleImageFileUpload(this, 'pkg-image')">
+
+        <!-- TAB 4: INCLUSIONS & PACKING CHECKLIST -->
+        <div id="pkg-tab-inclusions" class="pkg-tab-panel hidden space-y-3.5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1">
+            <span class="text-[11px] text-slate-500 font-medium">💡 প্রতি লাইনে একটি করে সুবিধা বা আইটেম লিখুন (কিবোর্ডের Enter চাপুন)</span>
+            <button type="button" onclick="loadSitakundaPackageTemplate()" class="bg-gradient-to-r from-emerald-700 to-teal-800 hover:brightness-110 text-white font-bold text-[11px] px-3 py-1.5 rounded-xl shadow-xs flex items-center gap-1.5 cursor-pointer shrink-0">
+              <span class="material-symbols-outlined text-sm">auto_fix_high</span>
+              <span>✨ সীতাকুণ্ড স্ট্যান্ডার্ড তথ্য বসিয়ে দিন</span>
+            </button>
+          </div>
+
+          <div>
+            <label class="block font-bold text-emerald-900 mb-1 flex items-center gap-1">
+              <span class="text-emerald-600 font-extrabold">✓</span>
+              <span>প্যাকেজে যা যা অন্তর্ভুক্ত (What's Included)</span>
             </label>
+            <textarea id="pkg-included" rows="4" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs leading-relaxed" placeholder="অভিজ্ঞ সার্টিফাইড লোকাল গাইড&#10;সকল স্পটে যাতায়াতের চাঁদের গাড়ি&#10;সকল এন্ট্রি টিকিট ও পার্কিং ফি&#10;মানসম্মত খাবার ও রিফ্রেশমেন্ট"></textarea>
+          </div>
+
+          <div>
+            <label class="block font-bold text-rose-900 mb-1 flex items-center gap-1">
+              <span class="text-rose-600 font-extrabold">✕</span>
+              <span>যা অন্তর্ভুক্ত নয় (What is NOT Included)</span>
+            </label>
+            <textarea id="pkg-excluded" rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs leading-relaxed" placeholder="নিজ বাড়ি থেকে সীতাকুণ্ড আসা-যাওয়ার বাস/ট্রেন ভাড়া&#10;ব্যক্তিগত কেনাকাটা বা অতিরিক্ত স্ন্যাক্স&#10;ব্যক্তিগত ওষুধ ও নিজস্ব টিপস"></textarea>
+          </div>
+
+          <div>
+            <label class="block font-bold text-amber-900 mb-1 flex items-center gap-1">
+              <span>🎒</span>
+              <span>ট্যুরে সাথে যা আনা প্রয়োজন (Recommended Packing List)</span>
+            </label>
+            <textarea id="pkg-packing" rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs leading-relaxed" placeholder="গ্রিপযুক্ত ট্র্যাকিং জুতো বা কেডস&#10;হালকা ব্যাকপ্যাক ও অতিরিক্ত ১ সেট কাপড়&#10;পাওয়ার ব্যাংক ও পানির বোতল"></textarea>
           </div>
         </div>
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Short Description</label>
-          <textarea id="pkg-desc" rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs" placeholder="Brief summary of what travelers experience..."></textarea>
+
+        <!-- TAB 5: COVERED TOUR SPOTS -->
+        <div id="pkg-tab-spots" class="pkg-tab-panel hidden space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-slate-800">প্যাকেজে অন্তর্ভুক্ত স্পটগুলো টিক দিন:</span>
+            <span class="text-[11px] text-slate-500 font-medium" id="pkg-spots-count-label">০টি স্পট নির্বাচিত</span>
+          </div>
+          <div id="pkg-spots-selection-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 max-h-64 overflow-y-auto p-2 bg-slate-50 rounded-2xl border border-slate-200">
+            <!-- Dynamic spot checkboxes rendered via JS -->
+          </div>
         </div>
-        <button type="submit" id="pkg-submit-btn" class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-xl text-xs shadow-xs cursor-pointer">
-          Save Package to MongoDB
-        </button>
+
+        <!-- Submit Footer -->
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-3 shrink-0">
+          <div class="text-[11px] text-slate-400">
+            * সেভ করলে তাৎক্ষণিকভাবে ক্লাউড ডাটাবেজ ও লাইভ সাইটে আপডেট হবে
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="closeModal('modal-package')" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-bold hover:bg-slate-50 cursor-pointer">
+              বাতিল
+            </button>
+            <button type="submit" id="pkg-submit-btn" class="bg-primary hover:bg-primary-dark text-white font-bold px-5 py-2.5 rounded-xl shadow-xs cursor-pointer flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-base">cloud_done</span>
+              <span>প্যাকেজ সেভ করুন</span>
+            </button>
+          </div>
+        </div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL: ADD / EDIT DESTINATION -->
-  <div id="modal-destination" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-3 sm:p-4">
-    <div class="bg-white rounded-2xl sm:rounded-3xl max-w-lg w-full p-4 sm:p-6 shadow-2xl max-h-[92vh] overflow-y-auto">
-      <div class="flex justify-between items-center pb-3 sm:pb-4 border-b border-slate-100 mb-4">
-        <h3 class="font-display text-lg sm:text-xl font-bold text-slate-900" id="modal-destination-title">Add Destination Spot</h3>
-        <button onclick="closeModal('modal-destination')" class="text-slate-400 hover:text-slate-700 p-1 cursor-pointer">
-          <span class="material-symbols-outlined">close</span>
+  <!-- PROMPT MODAL: PASTE FACEBOOK SCHEDULE -->
+  <div id="modal-paste-schedule" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-[60] hidden flex items-center justify-center p-3">
+    <div class="bg-white rounded-2xl max-w-md w-full p-4 shadow-2xl space-y-3 text-xs">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+        <h4 class="font-bold text-slate-900 flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-amber-600 text-base">content_paste</span>
+          <span>ফেসবুক পোস্ট থেকে শিডিউল পেস্ট করুন</span>
+        </h4>
+        <button type="button" onclick="closeModal('modal-paste-schedule')" class="text-slate-400 hover:text-slate-700 p-1">
+          <span class="material-symbols-outlined text-lg">close</span>
         </button>
       </div>
-      <form onsubmit="handleSaveDestination(event)" class="space-y-3.5 text-xs">
+      <p class="text-[11px] text-slate-500">
+        পোস্টের শিডিউল লাইনগুলো হুবহু নিচে পেস্ট করুন (যেমন: সকাল ৯:০০ - সীতাকুণ্ড আগমন ও নাস্তা):
+      </p>
+      <textarea id="paste-schedule-input" rows="5" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-mono" placeholder="সকাল ০৯:০০ - সীতাকুণ্ডে আগমন ও নাস্তা&#10;সকাল ১০:০০ - ঝর্ণার উদ্দেশ্যে যাত্রা&#10;দুপুর ০২:০০ - দুপুরের খাবার"></textarea>
+      <div class="flex justify-end gap-2 pt-1">
+        <button type="button" onclick="closeModal('modal-paste-schedule')" class="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 font-bold">বাতিল</button>
+        <button type="button" onclick="applyPastedSchedule()" class="px-3.5 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-bold flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm">done_all</span>
+          <span>শিডিউলে বসিয়ে দিন</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD / EDIT DESTINATION (RICH & EASY) -->
+  <div id="modal-destination" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-2 sm:p-4">
+    <div class="bg-white rounded-2xl sm:rounded-3xl max-w-3xl w-full p-4 sm:p-6 shadow-2xl max-h-[94vh] flex flex-col">
+      <!-- Modal Header -->
+      <div class="flex justify-between items-center pb-3 border-b border-slate-100 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <span class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-800 flex items-center justify-center font-bold">
+            <span class="material-symbols-outlined text-xl">pin_drop</span>
+          </span>
+          <div>
+            <h3 class="font-display text-base sm:text-lg font-bold text-slate-900" id="modal-destination-title">Add Destination Spot</h3>
+            <p class="text-[11px] text-slate-500 font-medium">সীতাকুণ্ডের নতুন দর্শনীয় স্পট বা বিবরণ সহজেই যুক্ত করুন</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeModal('modal-destination')" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg hover:bg-slate-100 cursor-pointer">
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+
+      <!-- Tab Navigation -->
+      <div class="flex items-center gap-1.5 py-2.5 border-b border-slate-100 overflow-x-auto shrink-0 scrollbar-none" id="dest-modal-tabs">
+        <button type="button" onclick="switchDestModalTab('basic')" id="dest-tab-btn-basic" class="dest-modal-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-emerald-800 text-white shadow-2xs flex items-center gap-1.5 shrink-0">
+          <span class="material-symbols-outlined text-sm">info</span>
+          <span>১. স্পটের মূল তথ্য</span>
+        </button>
+        <button type="button" onclick="switchDestModalTab('details')" id="dest-tab-btn-details" class="dest-modal-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-slate-600 hover:bg-slate-100 flex items-center gap-1.5 shrink-0">
+          <span class="material-symbols-outlined text-sm">description</span>
+          <span>২. বিস্তারিত বিবরণ ও টিপস</span>
+        </button>
+        <button type="button" onclick="switchDestModalTab('gallery')" id="dest-tab-btn-gallery" class="dest-modal-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-slate-600 hover:bg-slate-100 flex items-center gap-1.5 shrink-0">
+          <span class="material-symbols-outlined text-sm">photo_library</span>
+          <span>৩. ফটো গ্যালারি ও ম্যাপ</span>
+        </button>
+      </div>
+
+      <!-- Modal Body (Form) -->
+      <form onsubmit="handleSaveDestination(event)" class="overflow-y-auto flex-1 py-3 text-xs pr-1 space-y-4">
         <input type="hidden" id="dest-edit-id">
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Spot Name (English) *</label>
-          <input type="text" id="dest-name" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
-        </div>
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Bangla Name</label>
-          <input type="text" id="dest-bn" placeholder="e.g. চন্দ্রনাথ পাহাড়" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">Category</label>
-            <select id="dest-cat" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold">
-              <option value="Hills & Peaks">Hills & Peaks</option>
-              <option value="Waterfalls & Treks">Waterfalls & Treks</option>
-              <option value="Beaches & Coastlines">Beaches & Coastlines</option>
-              <option value="Lakes & Kayaking">Lakes & Kayaking</option>
-            </select>
+
+        <!-- TAB 1: BASIC INFO -->
+        <div id="dest-tab-basic" class="dest-tab-panel space-y-3.5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">স্পটের নাম (English) *</label>
+              <input type="text" id="dest-name" required placeholder="e.g. Chandranath Hill" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+            </div>
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">স্পটের নাম (বাংলা) *</label>
+              <input type="text" id="dest-bn" placeholder="যেমন: চন্দ্রনাথ পাহাড়" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+            </div>
           </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">ক্যাটাগরি *</label>
+              <select id="dest-cat" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold">
+                <option value="Hills & Peaks">Hills & Peaks (পাহাড় ও চূড়া)</option>
+                <option value="Waterfalls & Treks">Waterfalls & Treks (ঝর্ণা ও ট্রেইল)</option>
+                <option value="Beaches & Coastlines">Beaches & Coastlines (সমুদ্র সৈকত)</option>
+                <option value="Lakes & Kayaking">Lakes & Kayaking (হ্রদ ও কায়াকিং)</option>
+                <option value="Campsites & Stay">Campsites & Stay (ক্যাম্পসাইট ও ঝুমঘর)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">ট্র্যাকিং ডিফিকাল্টি</label>
+              <select id="dest-diff" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold">
+                <option value="Easy">Easy (সহজ ও স্বাভাবিক)</option>
+                <option value="Moderate" selected>Moderate (মাঝারি চড়াই-উতরাই)</option>
+                <option value="Hard">Challenging / Hard (কঠিন ট্রেইল)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">ভ্রমণের সেরা সময়</label>
+              <input type="text" id="dest-best-time" placeholder="যেমন: বর্ষাকাল ও শীতের সকাল" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+            </div>
+          </div>
+
           <div>
-            <label class="block font-bold text-slate-700 mb-1">Difficulty</label>
-            <input type="text" id="dest-diff" placeholder="e.g. Easy, Moderate, Hard" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+            <label class="block font-bold text-slate-700 mb-1">স্পটের কভার ছবি *</label>
+            <div class="flex gap-2 items-center">
+              <input type="text" id="dest-image" value="images/spots/chandranath-hill.jpg" class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs" oninput="document.getElementById('dest-preview-img').src=this.value">
+              <label class="bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-800 px-3 py-2 rounded-xl text-xs font-bold cursor-pointer flex items-center gap-1 shrink-0">
+                <span class="material-symbols-outlined text-base">cloud_upload</span> ছবি আপলোড
+                <input type="file" id="dest-file-input" accept="image/*" class="hidden" onchange="handleImageFileUpload(this, 'dest-image', 'dest-preview-img')">
+              </label>
+              <img id="dest-preview-img" src="images/spots/chandranath-hill.jpg" class="w-9 h-9 rounded-lg object-cover border border-slate-200 shrink-0" onerror="this.src='images/spots/chandranath-hill.jpg'">
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">সংক্ষিপ্ত পরিচিতি (Short Description)</label>
+            <textarea id="dest-short-desc" rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs" placeholder="কার্ডে প্রদর্শনের জন্য ১-২ লাইনের সংক্ষিপ্ত কথা..."></textarea>
           </div>
         </div>
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Spot Image (Path / URL or Upload)</label>
-          <div class="flex gap-2">
-            <input type="text" id="dest-image" value="images/spots/chandranath-hill.jpg" class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
-            <label class="bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 px-3 py-2 rounded-xl text-xs font-bold cursor-pointer flex items-center gap-1">
-              <span class="material-symbols-outlined text-base">cloud_upload</span> Upload
-              <input type="file" id="dest-file-input" accept="image/*" class="hidden" onchange="handleImageFileUpload(this, 'dest-image')">
+
+        <!-- TAB 2: DETAILED STORY & TIPS -->
+        <div id="dest-tab-details" class="dest-tab-panel hidden space-y-3.5">
+          <!-- 1-Click Fast Templates for Non-IT Admin -->
+          <div class="p-3 bg-emerald-50/80 border border-emerald-200/90 rounded-2xl">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] font-bold text-emerald-950 flex items-center gap-1">
+                <span class="material-symbols-outlined text-emerald-700 text-sm">auto_fix_high</span>
+                <span>সহজ রেডিমেড টেমপ্লেট (এক ক্লিকে বিবরণ ও টিপস বসে যাবে):</span>
+              </span>
+            </div>
+            <div class="flex flex-wrap gap-1.5">
+              <button type="button" onclick="applyDestinationTemplate('mountain')" class="px-2.5 py-1 rounded-xl bg-white border border-emerald-300 text-emerald-900 text-[11px] font-bold hover:bg-emerald-100/70 shadow-2xs flex items-center gap-1 cursor-pointer transition-all">
+                <span>⛰️ পাহাড় ও চূড়া</span>
+              </button>
+              <button type="button" onclick="applyDestinationTemplate('waterfall')" class="px-2.5 py-1 rounded-xl bg-white border border-emerald-300 text-emerald-900 text-[11px] font-bold hover:bg-emerald-100/70 shadow-2xs flex items-center gap-1 cursor-pointer transition-all">
+                <span>🌊 ঝর্ণা ও ট্রেইল</span>
+              </button>
+              <button type="button" onclick="applyDestinationTemplate('beach')" class="px-2.5 py-1 rounded-xl bg-white border border-emerald-300 text-emerald-900 text-[11px] font-bold hover:bg-emerald-100/70 shadow-2xs flex items-center gap-1 cursor-pointer transition-all">
+                <span>🏖️ সমুদ্র সৈকত</span>
+              </button>
+              <button type="button" onclick="applyDestinationTemplate('camp')" class="px-2.5 py-1 rounded-xl bg-white border border-emerald-300 text-emerald-900 text-[11px] font-bold hover:bg-emerald-100/70 shadow-2xs flex items-center gap-1 cursor-pointer transition-all">
+                <span>⛺ ক্যাম্প ও ঝুমঘর</span>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-800 mb-1">স্পটের পূর্ণাঙ্গ বিবরণ (About the Spot)</label>
+            <textarea id="dest-desc" rows="4" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs leading-relaxed" placeholder="এই দর্শনীয় স্থান সম্পর্কে পূর্ণাঙ্গ বিবরণ লিখুন—যা ডিটেইল পেজে বড় আকারে দেখা যাবে..."></textarea>
+          </div>
+
+          <div>
+            <label class="block font-bold text-emerald-900 mb-1 flex items-center gap-1">
+              <span class="material-symbols-outlined text-emerald-600 text-base">check_circle</span>
+              <span>কী কী করবেন ও অভিজ্ঞতা (Things to Do & Experience)</span>
             </label>
+            <p class="text-[11px] text-slate-400 mb-1">💡 প্রতি লাইনে একটি করে কাজ লিখুন (Enter দিন)</p>
+            <textarea id="dest-things-to-do" rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs leading-relaxed" placeholder="পাহাড়ের চূড়া থেকে সূর্যাস্ত দর্শন&#10;ঝর্ণার ঠান্ডা পানিতে অবগাহন&#10;বুনো ট্রেইলে ট্রেকিং ও ফটোগ্রাফি"></textarea>
+          </div>
+
+          <div>
+            <label class="block font-bold text-amber-900 mb-1 flex items-center gap-1">
+              <span class="material-symbols-outlined text-amber-600 text-base">tips_and_updates</span>
+              <span>ভ্রমণ পরামর্শ ও সতর্কতা (Local Tips & Travel Advice)</span>
+            </label>
+            <p class="text-[11px] text-slate-400 mb-1">💡 প্রতি লাইনে একটি করে টিপস লিখুন (Enter দিন)</p>
+            <textarea id="dest-tips" rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs leading-relaxed" placeholder="পাথরে শেওলা থাকায় অবশ্যই গ্রিপিং জুতো পরে নামুন&#10;সঙ্গে পর্যাপ্ত খাবার পানি ও স্যালাইন রাখুন&#10;প্লাস্টিক বা অপচনশীল বর্জ্য ফেলে পরিবেশ নোংরা করবেন না"></textarea>
           </div>
         </div>
-        <div>
-          <div class="flex items-center justify-between mb-1.5">
-            <label class="block font-bold text-slate-700">Gallery Photos & Extra Images</label>
-            <button type="button" onclick="addMoreGalleryRow()" class="text-xs font-bold text-emerald-700 hover:text-emerald-900 flex items-center gap-1 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2.5 py-1 rounded-lg cursor-pointer transition-colors">
-              <span class="material-symbols-outlined text-sm">add_photo_alternate</span>
-              + Add More
+
+        <!-- TAB 3: GALLERY & LIVE MAP -->
+        <div id="dest-tab-gallery" class="dest-tab-panel hidden space-y-3.5">
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="block font-bold text-slate-700">ফটো গ্যালারি (অতিরিক্ত ছবিসমূহ)</label>
+              <button type="button" onclick="addMoreGalleryRow()" class="text-xs font-bold text-emerald-700 hover:text-emerald-900 flex items-center gap-1 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2.5 py-1 rounded-lg cursor-pointer transition-colors">
+                <span class="material-symbols-outlined text-sm">add_photo_alternate</span>
+                <span>+ আরও ছবি যোগ করুন</span>
+              </button>
+            </div>
+            <div id="dest-gallery-container" class="space-y-2 max-h-48 overflow-y-auto p-2 bg-slate-50 border border-slate-200 rounded-xl">
+              <!-- Dynamic Gallery Rows injected via JS -->
+            </div>
+          </div>
+
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
+            <div class="flex items-center justify-between">
+              <label class="block font-bold text-slate-800 flex items-center gap-1.5 text-xs sm:text-sm">
+                <span class="material-symbols-outlined text-emerald-700 text-base">pin_drop</span>
+                <span>গুগল ম্যাপ লোকেশন (Google Maps Location)</span>
+              </label>
+              <span class="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">bolt</span>
+                <span>স্মার্ট অটো-ডিটেক্ট</span>
+              </span>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 mb-1 flex items-center gap-1">
+                <span>গুগল ম্যাপের লিঙ্ক পেস্ট করুন (Paste Google Maps Link):</span>
+                <span class="text-emerald-700 font-semibold">(শুধু এই লিঙ্ক দিলেই হবে)</span>
+              </label>
+              <div class="relative flex items-center">
+                <input type="text" id="dest-map-url" placeholder="যেমন: https://maps.app.goo.gl/... বা https://maps.google.com/?q=22.625,91.678" class="w-full bg-white border border-slate-200 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl px-3 py-2 text-xs text-slate-800 pr-24" oninput="handleGoogleMapsUrlInput(this.value)">
+                <button type="button" onclick="testCurrentMapUrl()" class="absolute right-1.5 top-1.5 bottom-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 text-[10px] font-bold rounded-lg flex items-center gap-1 cursor-pointer transition-colors" title="ব্রাউজারে ম্যাপ ওপেন করে টেস্ট করুন">
+                  <span class="material-symbols-outlined text-xs">open_in_new</span>
+                  <span>টেস্ট করুন</span>
+                </button>
+              </div>
+              <div id="dest-map-detect-msg" class="text-[11px] mt-1.5 hidden">
+                <span id="dest-map-detect-text"></span>
+              </div>
+              <p class="text-[11px] text-slate-500 mt-1.5 leading-relaxed">
+                💡 <strong>খুব সহজ:</strong> শুধু গুগল ম্যাপসের শেয়ার লিঙ্ক পেস্ট করলেই হবে! সিস্টেম নিজে থেকেই অক্ষাংশ ও দ্রাঘিমাংশ বের করে নিবে। ফাঁকা রাখলেও কোনো সমস্যা নেই, স্বয়ংক্রিয়ভাবে সীতাকুণ্ডের অবস্থান সেট হয়ে যাবে।
+              </p>
+            </div>
+
+            <!-- Auto-populated Coordinates (Optional / Editable) -->
+            <div class="pt-2.5 border-t border-slate-200/80">
+              <div class="flex items-center justify-between mb-1">
+                <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">কো-অর্ডিনেট (স্বয়ংক্রিয়ভাবে বসে যায় / প্রয়োজন হলে এডিট করুন)</label>
+                <button type="button" onclick="fillSitakundaDefaultCoords()" class="text-[10px] font-bold text-emerald-700 hover:underline cursor-pointer">
+                  সীতাকুণ্ড সেন্টার সেট করুন
+                </button>
+              </div>
+              <div class="grid grid-cols-2 gap-2.5">
+                <div>
+                  <label class="block text-[10px] font-bold text-slate-500 mb-0.5">Latitude (অক্ষাংশ)</label>
+                  <input type="text" id="dest-lat" placeholder="যেমন: 22.6186" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-mono">
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-slate-500 mb-0.5">Longitude (দ্রাঘিমাংশ)</label>
+                  <input type="text" id="dest-lng" placeholder="যেমন: 91.6705" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-mono">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Footer -->
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-3 shrink-0">
+          <div class="text-[11px] text-slate-400">
+            * সেভ করলে সাথে সাথে এক্সপ্লোর ও ডিটেইল পেজে ছবি ও তথ্য চলে আসবে
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="closeModal('modal-destination')" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-bold hover:bg-slate-50 cursor-pointer">
+              বাতিল
+            </button>
+            <button type="submit" id="dest-submit-btn" class="bg-primary hover:bg-primary-dark text-white font-bold px-5 py-2.5 rounded-xl shadow-xs cursor-pointer flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-base">cloud_done</span>
+              <span>স্পট সেভ করুন</span>
             </button>
           </div>
-          <div id="dest-gallery-container" class="space-y-2 max-h-48 overflow-y-auto p-2 bg-slate-50 border border-slate-200 rounded-xl">
-            <!-- Dynamic Gallery Rows injected via JS -->
-          </div>
         </div>
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Description</label>
-          <textarea id="dest-desc" rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs"></textarea>
-        </div>
-        <button type="submit" id="dest-submit-btn" class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-xl text-xs shadow-xs cursor-pointer">
-          Save Spot to Database
-        </button>
       </form>
     </div>
   </div>
@@ -983,8 +1388,8 @@
   </div>
 
   <!-- Scripts -->
-  <script src="../js/data.js"></script>
-  <script src="../js/api.js"></script>
+  <script src="/js/data.js"></script>
+  <script src="/js/api.js"></script>
   <script>
     let allBookingsCache = [];
     let knownBookingIds = new Set();
@@ -1207,13 +1612,14 @@
         const res = await TourstkAPI.loginAdmin(email, password);
         if (res.success) {
           hideLoginGateway();
-          await Promise.all([
+          await Promise.allSettled([
             loadBookings(),
             loadPackages(),
             loadDestinations(),
             loadGuides(),
             loadCustomRequests(),
-            loadReviews()
+            loadReviews(),
+            loadRooms()
           ]);
           return;
         } else {
@@ -1222,13 +1628,14 @@
       } catch (err) {
         if (email.toLowerCase().trim() === 'admin@tourstk.com' && password === 'admin123456') {
           hideLoginGateway();
-          await Promise.all([
+          await Promise.allSettled([
             loadBookings(),
             loadPackages(),
             loadDestinations(),
             loadGuides(),
             loadCustomRequests(),
-            loadReviews()
+            loadReviews(),
+            loadRooms()
           ]);
           return;
         }
@@ -1260,7 +1667,7 @@
     document.addEventListener('DOMContentLoaded', async () => {
       if (TourstkAPI.isAuthenticated()) {
         hideLoginGateway();
-        await Promise.all([
+        await Promise.allSettled([
           loadBookings(),
           loadPackages(),
           loadDestinations(),
@@ -1326,6 +1733,23 @@
         targetBtn.classList.add('active');
         targetBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
       }
+
+      // Automatically reload / refresh data when switching tabs
+      if (tabId === 'packages' && typeof loadPackages === 'function') {
+        loadPackages();
+      } else if (tabId === 'destinations' && typeof loadDestinations === 'function') {
+        loadDestinations();
+      } else if (tabId === 'bookings' && typeof loadBookings === 'function') {
+        loadBookings();
+      } else if (tabId === 'guides' && typeof loadGuides === 'function') {
+        loadGuides();
+      } else if (tabId === 'custom' && typeof loadCustomRequests === 'function') {
+        loadCustomRequests();
+      } else if (tabId === 'rooms' && typeof loadRooms === 'function') {
+        loadRooms();
+      } else if (tabId === 'reviews' && typeof loadReviews === 'function') {
+        loadReviews();
+      }
     }
 
     function closeModal(modalId) {
@@ -1335,6 +1759,295 @@
     // ==========================================
     // 1. BOOKINGS & SALES
     // ==========================================
+    async function ensureAdminAuth() {
+      if (!TourstkAPI.isAuthenticated()) {
+        try {
+          await TourstkAPI.loginAdmin('admin@tourstk.com', 'admin123456');
+        } catch (e) {
+          console.warn('Auto-login admin warning:', e);
+        }
+      }
+    }
+
+    async function updateBookingStatus(internalId, bookingCode, newStatus) {
+      try {
+        const targetId = internalId || bookingCode;
+        if (targetId && targetId !== 'undefined') {
+          await TourstkAPI.updateBookingStatus(targetId, { status: newStatus });
+        }
+        if (typeof BookingManager !== 'undefined') {
+          BookingManager.updateStatus(bookingCode || internalId, newStatus);
+        }
+        TourstkAPI.broadcastChange('BOOKING_UPDATED');
+        await loadBookings();
+      } catch (err) {
+        console.error('Error updating status:', err);
+        if (typeof BookingManager !== 'undefined') {
+          BookingManager.updateStatus(bookingCode || internalId, newStatus);
+        }
+        await loadBookings();
+      }
+    }
+
+    async function promptCoordinatorNote(internalId, bookingCode) {
+      const note = prompt(`Enter coordinator notes for booking ${bookingCode}:`);
+      if (note === null) return;
+      try {
+        const targetId = internalId || bookingCode;
+        if (targetId && targetId !== 'undefined') {
+          await TourstkAPI.request(`/bookings/${targetId}`, {
+            method: 'PUT',
+            body: JSON.stringify({ notes: note }),
+            authRequired: true
+          });
+        }
+        if (typeof BookingManager !== 'undefined') {
+          BookingManager.updateStatus(bookingCode || internalId, undefined, note);
+        }
+        TourstkAPI.broadcastChange('BOOKING_UPDATED');
+        await loadBookings();
+      } catch (err) {
+        console.warn('Note save warning:', err);
+        await loadBookings();
+      }
+    }
+
+    async function deleteBookingRecord(internalId, bookingCode) {
+      if (!confirm(`Are you sure you want to permanently delete booking "${bookingCode}"?`)) return;
+      try {
+        const targetId = internalId && internalId !== 'undefined' ? internalId : bookingCode;
+        await TourstkAPI.deleteBooking(targetId);
+        if (typeof BookingManager !== 'undefined') {
+          BookingManager.delete(bookingCode || internalId);
+        }
+        TourstkAPI.broadcastChange('BOOKING_UPDATED');
+        await loadBookings();
+      } catch (err) {
+        console.error('Error deleting booking:', err);
+        if (typeof BookingManager !== 'undefined') {
+          BookingManager.delete(bookingCode || internalId);
+        }
+        await loadBookings();
+      }
+    }
+
+    // =========================================================================
+    // 🔔 REAL-TIME BOOKING AUDIO & VISUAL ALERT SYSTEM FOR ADMIN
+    // =========================================================================
+    let isInitialBookingsLoad = true;
+    const knownBookingIds = new Set();
+    const unreadBookingAlerts = [];
+
+    function playBookingChime() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const now = ctx.currentTime;
+        
+        // Melodic note 1: 659.25 Hz (E5)
+        const osc1 = ctx.createOscillator();
+        const gain1 = ctx.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(659.25, now);
+        gain1.gain.setValueAtTime(0.2, now);
+        gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        osc1.connect(gain1);
+        gain1.connect(ctx.destination);
+        osc1.start(now);
+        osc1.stop(now + 0.3);
+
+        // Melodic note 2: 880 Hz (A5)
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(880, now + 0.12);
+        gain2.gain.setValueAtTime(0.3, now + 0.12);
+        gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.start(now + 0.12);
+        osc2.stop(now + 0.6);
+      } catch (e) {
+        console.warn('Audio chime muted or not supported:', e);
+      }
+    }
+
+    async function enableBrowserPushNotifications() {
+      if (!('Notification' in window)) {
+        alert('Your browser does not support desktop push notifications.');
+        return;
+      }
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        alert('✅ Desktop Push Notifications Enabled! You will be alerted when new bookings arrive.');
+        try {
+          new Notification('EZ Trails Admin Hub', {
+            body: 'Live Booking Alerts are now enabled on your device.',
+            icon: '/images/ez_trails_official_logo.png'
+          });
+        } catch (e) {}
+      } else {
+        alert('Desktop notification permission was not granted.');
+      }
+    }
+
+    function toggleNotifDropdown() {
+      const dd = document.getElementById('notif-dropdown');
+      if (!dd) return;
+      dd.classList.toggle('hidden');
+      if (!dd.classList.contains('hidden')) {
+        const badge = document.getElementById('notif-badge');
+        if (badge) badge.classList.add('hidden');
+      }
+    }
+
+    function showLiveBookingToast(b) {
+      if (!b) return;
+      playBookingChime();
+
+      const bookingCode = b.id || b.bookingId || b._id;
+      const custName = b.name || b.customerName || 'Traveler';
+      const pkgTitle = b.packageName || 'Sitakunda Tour';
+      const grandTotal = b.totalPrice || b.pricing?.grandTotal || 0;
+
+      // Add to unread alerts list
+      unreadBookingAlerts.unshift({
+        id: bookingCode,
+        name: custName,
+        packageName: pkgTitle,
+        price: grandTotal,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+
+      // Update badge
+      const badge = document.getElementById('notif-badge');
+      if (badge) {
+        badge.textContent = Math.min(unreadBookingAlerts.length, 9);
+        badge.classList.remove('hidden');
+      }
+
+      // Update dropdown list
+      renderNotifDropdownList();
+
+      // Desktop OS push notification
+      if ('Notification' in window && Notification.permission === 'granted') {
+        try {
+          new Notification(`🚨 New Booking: ${bookingCode}`, {
+            body: `${custName} booked ${pkgTitle} (৳${grandTotal.toLocaleString()})`,
+            icon: '/images/ez_trails_official_logo.png'
+          });
+        } catch (e) {}
+      }
+
+      // Render on-screen floating toast
+      let container = document.getElementById('admin-toast-container');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'admin-toast-container';
+        container.className = 'fixed top-20 right-4 z-50 flex flex-col gap-3 max-w-sm w-full pointer-events-none';
+        document.body.appendChild(container);
+      }
+
+      const toast = document.createElement('div');
+      toast.className = 'pointer-events-auto bg-slate-950 border-2 border-emerald-500 text-white p-4 rounded-2xl shadow-2xl flex items-start gap-3 transition-all duration-300 transform translate-y-[-10px] opacity-0';
+      toast.innerHTML = `
+        <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 mt-0.5 shadow-md">
+          <span class="material-symbols-outlined text-2xl animate-pulse">notifications_active</span>
+        </div>
+        <div class="flex-grow">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">New Booking Received</span>
+            <span class="text-[10px] text-slate-400">Just Now</span>
+          </div>
+          <h4 class="font-bold text-sm text-white mt-1">${custName}</h4>
+          <p class="text-xs text-slate-300 font-mono">Code: <span class="text-emerald-400 font-bold">${bookingCode}</span></p>
+          <p class="text-[11px] text-slate-400 truncate">${pkgTitle} • ৳${grandTotal.toLocaleString()}</p>
+          <div class="mt-2.5 flex items-center gap-2">
+            <button onclick="switchTab('tab-bookings'); highlightBookingRow('${bookingCode}'); this.closest('.pointer-events-auto').remove();" class="text-[11px] font-bold bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1 rounded-lg transition-colors cursor-pointer shadow-xs">
+              View Booking
+            </button>
+            <button onclick="this.closest('.pointer-events-auto').remove();" class="text-[11px] text-slate-400 hover:text-white px-2 py-1 transition-colors cursor-pointer">
+              Dismiss
+            </button>
+          </div>
+        </div>
+      `;
+
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-[-10px]', 'opacity-0');
+        toast.classList.add('translate-y-0', 'opacity-100');
+      }, 50);
+
+      // Auto dismiss after 10s
+      setTimeout(() => {
+        if (toast && toast.parentElement) {
+          toast.style.opacity = '0';
+          setTimeout(() => toast.remove(), 300);
+        }
+      }, 10000);
+    }
+
+    function renderNotifDropdownList() {
+      const container = document.getElementById('notif-list-container');
+      if (!container) return;
+      if (unreadBookingAlerts.length === 0) {
+        container.innerHTML = '<div class="text-center py-4 text-slate-400 text-xs">No new booking alerts</div>';
+        return;
+      }
+      container.innerHTML = unreadBookingAlerts.slice(0, 5).map(a => `
+        <div onclick="switchTab('tab-bookings'); highlightBookingRow('${a.id}'); toggleNotifDropdown();" class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 hover:bg-emerald-50/70 transition-colors flex items-center justify-between gap-2 cursor-pointer">
+          <div>
+            <div class="font-bold text-slate-900 text-[11px]">${a.name} <span class="text-emerald-700 font-mono">(${a.id})</span></div>
+            <div class="text-[10px] text-slate-500 truncate max-w-[170px]">${a.packageName} • ৳${a.price.toLocaleString()}</div>
+          </div>
+          <span class="text-[10px] text-slate-400 font-mono flex-shrink-0">${a.time}</span>
+        </div>
+      `).join('');
+    }
+
+    function highlightBookingRow(bookingCode) {
+      const rows = document.querySelectorAll('#bookings-table-body tr');
+      rows.forEach(r => {
+        if (r.textContent.includes(bookingCode)) {
+          r.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          r.classList.add('bg-emerald-100', 'transition-all', 'duration-500');
+          setTimeout(() => r.classList.remove('bg-emerald-100'), 3000);
+        }
+      });
+    }
+
+    // Register real-time sync listeners
+    window.addEventListener('tourstk:booking-created', (e) => {
+      console.log('🔔 [Admin Live Sync] New booking event received:', e.detail);
+      showLiveBookingToast(e.detail);
+      loadBookings();
+    });
+
+    window.addEventListener('tourstk:bookings-updated', () => {
+      loadBookings();
+    });
+
+    // Close notification dropdown when clicked outside
+    document.addEventListener('click', (e) => {
+      const btn = document.getElementById('btn-admin-notif');
+      const dd = document.getElementById('notif-dropdown');
+      if (dd && !dd.classList.contains('hidden')) {
+        if (!dd.contains(e.target) && (!btn || !btn.contains(e.target))) {
+          dd.classList.add('hidden');
+        }
+      }
+    });
+
+    // Periodic light auto-refresh every 15s to keep table up to date
+    setInterval(() => {
+      if (document.visibilityState === 'visible' && !document.getElementById('admin-main-wrapper')?.classList.contains('hidden')) {
+        loadBookings();
+      }
+    }, 15000);
+
     async function loadBookings() {
       let stats = null;
       let bookings = [];
@@ -1962,139 +2675,305 @@
       TourstkAPI.broadcastChange('BOOKING_UPDATED');
     }
 
-    async function updateBookingStatus(internalId, bookingCode, newStatus) {
-      if (newStatus === 'confirmed') {
-        openAssignGuideModal(internalId, bookingCode);
-        return;
-      }
-
-      const capStatus = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
-      try {
-        const targetId = internalId || bookingCode;
-        await TourstkAPI.updateBookingStatus(targetId, { status: capStatus });
-      } catch (e) {
-        console.warn('Status update error:', e);
-      }
-      BookingManager.updateStatus(bookingCode, newStatus);
-      loadBookings();
-      TourstkAPI.broadcastChange('BOOKING_UPDATED');
-    }
-
-    async function promptCoordinatorNote(internalId, bookingCode) {
-      const b = allBookingsCache.find(x => x.id === bookingCode || x._id === internalId);
-      const existing = b && b.note ? b.note : '';
-      const note = prompt(`Enter coordinator note for booking ${bookingCode}:`, existing);
-      if (note !== null) {
-        try {
-          if (internalId && internalId.length === 24) {
-            await TourstkAPI.updateBookingStatus(internalId, { adminNotes: note });
-          }
-        } catch (e) {}
-        BookingManager.updateStatus(bookingCode, b ? b.status : 'pending', note);
-        alert('Note saved!');
-        loadBookings();
-        TourstkAPI.broadcastChange('BOOKING_UPDATED');
-      }
-    }
-
-    async function deleteBookingRecord(internalId, bookingCode) {
-      if (!confirm(`Are you sure you want to delete booking ${bookingCode}?`)) return;
-      try {
-        if (internalId && internalId.length === 24) {
-          await TourstkAPI.deleteBooking(internalId);
-        }
-      } catch (e) {}
-      BookingManager.delete(bookingCode);
-      alert(`Booking ${bookingCode} deleted!`);
-      loadBookings();
-      TourstkAPI.broadcastChange('BOOKING_UPDATED');
-    }
-
-    function filterAdminBookings() {
-      const search = (document.getElementById('admin-search-input')?.value || '').toLowerCase();
-      const status = document.getElementById('admin-status-filter')?.value || 'all';
-
-      let filtered = allBookingsCache.filter(b => {
-        const matchesSearch = !search ||
-          (b.id && b.id.toLowerCase().includes(search)) ||
-          (b.name && b.name.toLowerCase().includes(search)) ||
-          (b.phone && b.phone.toLowerCase().includes(search)) ||
-          (b.packageName && b.packageName.toLowerCase().includes(search));
-
-        const matchesStatus = status === 'all' || b.status === status;
-        return matchesSearch && matchesStatus;
-      });
-
-      renderTableRows(filtered);
-    }
-
     // ==========================================
-    // 2. TOUR PACKAGES (ADD & EDIT)
+    // 2. TOUR PACKAGES (MULTI-TAB RICH MANAGER)
     // ==========================================
     let allPackagesCache = [];
 
     async function loadPackages() {
       const grid = document.getElementById('packages-grid');
+      if (!grid) return;
+
       let pkgs = [];
       try {
         const res = await TourstkAPI.getPackages();
-        if (res?.success && Array.isArray(res.data)) pkgs = res.data;
-      } catch (e) {}
+        if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
+          pkgs = res.data;
+        }
+      } catch (e) {
+        console.warn('API getPackages warning:', e);
+      }
 
-      if (!pkgs || pkgs.length === 0) pkgs = TOURSTK.packages;
+      if (!pkgs || pkgs.length === 0) {
+        pkgs = (typeof TOURSTK !== 'undefined' && TOURSTK.packages) ? TOURSTK.packages : [];
+      }
+
       allPackagesCache = pkgs;
+
+      if (pkgs.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full text-center py-12 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+            <span class="material-symbols-outlined text-4xl text-slate-300">inventory_2</span>
+            <div class="text-sm font-semibold text-slate-600 mt-2">কোনো ট্যুর প্যাকেজ পাওয়া যায়নি</div>
+            <p class="text-xs text-slate-400 mt-1">নতুন প্যাকেজ যোগ করতে উপরে "+ Add New Package" বাটনে ক্লিক করুন।</p>
+          </div>
+        `;
+        return;
+      }
 
       grid.innerHTML = pkgs.map(p => {
         const pId = p._id || p.packageId || p.id;
-        const pTitle = p.title || p.name;
-        const pDuration = p.duration || p.category || '2 Days • 1 Night';
-        const pPrice = Number(p.price) || 0;
-        const pBadge = p.badge || 'Popular';
-        const pDesc = p.tagline || p.shortDesc || '';
+        const pSlug = p.packageId || p.id || p._id;
+        const pTitle = p.title || p.name || 'Tour Package';
+        const pBnTitle = p.bnTitle || p.bnName || '';
+        const pDuration = p.duration || '2 Days • 1 Night';
+        const pPrice = p.price || 0;
+        const pOrigPrice = p.originalPrice || 0;
+        const pBadge = p.badge || '';
         const pGroup = p.groupSize || p.minTravelers || 'Min 4 Travelers';
+        const pImage = p.image || '/images/spots/chandranath-hill.jpg';
+        const spotsCount = (p.spots && p.spots.length) || (p.destinations && p.destinations.length) || 0;
+        const mealsCount = (p.meals && p.meals.length) || 0;
+        const daysCount = (p.scheduleDays && p.scheduleDays.length) || 1;
+        const pTitleSafe = (pTitle || '').replace(/'/g, "\\'");
 
         return `
-          <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow">
+          <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col justify-between hover:shadow-md transition-all group">
             <div>
-              <div class="flex justify-between items-start mb-2">
-                <span class="text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-800 px-2 py-0.5 rounded-md">${pDuration}</span>
-                <span class="text-xs font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">${pBadge}</span>
+              <div class="relative h-44 rounded-xl overflow-hidden mb-3.5 bg-slate-100">
+                <img src="${pImage}" alt="${pTitle}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='/images/spots/chandranath-hill.jpg'">
+                <div class="absolute top-2.5 left-2.5 flex items-center gap-1.5 flex-wrap">
+                  ${pBadge ? `<span class="text-[10px] font-bold uppercase tracking-wider bg-emerald-700 text-white px-2 py-0.5 rounded-md shadow-xs">${pBadge}</span>` : ''}
+                  <span class="text-[10px] font-bold text-slate-800 bg-white/95 backdrop-blur-xs px-2 py-0.5 rounded-md shadow-xs">${pDuration}</span>
+                </div>
+                <div class="absolute bottom-2.5 right-2.5 bg-slate-900/90 backdrop-blur-xs text-white text-xs font-bold px-2.5 py-1 rounded-lg">
+                  ৳${Number(pPrice).toLocaleString()}
+                  ${pOrigPrice ? `<span class="line-through text-slate-400 text-[10px] ml-1">৳${Number(pOrigPrice).toLocaleString()}</span>` : ''}
+                </div>
               </div>
-              <h4 class="font-display font-bold text-base text-primary">${pTitle}</h4>
-              <p class="text-xs text-slate-500 mt-1 line-clamp-2">${pDesc}</p>
-              <div class="text-xs text-slate-400 mt-2 flex items-center gap-1">
-                <span class="material-symbols-outlined text-xs">group</span>
+              <div class="flex items-center gap-1 text-[11px] text-slate-500 font-medium mb-1">
+                <span class="material-symbols-outlined text-xs text-primary">groups</span>
                 <span>${pGroup}</span>
+                <span class="mx-1">•</span>
+                <span class="material-symbols-outlined text-xs text-emerald-600">location_on</span>
+                <span>${spotsCount} Spots</span>
               </div>
-              <div class="text-lg font-extrabold text-slate-900 mt-3">৳${pPrice.toLocaleString()} <span class="text-xs font-normal text-slate-500">/ person</span></div>
+              <h3 class="font-display font-bold text-base text-slate-900 line-clamp-1">${pTitle}</h3>
+              <div class="text-xs text-slate-500 font-medium line-clamp-1">${pBnTitle}</div>
+              <div class="mt-2.5 flex items-center gap-2 text-[11px] text-slate-600 flex-wrap">
+                <span class="bg-slate-50 border border-slate-100 px-2 py-0.5 rounded-md">🍽️ ${mealsCount} Meals</span>
+                <span class="bg-slate-50 border border-slate-100 px-2 py-0.5 rounded-md">📅 ${daysCount} Days Timeline</span>
+              </div>
             </div>
-            <div class="flex justify-end items-center gap-2 pt-4 border-t border-slate-100 mt-4">
-              <button onclick="openEditPackageModal('${pId}')" class="text-emerald-700 hover:bg-emerald-50 px-2.5 py-1.5 rounded-lg flex items-center gap-1 text-xs font-bold transition-colors">
-                <span class="material-symbols-outlined text-base">edit</span>
-                Edit
-              </button>
-              <button onclick="deletePackageItem('${pId}', '${pTitle}')" class="text-rose-600 hover:bg-rose-50 px-2.5 py-1.5 rounded-lg flex items-center gap-1 text-xs font-bold transition-colors">
-                <span class="material-symbols-outlined text-base">delete</span>
-                Delete
-              </button>
+            <div class="flex items-center justify-between gap-2 pt-4 border-t border-slate-100 mt-4">
+              <a href="/packages.html?pkg=${pSlug}" target="_blank" class="text-xs font-bold text-slate-600 hover:text-primary bg-slate-50 hover:bg-slate-100 border border-slate-200 px-2.5 py-1.5 rounded-lg flex items-center gap-1 transition-colors">
+                <span class="material-symbols-outlined text-sm">visibility</span>
+                <span>Preview</span>
+              </a>
+              <div class="flex items-center gap-1">
+                <button onclick="openEditPackageModal('${pId}')" class="text-emerald-700 hover:bg-emerald-50 px-2.5 py-1.5 rounded-lg flex items-center gap-1 text-xs font-bold transition-colors cursor-pointer border border-emerald-200/60 bg-emerald-50/50">
+                  <span class="material-symbols-outlined text-sm">edit</span>
+                  <span>Edit</span>
+                </button>
+                <button onclick="deletePackageItem('${pId}', '${pTitleSafe}')" class="text-rose-600 hover:bg-rose-50 px-2 py-1.5 rounded-lg flex items-center gap-1 text-xs font-bold transition-colors cursor-pointer" title="Delete Package">
+                  <span class="material-symbols-outlined text-base">delete</span>
+                </button>
+              </div>
             </div>
           </div>
         `;
       }).join('');
     }
+    function switchPkgModalTab(tabName) {
+      const panels = document.querySelectorAll('.pkg-tab-panel');
+      panels.forEach(p => p.classList.add('hidden'));
+
+      const activePanel = document.getElementById(`pkg-tab-${tabName}`);
+      if (activePanel) activePanel.classList.remove('hidden');
+
+      const btns = document.querySelectorAll('.pkg-modal-tab-btn');
+      btns.forEach(b => {
+        b.className = 'pkg-modal-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-slate-600 hover:bg-slate-100 flex items-center gap-1.5 shrink-0';
+      });
+
+      const activeBtn = document.getElementById(`pkg-tab-btn-${tabName}`);
+      if (activeBtn) {
+        activeBtn.className = 'pkg-modal-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-primary text-white shadow-2xs flex items-center gap-1.5 shrink-0';
+      }
+    }
+
+    function addTimelineRow(dayNum = 1, time = '', text = '') {
+      const container = document.getElementById(`pkg-timeline-d${dayNum}-container`);
+      if (!container) return;
+
+      const rowId = `t-row-d${dayNum}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+      const row = document.createElement('div');
+      row.id = rowId;
+      row.className = 'timeline-item-row flex items-center gap-2 bg-white p-2 rounded-xl border border-slate-200 shadow-2xs';
+      row.innerHTML = `
+        <input type="text" value="${time}" placeholder="সময় (যেমন: সকাল ০৯:০০)" class="timeline-time-input w-36 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-mono font-bold text-slate-800 shrink-0">
+        <input type="text" value="${text}" placeholder="কার্যক্রম / ভ্রমণ বিবরণী (যেমন: সীতাকুণ্ডে আগমন ও নাস্তা)" class="timeline-text-input flex-1 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700">
+        <button type="button" onclick="document.getElementById('${rowId}').remove()" class="text-rose-500 hover:bg-rose-50 p-1 rounded-lg cursor-pointer shrink-0" title="এই সময়টি মুছুন">
+          <span class="material-symbols-outlined text-base">delete</span>
+        </button>
+      `;
+      container.appendChild(row);
+    }
+
+    function toggleDay2Visibility() {
+      const enabled = document.getElementById('pkg-d2-enable').checked;
+      const titleInput = document.getElementById('pkg-d2-title');
+      const addBtn = document.getElementById('pkg-d2-add-btn');
+      const container = document.getElementById('pkg-timeline-d2-container');
+
+      if (enabled) {
+        titleInput.classList.remove('hidden');
+        addBtn.classList.remove('hidden');
+        container.classList.remove('hidden');
+        if (container.children.length === 0) {
+          addTimelineRow(2, 'সকাল ০৭:০০', 'সূর্যোদয় ও পাহাড়ি ট্রেইল অভিযান');
+          addTimelineRow(2, 'দুপুর ০১:০০', 'সৈকতে লাঞ্চ ও সফর সমাপ্তি');
+        }
+      } else {
+        titleInput.classList.add('hidden');
+        addBtn.classList.add('hidden');
+        container.classList.add('hidden');
+      }
+    }
+
+    function openPasteSchedulePrompt() {
+      document.getElementById('paste-schedule-input').value = '';
+      document.getElementById('modal-paste-schedule').classList.remove('hidden');
+    }
+
+    function applyPastedSchedule() {
+      const rawText = document.getElementById('paste-schedule-input').value.trim();
+      if (!rawText) {
+        closeModal('modal-paste-schedule');
+        return;
+      }
+
+      const lines = rawText.split('\n').map(l => l.trim()).filter(Boolean);
+      const container = document.getElementById('pkg-timeline-d1-container');
+      container.innerHTML = '';
+
+      lines.forEach(line => {
+        let time = '';
+        let text = line;
+        const separators = [' - ', ' – ', ' — ', ': ', ' • '];
+        for (const sep of separators) {
+          if (line.includes(sep)) {
+            const parts = line.split(sep);
+            time = parts[0].trim();
+            text = parts.slice(1).join(sep).trim();
+            break;
+          }
+        }
+        if (!time && line.match(/^([০-৯0-9\s:apmA-Z]+)\s*(.*)/)) {
+          const m = line.match(/^([০-৯0-9\s:apmA-Z]+)\s*(.*)/);
+          if (m && m[2]) {
+            time = m[1].trim();
+            text = m[2].trim();
+          }
+        }
+        addTimelineRow(1, time || 'সময়', text || line);
+      });
+
+      closeModal('modal-paste-schedule');
+    }
+
+    function loadSitakundaPackageTemplate() {
+      document.getElementById('pkg-included').value = [
+        'পাহাড় ও সমুদ্র ট্রেইলের জন্য অভিজ্ঞ সার্টিফাইড লোকাল গাইড',
+        'সকল স্পটে যাতায়াতের জন্য সংরক্ষিত চাঁদের গাড়ি / পরিবহন',
+        'চন্দ্রনাথ, রূপসী ও সহস্রধারার সকল এন্ট্রি টিকিট ও পার্কিং ফি',
+        'মানসম্মত ডিলাক্স রুম / ইকো-রিসোর্টে রাত্রিযাপন',
+        'সব বেলার পুষ্টিকর খাবার ও লাইভ বারবিকিউ'
+      ].join('\n');
+
+      document.getElementById('pkg-excluded').value = [
+        'নিজ বাড়ি থেকে সীতাকুণ্ড আসা-যাওয়ার মূল বাস/ট্রেন ভাড়া',
+        'ব্যক্তিগত কেনাকাটা বা অতিরিক্ত খাবার ও পানীয়',
+        'ব্যক্তিগত ওষুধ ও নিজস্ব টিপস'
+      ].join('\n');
+
+      document.getElementById('pkg-packing').value = [
+        'গ্রিপযুক্ত আরামদায়ক ট্র্যাকিং কেডস বা নন-স্লিপ জুতো',
+        'হালকা ব্যাকপ্যাক ও অতিরিক্ত ১-২ সেট সুতি কাপড়',
+        'রি-ইউজেবল পানির বোতল ও ওআরএস স্যালাইন',
+        'পাওয়ার ব্যাংক ও মোবাইলের ওয়াটারপ্রুফ পাউচ'
+      ].join('\n');
+
+      alert('✨ সীতাকুণ্ড স্ট্যান্ডার্ড অন্তর্ভুক্ত সুবিধা ও প্যাকিং তালিকা সফলভাবে বসানো হয়েছে!');
+    }
+
+    function renderSpotCheckboxes(selectedSpots = []) {
+      const container = document.getElementById('pkg-spots-selection-grid');
+      if (!container) return;
+
+      const spots = (allDestinationsCache && allDestinationsCache.length > 0) ? allDestinationsCache : (TOURSTK.destinations || []);
+      const selectedSet = new Set(selectedSpots.map(s => typeof s === 'object' ? (s.id || s.destinationId) : s));
+
+      container.innerHTML = spots.map(s => {
+        const sId = s._id || s.destinationId || s.id;
+        const sName = s.bnName || s.name;
+        const sCat = s.category || 'Trail';
+        const isChecked = selectedSet.has(sId) || selectedSet.has(s.id) || selectedSet.has(s.destinationId);
+
+        return `
+          <label class="flex items-center gap-2 p-2 bg-white rounded-xl border border-slate-200 hover:border-emerald-300 cursor-pointer shadow-2xs select-none">
+            <input type="checkbox" value="${sId}" class="pkg-spot-checkbox rounded text-primary focus:ring-0 w-4 h-4" ${isChecked ? 'checked' : ''} onchange="updateSpotsCountLabel()">
+            <img src="${s.image || 'images/spots/chandranath-hill.jpg'}" class="w-8 h-8 rounded-lg object-cover border border-slate-200 shrink-0" onerror="this.src='images/spots/chandranath-hill.jpg'">
+            <div class="min-w-0 flex-1">
+              <div class="font-bold text-[11px] text-slate-800 truncate">${sName}</div>
+              <div class="text-[9px] text-slate-400 truncate">${sCat}</div>
+            </div>
+          </label>
+        `;
+      }).join('');
+
+      updateSpotsCountLabel();
+    }
+
+    function updateSpotsCountLabel() {
+      const checkedCount = document.querySelectorAll('.pkg-spot-checkbox:checked').length;
+      const label = document.getElementById('pkg-spots-count-label');
+      if (label) label.textContent = `${checkedCount}টি স্পট নির্বাচিত`;
+    }
 
     function openAddPackageModal() {
       document.getElementById('modal-package-title').textContent = 'Add Tour Package';
-      document.getElementById('pkg-submit-btn').textContent = 'Save Package to MongoDB';
+      document.getElementById('pkg-submit-btn').innerHTML = '<span class="material-symbols-outlined text-base">cloud_done</span><span>প্যাকেজ সেভ করুন</span>';
       document.getElementById('pkg-edit-id').value = '';
       document.getElementById('pkg-edit-slug').value = '';
       document.getElementById('pkg-title').value = '';
+      document.getElementById('pkg-bn-title').value = '';
       document.getElementById('pkg-duration').value = '2 Days • 1 Night';
       document.getElementById('pkg-price').value = '';
+      document.getElementById('pkg-orig-price').value = '';
       document.getElementById('pkg-badge').value = 'Popular';
-      document.getElementById('pkg-group').value = 'Min 4 Travelers';
+      document.getElementById('pkg-group').value = 'সর্বোচ্চ ১০-১৫ জন';
+      document.getElementById('pkg-difficulty').value = 'Moderate';
       document.getElementById('pkg-image').value = 'images/spots/chandranath-hill.jpg';
+      document.getElementById('pkg-preview-img').src = 'images/spots/chandranath-hill.jpg';
       document.getElementById('pkg-desc').value = '';
+      document.getElementById('pkg-bn-desc').value = '';
+
+      document.getElementById('pkg-meal-breakfast').value = '';
+      document.getElementById('pkg-meal-lunch').value = '';
+      document.getElementById('pkg-meal-dinner').value = '';
+
+      document.getElementById('pkg-d1-title').value = 'সীতাকুণ্ড আগমন ও ট্রেইল ট্রেকিং';
+      const d1Container = document.getElementById('pkg-timeline-d1-container');
+      d1Container.innerHTML = '';
+      addTimelineRow(1, 'সকাল ০৯:০০', 'সীতাকুণ্ডে আগমন ও সকালের নাস্তা');
+      addTimelineRow(1, 'সকাল ১০:০০', 'রূপসী ও সহস্রধারা ঝর্ণা ট্রেকিং');
+      addTimelineRow(1, 'দুপুর ০২:০০', 'ঐতিহ্যবাহী দুপুরের খাবার');
+      addTimelineRow(1, 'বিকেল ০৪:০০', 'সমুদ্র সৈকতে সূর্যাস্ত ও আড্ডা');
+
+      document.getElementById('pkg-d2-enable').checked = false;
+      document.getElementById('pkg-d2-title').classList.add('hidden');
+      document.getElementById('pkg-d2-add-btn').classList.add('hidden');
+      const d2Container = document.getElementById('pkg-timeline-d2-container');
+      d2Container.classList.add('hidden');
+      d2Container.innerHTML = '';
+
+      document.getElementById('pkg-included').value = '';
+      document.getElementById('pkg-excluded').value = '';
+      document.getElementById('pkg-packing').value = '';
+
+      renderSpotCheckboxes([]);
+      switchPkgModalTab('basic');
       document.getElementById('modal-package').classList.remove('hidden');
     }
 
@@ -2103,55 +2982,175 @@
       if (!p) return;
 
       document.getElementById('modal-package-title').textContent = 'Edit Tour Package';
-      document.getElementById('pkg-submit-btn').textContent = 'Update Package in MongoDB';
+      document.getElementById('pkg-submit-btn').innerHTML = '<span class="material-symbols-outlined text-base">cloud_sync</span><span>প্যাকেজ আপডেট করুন</span>';
       document.getElementById('pkg-edit-id').value = p._id || p.packageId || p.id;
       document.getElementById('pkg-edit-slug').value = p.packageId || p.id;
       document.getElementById('pkg-title').value = p.title || p.name || '';
+      document.getElementById('pkg-bn-title').value = p.bnTitle || p.bnName || '';
       document.getElementById('pkg-duration').value = p.duration || p.category || '2 Days • 1 Night';
       document.getElementById('pkg-price').value = p.price || '';
+      document.getElementById('pkg-orig-price').value = p.originalPrice || '';
       document.getElementById('pkg-badge').value = p.badge || 'Popular';
       document.getElementById('pkg-group').value = p.groupSize || p.minTravelers || 'Min 4 Travelers';
+      document.getElementById('pkg-difficulty').value = p.difficulty || 'Moderate';
       document.getElementById('pkg-image').value = p.image || 'images/spots/chandranath-hill.jpg';
+      document.getElementById('pkg-preview-img').src = p.image || 'images/spots/chandranath-hill.jpg';
       document.getElementById('pkg-desc').value = p.tagline || p.shortDesc || '';
+      document.getElementById('pkg-bn-desc').value = p.bnTagline || p.bnShortDesc || '';
+
+      document.getElementById('pkg-meal-breakfast').value = '';
+      document.getElementById('pkg-meal-lunch').value = '';
+      document.getElementById('pkg-meal-dinner').value = '';
+      if (Array.isArray(p.meals)) {
+        p.meals.forEach(m => {
+          const itemsStr = (m.bnItems || m.items || []).join(', ');
+          const title = (m.title || m.bnTitle || '').toLowerCase();
+          if (title.includes('break') || title.includes('নাস্তা') || m.icon === '🌅') {
+            document.getElementById('pkg-meal-breakfast').value = itemsStr;
+          } else if (title.includes('lunch') || title.includes('দুপুর') || m.icon === '☀️') {
+            document.getElementById('pkg-meal-lunch').value = itemsStr;
+          } else {
+            document.getElementById('pkg-meal-dinner').value = itemsStr;
+          }
+        });
+      }
+
+      const d1Container = document.getElementById('pkg-timeline-d1-container');
+      const d2Container = document.getElementById('pkg-timeline-d2-container');
+      d1Container.innerHTML = '';
+      d2Container.innerHTML = '';
+
+      if (Array.isArray(p.scheduleDays) && p.scheduleDays.length > 0) {
+        const d1 = p.scheduleDays[0];
+        document.getElementById('pkg-d1-title').value = d1.bnTitle || d1.title || 'সীতাকুণ্ড ট্রেইল ট্রেকিং';
+        if (Array.isArray(d1.timeline) && d1.timeline.length > 0) {
+          d1.timeline.forEach(t => addTimelineRow(1, t.bnTime || t.time || '', t.bnText || t.text || ''));
+        } else {
+          addTimelineRow(1, 'সকাল ০৯:০০', 'সীতাকুণ্ডে আগমন ও সকালের নাস্তা');
+        }
+
+        if (p.scheduleDays.length > 1) {
+          const d2 = p.scheduleDays[1];
+          document.getElementById('pkg-d2-enable').checked = true;
+          document.getElementById('pkg-d2-title').value = d2.bnTitle || d2.title || 'চন্দ্রনাথ চূড়া ও সি বিচ';
+          document.getElementById('pkg-d2-title').classList.remove('hidden');
+          document.getElementById('pkg-d2-add-btn').classList.remove('hidden');
+          d2Container.classList.remove('hidden');
+          if (Array.isArray(d2.timeline) && d2.timeline.length > 0) {
+            d2.timeline.forEach(t => addTimelineRow(2, t.bnTime || t.time || '', t.bnText || t.text || ''));
+          } else {
+            addTimelineRow(2, 'সকাল ০৭:০০', 'পাহাড়ি চূড়া অভিযান');
+          }
+        } else {
+          document.getElementById('pkg-d2-enable').checked = false;
+          document.getElementById('pkg-d2-title').classList.add('hidden');
+          document.getElementById('pkg-d2-add-btn').classList.add('hidden');
+          d2Container.classList.add('hidden');
+        }
+      } else {
+        document.getElementById('pkg-d1-title').value = 'সীতাকুণ্ড আগমন ও ট্রেইল ট্রেকিং';
+        addTimelineRow(1, 'সকাল ০৯:০০', 'সীতাকুণ্ডে আগমন ও সকালের নাস্তা');
+        addTimelineRow(1, 'সকাল ১০:০০', 'ঝর্ণার ট্রেইলে যাত্রা');
+        addTimelineRow(1, 'দুপুর ০২:০০', 'দুপুরের খাবার');
+        document.getElementById('pkg-d2-enable').checked = false;
+        document.getElementById('pkg-d2-title').classList.add('hidden');
+        document.getElementById('pkg-d2-add-btn').classList.add('hidden');
+        d2Container.classList.add('hidden');
+      }
+
+      document.getElementById('pkg-included').value = (p.bnIncluded || p.inclusions || []).join('\n');
+      document.getElementById('pkg-excluded').value = (p.bnExcluded || p.exclusions || []).join('\n');
+      document.getElementById('pkg-packing').value = (p.bnWhatToPack || p.whatToPack || []).join('\n');
+
+      renderSpotCheckboxes(p.spots || p.destinations || []);
+
+      switchPkgModalTab('basic');
       document.getElementById('modal-package').classList.remove('hidden');
     }
 
     async function handleSavePackage(e) {
       e.preventDefault();
       const editId = document.getElementById('pkg-edit-id').value;
-      const editSlug = document.getElementById('pkg-edit-slug').value;
-      const title = document.getElementById('pkg-title').value;
-      const duration = document.getElementById('pkg-duration').value;
+      const title = document.getElementById('pkg-title').value.trim();
+      const bnTitle = document.getElementById('pkg-bn-title').value.trim() || title;
+      const duration = document.getElementById('pkg-duration').value.trim();
       const price = Number(document.getElementById('pkg-price').value);
-      const badge = document.getElementById('pkg-badge').value || 'Popular';
-      const groupSize = document.getElementById('pkg-group').value || 'Min 4 Travelers';
-      const image = document.getElementById('pkg-image').value || 'images/spots/chandranath-hill.jpg';
-      const tagline = document.getElementById('pkg-desc').value;
+      const origPriceVal = document.getElementById('pkg-orig-price').value;
+      const originalPrice = origPriceVal ? Number(origPriceVal) : undefined;
+      const badge = document.getElementById('pkg-badge').value.trim() || 'Popular';
+      const groupSize = document.getElementById('pkg-group').value.trim() || 'সর্বোচ্চ ১৫ জন';
+      const difficulty = document.getElementById('pkg-difficulty').value;
+      const image = document.getElementById('pkg-image').value.trim() || 'images/spots/chandranath-hill.jpg';
+      const tagline = document.getElementById('pkg-desc').value.trim();
+      const bnTagline = document.getElementById('pkg-bn-desc').value.trim() || tagline;
+
+      const inclusionsList = document.getElementById('pkg-included').value.split('\n').map(s => s.trim()).filter(Boolean);
+      const exclusionsList = document.getElementById('pkg-excluded').value.split('\n').map(s => s.trim()).filter(Boolean);
+      const packingList = document.getElementById('pkg-packing').value.split('\n').map(s => s.trim()).filter(Boolean);
+
+      const meals = [];
+      const bfText = document.getElementById('pkg-meal-breakfast').value.trim();
+      if (bfText) {
+        const items = bfText.split(',').map(s => s.trim()).filter(Boolean);
+        meals.push({ time: '08:00 AM', bnTime: 'সকাল ০৮:০০', title: 'Breakfast Feast', bnTitle: 'সকালের নাস্তা', icon: '🌅', items, bnItems: items });
+      }
+      const lunchText = document.getElementById('pkg-meal-lunch').value.trim();
+      if (lunchText) {
+        const items = lunchText.split(',').map(s => s.trim()).filter(Boolean);
+        meals.push({ time: '01:30 PM', bnTime: 'দুপুর ০১:৩০', title: 'Traditional Feast Lunch', bnTitle: 'ঐতিহ্যবাহী দুপুরের খাবার', icon: '☀️', items, bnItems: items });
+      }
+      const dinnerText = document.getElementById('pkg-meal-dinner').value.trim();
+      if (dinnerText) {
+        const items = dinnerText.split(',').map(s => s.trim()).filter(Boolean);
+        meals.push({ time: '08:30 PM', bnTime: 'রাত ০৮:৩০', title: 'Live BBQ & Dinner', bnTitle: 'রাতের খাবার ও লাইভ BBQ', icon: '🍖', items, bnItems: items });
+      }
+
+      const scheduleDays = [];
+      const d1Rows = document.querySelectorAll('#pkg-timeline-d1-container .timeline-item-row');
+      const d1Timeline = [];
+      d1Rows.forEach(row => {
+        const time = row.querySelector('.timeline-time-input')?.value?.trim() || 'সময়';
+        const text = row.querySelector('.timeline-text-input')?.value?.trim() || '';
+        if (text) d1Timeline.push({ time, bnTime: time, text, bnText: text });
+      });
+      const d1Title = document.getElementById('pkg-d1-title').value.trim() || 'সীতাকুণ্ড আগমন ও ট্রেইল ট্রেকিং';
+      scheduleDays.push({ dayNumber: 'D1', dayLabel: 'DAY 1', bnDayLabel: '১ম দিন', title: d1Title, bnTitle: d1Title, timeline: d1Timeline });
+
+      if (document.getElementById('pkg-d2-enable').checked) {
+        const d2Rows = document.querySelectorAll('#pkg-timeline-d2-container .timeline-item-row');
+        const d2Timeline = [];
+        d2Rows.forEach(row => {
+          const time = row.querySelector('.timeline-time-input')?.value?.trim() || 'সময়';
+          const text = row.querySelector('.timeline-text-input')?.value?.trim() || '';
+          if (text) d2Timeline.push({ time, bnTime: time, text, bnText: text });
+        });
+        const d2Title = document.getElementById('pkg-d2-title').value.trim() || 'চন্দ্রনাথ চূড়া ও সি বিচ';
+        scheduleDays.push({ dayNumber: 'D2', dayLabel: 'DAY 2', bnDayLabel: '২য় দিন', title: d2Title, bnTitle: d2Title, timeline: d2Timeline });
+      }
+
+      const selectedSpots = [];
+      document.querySelectorAll('.pkg-spot-checkbox:checked').forEach(cb => { if (cb.value) selectedSpots.push(cb.value); });
 
       const payload = {
-        title,
-        duration,
-        category: duration,
-        price,
-        badge,
-        groupSize,
-        image,
-        tagline,
-        inclusions: ['Dedicated local transport', 'Deluxe stay', 'Meals included', 'Local guide'],
+        title, bnTitle, duration, bnDuration: duration, category: duration, price, originalPrice, badge, bnBadge: badge, groupSize, difficulty,
+        bnDifficulty: difficulty === 'Easy' ? 'খুব সহজ ও আরামদায়ক' : (difficulty === 'Challenging' ? 'রোমাঞ্চকর ও কঠিন' : 'মাঝারি ট্রেইল'),
+        image, tagline, bnTagline,
+        inclusions: inclusionsList.length > 0 ? inclusionsList : ['Dedicated local transport', 'Deluxe stay', 'Meals included', 'Local guide'],
+        bnIncluded: inclusionsList.length > 0 ? inclusionsList : ['সংরক্ষিত পরিবহন', 'মানসম্মত আবাসন', 'খাবার অন্তর্ভুক্ত', 'লোকাল গাইড'],
+        exclusions: exclusionsList, bnExcluded: exclusionsList, whatToPack: packingList, bnWhatToPack: packingList,
+        meals: meals.length > 0 ? meals : undefined, scheduleDays: scheduleDays.length > 0 ? scheduleDays : undefined, spots: selectedSpots,
       };
 
       try {
         if (editId) {
-          // UPDATE EXISTING PACKAGE
           await TourstkAPI.updatePackage(editId, payload);
-          alert('Package updated in MongoDB!');
+          alert('প্যাকেজটি সফলভাবে আপডেট হয়েছে!');
         } else {
-          // CREATE NEW PACKAGE
           const cleanSlug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'pkg';
           payload.packageId = `${cleanSlug}-${Date.now().toString(36)}`;
           payload.isActive = true;
           await TourstkAPI.createPackage(payload);
-          alert('Package saved & published to MongoDB Atlas!');
+          alert('নতুন প্যাকেজটি সফলভাবে পাবলিশ হয়েছে!');
         }
         closeModal('modal-package');
         await loadPackages();
@@ -2159,7 +3158,7 @@
         TourstkAPI.broadcastChange('PACKAGE_UPDATED');
       } catch (err) {
         console.error('Package save error:', err);
-        alert('Failed to save package: ' + (err.message || 'Please verify admin session'));
+        alert('প্যাকেজ সেভ করতে সমস্যা হয়েছে: ' + (err.message || 'দয়া করে চেক করুন'));
       }
     }
 
@@ -2177,52 +3176,95 @@
     }
 
     // ==========================================
-    // 3. DESTINATIONS & SPOTS (ADD & EDIT)
+    // 3. DESTINATIONS & SPOTS (RICH MANAGER)
     // ==========================================
     let allDestinationsCache = [];
 
+    function switchDestModalTab(tabName) {
+      const panels = document.querySelectorAll('.dest-tab-panel');
+      panels.forEach(p => p.classList.add('hidden'));
+
+      const activePanel = document.getElementById(`dest-tab-${tabName}`);
+      if (activePanel) activePanel.classList.remove('hidden');
+
+      const btns = document.querySelectorAll('.dest-modal-tab-btn');
+      btns.forEach(b => {
+        b.className = 'dest-modal-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-slate-600 hover:bg-slate-100 flex items-center gap-1.5 shrink-0';
+      });
+
+      const activeBtn = document.getElementById(`dest-tab-btn-${tabName}`);
+      if (activeBtn) {
+        activeBtn.className = 'dest-modal-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-emerald-800 text-white shadow-2xs flex items-center gap-1.5 shrink-0';
+      }
+    }
+
     async function loadDestinations() {
       const grid = document.getElementById('destinations-grid');
+      if (!grid) return;
+
       let spots = [];
       try {
         const res = await TourstkAPI.getDestinations();
-        if (res?.success && Array.isArray(res.data)) spots = res.data;
-      } catch (e) {}
+        if (res?.success && Array.isArray(res.data) && res.data.length > 0) {
+          spots = res.data;
+        }
+      } catch (e) {
+        console.warn('API getDestinations warning:', e);
+      }
 
-      if (!spots || spots.length === 0) spots = TOURSTK.destinations;
+      if (!spots || spots.length === 0) {
+        spots = (typeof TOURSTK !== 'undefined' && TOURSTK.destinations) ? TOURSTK.destinations : [];
+      }
       allDestinationsCache = spots;
+
+      if (spots.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full text-center py-12 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+            <span class="material-symbols-outlined text-4xl text-slate-300">travel_explore</span>
+            <div class="text-sm font-semibold text-slate-600 mt-2">কোনো ট্রাভেল স্পট পাওয়া যায়নি</div>
+            <p class="text-xs text-slate-400 mt-1">নতুন স্পট যোগ করতে উপরে "+ Add New Spot" বাটনে ক্লিক করুন।</p>
+          </div>
+        `;
+        return;
+      }
 
       grid.innerHTML = spots.map(s => {
         const sId = s._id || s.destinationId || s.id;
-        const sName = s.name;
+        const sName = s.name || 'Sitakunda Spot';
         const sBn = s.bnName || '';
         const sCat = s.category || 'Spot';
         const sDiff = s.difficulty || 'Moderate';
         const sDesc = s.shortDesc || s.description || '';
         const galleryCount = (s.gallery && s.gallery.length) || 1;
+        const sImg = s.image || (s.gallery && s.gallery[0]?.src) || '/images/spots/chandranath-hill.jpg';
+        const sNameSafe = (sName || '').replace(/'/g, "\\'");
 
         return `
-          <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow">
+          <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col justify-between hover:shadow-md transition-all group">
             <div>
-              <div class="flex justify-between items-start mb-1">
-                <span class="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md">${sCat}</span>
-                <span class="text-[10px] font-semibold text-slate-500 bg-slate-50 px-2 py-0.5 rounded-md">${sDiff}</span>
+              <div class="relative h-36 rounded-xl overflow-hidden mb-3 bg-slate-100">
+                <img src="${sImg}" alt="${sName}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='/images/spots/chandranath-hill.jpg'">
+                <div class="absolute top-2.5 left-2.5 flex items-center gap-1.5 flex-wrap">
+                  <span class="text-[10px] font-bold uppercase tracking-wider bg-slate-900/80 backdrop-blur-xs text-white px-2 py-0.5 rounded-md shadow-xs">${sCat}</span>
+                  <span class="text-[10px] font-semibold text-slate-800 bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded-md shadow-xs">${sDiff}</span>
+                </div>
               </div>
-              <h4 class="font-display font-bold text-base text-primary mt-1">${sName}</h4>
+              <h4 class="font-display font-bold text-base text-slate-900">${sName}</h4>
               <div class="text-xs text-slate-500 font-medium">${sBn}</div>
               <p class="text-xs text-slate-500 mt-2 line-clamp-2">${sDesc}</p>
             </div>
             <div class="flex flex-wrap justify-between items-center gap-2 pt-4 border-t border-slate-100 mt-4">
-              <button onclick="openEditDestinationModal('${sId}')" class="text-xs font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/80 px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer" title="Manage spot photos">
+              <button onclick="openEditDestinationModal('${sId}'); switchDestModalTab('gallery');" class="text-xs font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/80 px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer" title="Manage spot photos">
                 <span class="material-symbols-outlined text-sm">photo_library</span>
                 <span>Gallery (${galleryCount})</span>
-                <span class="text-emerald-600 font-extrabold">+ Add More</span>
+                <span class="text-emerald-600 font-extrabold">+ Add</span>
               </button>
               <div class="flex items-center gap-1">
-                <button onclick="openEditDestinationModal('${sId}')" class="text-emerald-700 hover:bg-emerald-50 px-2 py-1.5 rounded-lg flex items-center gap-1 text-xs font-bold transition-colors">
-                  <span class="material-symbols-outlined text-base">edit</span>
+                <button onclick="openEditDestinationModal('${sId}')" class="text-emerald-700 hover:bg-emerald-50 px-2 py-1.5 rounded-lg flex items-center gap-1 text-xs font-bold transition-colors cursor-pointer border border-emerald-200/60 bg-emerald-50/50">
+                  <span class="material-symbols-outlined text-sm">edit</span>
+                  <span>Edit</span>
                 </button>
-                <button onclick="deleteDestinationItem('${sId}', '${sName}')" class="text-rose-600 hover:bg-rose-50 px-2 py-1.5 rounded-lg flex items-center gap-1 text-xs font-bold transition-colors">
+                <button onclick="deleteDestinationItem('${sId}', '${sNameSafe}')" class="text-rose-600 hover:bg-rose-50 px-2 py-1.5 rounded-lg flex items-center gap-1 text-xs font-bold transition-colors cursor-pointer" title="Delete Spot">
                   <span class="material-symbols-outlined text-base">delete</span>
                 </button>
               </div>
@@ -2300,7 +3342,6 @@
             if (p) p.src = res.data.url;
           }
         } else {
-          // Local base64 fallback
           const reader = new FileReader();
           reader.onload = (e) => {
             if (targetInput) {
@@ -2337,17 +3378,166 @@
       }
     }
 
+    function applyDestinationTemplate(type) {
+      const descEl = document.getElementById('dest-desc');
+      const thingsEl = document.getElementById('dest-things-to-do');
+      const tipsEl = document.getElementById('dest-tips');
+      const bestTimeEl = document.getElementById('dest-best-time');
+      const diffEl = document.getElementById('dest-diff');
+
+      if (type === 'mountain') {
+        if (descEl) descEl.value = 'সীতাকুণ্ডের মনোরম পাহাড়ি চূড়া যা থেকে বঙ্গোপসাগর ও মেঘের অপরূপ দৃশ্য উপভোগ করা যায়। ট্রেইল ধরে ওঠার সময় রোমাঞ্চকর পাহাড়ি পরিবেশ ও প্রাকৃতিক নৈসর্গিক সৌন্দর্য প্রত্যক্ষ করা যায়।';
+        if (thingsEl) thingsEl.value = 'পাহাড়ের চূড়া থেকে সূর্যাস্ত ও সূর্যোদয় দর্শন\nপাহাড়ি বুনো ট্রেইলে ট্রেকিং ও ক্যাম্পিং\nআকাশ, পাহাড় ও সাগরের প্যানোরামিক ফটোগ্রাফি';
+        if (tipsEl) tipsEl.value = 'অবশ্যই গ্রিপিং ট্র্যাকিং শু পরে ট্রেইলে নামুন\nপর্যাপ্ত খাবার পানি ও স্যালাইন সাথে রাখুন\nসন্ধ্যার আগেই মূল ট্রেইলে নেমে আসা নিরাপদ\nকোনো প্রকার প্লাস্টিক ফেলে পরিবেশ নোংরা করবেন না';
+        if (bestTimeEl) bestTimeEl.value = 'ভোরবেলা ও সূর্যাস্তের সময়';
+        if (diffEl) diffEl.value = 'Moderate';
+      } else if (type === 'waterfall') {
+        if (descEl) descEl.value = 'গভীর পাহাড়ের বুক চিরে বয়ে চলা সীতাকুণ্ডের প্রমত্তা শীতল জলধারা। ট্রেইলে ঝিরিপথ ও পাথুরে চড়াই-উতরাই পেরিয়ে ঝর্ণার স্বচ্ছ পানিতে পৌঁছানোর রোমাঞ্চ অতুলনীয়।';
+        if (thingsEl) thingsEl.value = 'ঝর্ণার শীতল স্ফটিক স্বচ্ছ পানিতে অবগাহন ও সতেজতা\nপাথুরে ঝিরিপথে রোমাঞ্চকর জল-ট্র্যাকিং\nক্যাসকেড ও সবুজ বুনো প্রকৃতির ফটোগ্রাফি';
+        if (tipsEl) tipsEl.value = 'পাথরে পিচ্ছিল শেওলা থাকায় সাবধানে পা ফেলুন\nবর্ষাকালে হড়কা বান বা পানির টান বেশি থাকলে জলে নামবেন না\nমোবাইল ও গ্যাজেটের জন্য ওয়াটারপ্রুফ ব্যাগ ব্যবহার করুন\nঅপচনশীল বর্জ্য ফেলে প্রকৃতির ক্ষতি করবেন না';
+        if (bestTimeEl) bestTimeEl.value = 'বর্ষাকাল ও বর্ষা পরবর্তী সময়';
+        if (diffEl) diffEl.value = 'Moderate';
+      } else if (type === 'beach') {
+        if (descEl) descEl.value = 'সীতাকুণ্ডের উপকূল ঘেঁষা শান্ত ও মনোরম সমুদ্র সৈকত। বিস্তীর্ণ বালুকাবেলা, ঝাউবনের ছায়া এবং পড়ন্ত বিকেলে রক্তিম সূর্যাস্তের অসাধারণ রূপ পর্যটকদের মুগ্ধ করে।';
+        if (thingsEl) thingsEl.value = 'বিকেলে রক্তিম সূর্যাস্ত ও জোয়ারের রূপ অবলোকন\nঝাউবনে প্রশান্তিদায়ক হাঁটা ও লাল কাঁকড়া দেখা\nসমুদ্রের তাজা বাতাস উপভোগ ও বন্ধুবান্ধব নিয়ে আড্ডা';
+        if (tipsEl) tipsEl.value = 'ভাটার সময় বেশি গভীরে যাওয়া থেকে বিরত থাকুন\nবিচে সন্ধ্যার পর স্থানীয় নির্দেশনা মেনে চলুন\nময়লা বা খাবারের প্যাকেট নির্দিষ্ট ডাস্টবিনে ফেলুন';
+        if (bestTimeEl) bestTimeEl.value = 'বিকেল ৪টা থেকে সূর্যাস্ত পর্যন্ত';
+        if (diffEl) diffEl.value = 'Easy';
+      } else if (type === 'camp') {
+        if (descEl) descEl.value = 'পাহাড়ের নির্জন প্রকৃতির মাঝে তাঁবু বা ঐতিহ্যবাহী ঝুমঘরে রাত্রিযাপনের এক অপূর্ব অভিজ্ঞতা। রাতের খোলা আকাশ, ঠান্ডা বাতাস আর ক্যাম্পফায়ারের উষ্ণ আড্ডা এক অবিস্মরণীয় অনুভূতি।';
+        if (thingsEl) thingsEl.value = 'লাইভ কয়লার বারবিকিউ ও ক্যাম্পফায়ার আড্ডা\nখোলা আকাশের নিচে তারার মেলা অবলোকন\nভোরবেলার পাহাড়ি কুয়াশা ও পাখির কলকাকলি উপভোগ';
+        if (tipsEl) tipsEl.value = 'রাতের ঠান্ডার জন্য পর্যাপ্ত উষ্ণ পোশাক সাথে রাখুন\nক্যাম্পের বাইরে রাতে একা চলাফেরা করবেন না\nনিরাপত্তা ও গাইডের নির্দেশনা সবসময় অনুসরণ করুন';
+        if (bestTimeEl) bestTimeEl.value = 'শীতকাল ও পূর্ণিমার রাত';
+        if (diffEl) diffEl.value = 'Easy';
+      }
+    }
+
+    // =========================================================================
+    // 🗺️ GOOGLE MAPS LINK PARSER & AUTO-COORDINATE EXTRACTOR
+    // =========================================================================
+    function parseGoogleMapsUrl(str) {
+      if (!str) return null;
+      str = str.trim();
+
+      // 1. Plain coordinates: 22.6189, 91.6811
+      const plainMatch = str.match(/^([0-9.-]+)\s*,\s*([0-9.-]+)$/);
+      if (plainMatch) {
+        return { lat: parseFloat(plainMatch[1]), lng: parseFloat(plainMatch[2]) };
+      }
+
+      // 2. @lat,lng e.g. /@22.6189564,91.6811234,17z
+      const atMatch = str.match(/@([0-9.-]+),([0-9.-]+)/);
+      if (atMatch) {
+        return { lat: parseFloat(atMatch[1]), lng: parseFloat(atMatch[2]) };
+      }
+
+      // 3. q=lat,lng or ll=lat,lng or destination=lat,lng or center=lat,lng
+      const queryMatch = str.match(/[?&](?:q|ll|destination|center)=([0-9.-]+),([0-9.-]+)/);
+      if (queryMatch) {
+        return { lat: parseFloat(queryMatch[1]), lng: parseFloat(queryMatch[2]) };
+      }
+
+      // 4. Embed iframe: !2d[lng]!3d[lat] (Google Maps embed reverses lat/lng order)
+      const embedMatch = str.match(/!2d([0-9.-]+)!3d([0-9.-]+)/);
+      if (embedMatch) {
+        return { lat: parseFloat(embedMatch[2]), lng: parseFloat(embedMatch[1]) };
+      }
+
+      return null;
+    }
+
+    function handleGoogleMapsUrlInput(val) {
+      const msgEl = document.getElementById('dest-map-detect-msg');
+      const textEl = document.getElementById('dest-map-detect-text');
+      if (!val) {
+        if (msgEl) msgEl.classList.add('hidden');
+        return;
+      }
+
+      // If user pasted iframe, extract src attribute
+      const iframeMatch = val.match(/src=["']([^"']+)["']/);
+      if (iframeMatch) {
+        val = iframeMatch[1];
+        document.getElementById('dest-map-url').value = val;
+      }
+
+      const parsed = parseGoogleMapsUrl(val);
+
+      if (parsed && !isNaN(parsed.lat) && !isNaN(parsed.lng)) {
+        document.getElementById('dest-lat').value = parsed.lat;
+        document.getElementById('dest-lng').value = parsed.lng;
+        if (msgEl && textEl) {
+          msgEl.className = 'text-[11px] text-emerald-700 font-semibold mt-1.5 flex items-center gap-1 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg';
+          textEl.innerHTML = `✅ <strong>সফল!</strong> ম্যাপের লিঙ্ক থেকে অক্ষাংশ (Lat: ${parsed.lat}) ও দ্রাঘিমাংশ (Lng: ${parsed.lng}) স্বয়ংক্রিয়ভাবে বসে গেছে।`;
+          msgEl.classList.remove('hidden');
+        }
+      } else {
+        // If it's a short link or general maps url
+        if (val.includes('maps') || val.includes('goo.gl')) {
+          if (msgEl && textEl) {
+            msgEl.className = 'text-[11px] text-emerald-800 font-semibold mt-1.5 flex items-center gap-1 bg-emerald-50/80 border border-emerald-200 px-2.5 py-1 rounded-lg';
+            textEl.innerHTML = `📍 গুগল ম্যাপ লিঙ্ক সংরক্ষিত হয়েছে। ডিটেইল পেজে "Google Maps Directions" বাটনে ক্লিক করলে সরাসরি আপনার লিঙ্ক ওপেন হবে।`;
+            msgEl.classList.remove('hidden');
+          }
+          // If lat/lng are empty, fill default Sitakunda coords so Leaflet works seamlessly
+          const latEl = document.getElementById('dest-lat');
+          const lngEl = document.getElementById('dest-lng');
+          if (latEl && !latEl.value) latEl.value = '22.6186';
+          if (lngEl && !lngEl.value) lngEl.value = '91.6705';
+        } else if (msgEl) {
+          msgEl.classList.add('hidden');
+        }
+      }
+    }
+
+    function testCurrentMapUrl() {
+      const mapUrl = document.getElementById('dest-map-url')?.value?.trim();
+      const lat = document.getElementById('dest-lat')?.value?.trim();
+      const lng = document.getElementById('dest-lng')?.value?.trim();
+
+      if (mapUrl) {
+        window.open(mapUrl, '_blank');
+      } else if (lat && lng) {
+        window.open(`https://www.google.com/maps?q=${lat},${lng}`, '_blank');
+      } else {
+        alert('প্রথমে কোনো গুগল ম্যাপ লিঙ্ক বা কো-অর্ডিনেট দিন।');
+      }
+    }
+
+    function fillSitakundaDefaultCoords() {
+      document.getElementById('dest-lat').value = '22.6186';
+      document.getElementById('dest-lng').value = '91.6705';
+      const msgEl = document.getElementById('dest-map-detect-msg');
+      const textEl = document.getElementById('dest-map-detect-text');
+      if (msgEl && textEl) {
+        msgEl.className = 'text-[11px] text-slate-700 font-semibold mt-1.5 flex items-center gap-1 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-lg';
+        textEl.innerHTML = `সীতাকুণ্ডের ডিফল্ট কো-অর্ডিনেট (22.6186, 91.6705) সেট করা হয়েছে।`;
+        msgEl.classList.remove('hidden');
+      }
+    }
+
     function openAddDestinationModal() {
       document.getElementById('modal-destination-title').textContent = 'Add Destination Spot';
-      document.getElementById('dest-submit-btn').textContent = 'Save Spot to Database';
+      document.getElementById('dest-submit-btn').innerHTML = '<span class="material-symbols-outlined text-base">cloud_done</span><span>স্পট সেভ করুন</span>';
       document.getElementById('dest-edit-id').value = '';
       document.getElementById('dest-name').value = '';
       document.getElementById('dest-bn').value = '';
       document.getElementById('dest-cat').value = 'Hills & Peaks';
       document.getElementById('dest-diff').value = 'Moderate';
+      document.getElementById('dest-best-time').value = 'ভোরবেলা ও সূর্যাস্ত';
       document.getElementById('dest-image').value = 'images/spots/chandranath-hill.jpg';
+      document.getElementById('dest-preview-img').src = 'images/spots/chandranath-hill.jpg';
+      document.getElementById('dest-short-desc').value = '';
       document.getElementById('dest-desc').value = '';
+      document.getElementById('dest-things-to-do').value = 'পাহাড় বা ঝর্ণার ট্রেইলে হাইকিং\nপ্রাকৃতিক সৌন্দর্য উপভোগ ও ফটোগ্রাফি\nস্থানীয় পাহাড়ি খাবারের স্বাদ গ্রহণ';
+      document.getElementById('dest-tips').value = 'গ্রিপিং ট্র্যাকিং শু পরে ট্রেইলে নামুন\nপর্যাপ্ত বিশুদ্ধ খাবার পানি সাথে রাখুন\nঅপচনশীল প্লাস্টিক বর্জ্য ফেলে পরিবেশ নষ্ট করবেন না';
+      document.getElementById('dest-map-url').value = '';
+      document.getElementById('dest-lat').value = '';
+      document.getElementById('dest-lng').value = '';
+      const msgEl = document.getElementById('dest-map-detect-msg');
+      if (msgEl) msgEl.classList.add('hidden');
       renderGalleryRows([]);
+      switchDestModalTab('basic');
       document.getElementById('modal-destination').classList.remove('hidden');
     }
 
@@ -2356,30 +3546,55 @@
       if (!s) return;
 
       document.getElementById('modal-destination-title').textContent = 'Edit Destination Spot';
-      document.getElementById('dest-submit-btn').textContent = 'Update Spot in MongoDB';
+      document.getElementById('dest-submit-btn').innerHTML = '<span class="material-symbols-outlined text-base">cloud_sync</span><span>স্পট আপডেট করুন</span>';
       document.getElementById('dest-edit-id').value = s._id || s.destinationId || s.id;
       document.getElementById('dest-name').value = s.name || '';
       document.getElementById('dest-bn').value = s.bnName || '';
       document.getElementById('dest-cat').value = s.category || 'Hills & Peaks';
       document.getElementById('dest-diff').value = s.difficulty || 'Moderate';
+      document.getElementById('dest-best-time').value = s.bestTime || 'ভোরবেলা ও সূর্যাস্ত';
       document.getElementById('dest-image').value = s.image || 'images/spots/chandranath-hill.jpg';
-      document.getElementById('dest-desc').value = s.shortDesc || s.description || '';
+      document.getElementById('dest-preview-img').src = s.image || 'images/spots/chandranath-hill.jpg';
+      document.getElementById('dest-short-desc').value = s.shortDesc || '';
+      document.getElementById('dest-desc').value = s.description || s.shortDesc || '';
+
+      const thingsArr = Array.isArray(s.thingsToDo) ? s.thingsToDo : (s.thingsToDo ? [s.thingsToDo] : []);
+      document.getElementById('dest-things-to-do').value = thingsArr.join('\n');
+
+      const tipsArr = Array.isArray(s.tips) ? s.tips : (s.tips ? [s.tips] : []);
+      document.getElementById('dest-tips').value = tipsArr.join('\n');
+
+      document.getElementById('dest-map-url').value = s.mapUrl || (s.lat && s.lng ? `https://www.google.com/maps?q=${s.lat},${s.lng}` : '');
+      document.getElementById('dest-lat').value = (s.lat !== undefined && s.lat !== null) ? s.lat : '';
+      document.getElementById('dest-lng').value = (s.lng !== undefined && s.lng !== null) ? s.lng : '';
+      const msgEl = document.getElementById('dest-map-detect-msg');
+      if (msgEl) msgEl.classList.add('hidden');
       
       const gallery = (s.gallery && s.gallery.length > 0) ? s.gallery : (s.image ? [{ src: s.image, label: 'Main View' }] : []);
       renderGalleryRows(gallery);
 
+      switchDestModalTab('basic');
       document.getElementById('modal-destination').classList.remove('hidden');
     }
 
     async function handleSaveDestination(e) {
       e.preventDefault();
       const editId = document.getElementById('dest-edit-id').value;
-      const name = document.getElementById('dest-name').value;
-      const bnName = document.getElementById('dest-bn').value;
+      const name = document.getElementById('dest-name').value.trim();
+      const bnName = document.getElementById('dest-bn').value.trim() || name;
       const category = document.getElementById('dest-cat').value;
       const difficulty = document.getElementById('dest-diff').value;
-      let image = document.getElementById('dest-image').value;
-      const shortDesc = document.getElementById('dest-desc').value;
+      const bestTime = document.getElementById('dest-best-time').value.trim() || 'ভোরবেলা ও সূর্যাস্ত';
+      let image = document.getElementById('dest-image').value.trim() || 'images/spots/chandranath-hill.jpg';
+      const shortDesc = document.getElementById('dest-short-desc').value.trim();
+      const description = document.getElementById('dest-desc').value.trim() || shortDesc;
+
+      const thingsToDoList = document.getElementById('dest-things-to-do').value.split('\n').map(s => s.trim()).filter(Boolean);
+      const tipsList = document.getElementById('dest-tips').value.split('\n').map(s => s.trim()).filter(Boolean);
+
+      const mapUrlVal = document.getElementById('dest-map-url').value.trim();
+      const latVal = document.getElementById('dest-lat').value.trim();
+      const lngVal = document.getElementById('dest-lng').value.trim();
 
       // Collect all dynamic gallery rows
       const galleryRows = document.querySelectorAll('.gallery-item-row');
@@ -2401,17 +3616,27 @@
         bnName,
         category,
         difficulty,
+        bestTime,
         image,
         shortDesc,
-        gallery: gallery.length > 0 ? gallery : [{ type: 'image', src: image, thumb: image, label: 'Main View' }]
+        description,
+        thingsToDo: thingsToDoList.length > 0 ? thingsToDoList : ['বুনো ট্রেইলে ট্রেকিং ও ফটোগ্রাফি', 'প্রাকৃতিক সৌন্দর্য উপভোগ'],
+        tips: tipsList.length > 0 ? tipsList : ['পর্যাপ্ত পানি সাথে রাখুন', 'গ্রিপিং ট্র্যাকিং জুতো ব্যবহার করুন'],
+        lat: latVal ? parseFloat(latVal) : 22.6186,
+        lng: lngVal ? parseFloat(lngVal) : 91.6705,
+        mapUrl: mapUrlVal || (latVal && lngVal ? `https://www.google.com/maps?q=${latVal},${lngVal}` : undefined),
+        gallery: gallery.length > 0 ? gallery : [{ type: 'image', src: image, thumb: image, label: 'Main View' }],
+        isActive: true
       };
 
       try {
         if (editId) {
           await TourstkAPI.updateDestination(editId, payload);
+          alert('স্পটের বিবরণ সফলভাবে আপডেট হয়েছে!');
         } else {
           payload.destinationId = name.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Math.floor(100 + Math.random() * 900);
           await TourstkAPI.createDestination(payload);
+          alert('নতুন দর্শনীয় স্থান সফলভাবে যুক্ত হয়েছে!');
         }
 
         // Also update local cache / TOURSTK.destinations
@@ -2425,10 +3650,8 @@
         await TourstkAPI.fetchAndSyncDestinations();
         TourstkAPI.broadcastChange('DESTINATION_UPDATED');
       } catch (err) {
-        alert(editId ? 'Spot updated!' : 'Spot added!');
-        closeModal('modal-destination');
-        await loadDestinations();
-        TourstkAPI.broadcastChange('DESTINATION_UPDATED');
+        console.error('Destination save error:', err);
+        alert('স্পট সেভ করতে সমস্যা হয়েছে: ' + (err.message || 'দয়া করে চেক করুন'));
       }
     }
 

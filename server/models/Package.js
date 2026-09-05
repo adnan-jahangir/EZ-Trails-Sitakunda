@@ -21,9 +21,17 @@ const packageSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    bnTagline: {
+      type: String,
+      trim: true,
+    },
     duration: {
       type: String,
       required: true,
+    },
+    bnDuration: {
+      type: String,
+      trim: true,
     },
     days: {
       type: Number,
@@ -40,9 +48,18 @@ const packageSchema = new mongoose.Schema(
     originalPrice: {
       type: Number,
     },
+    priceNote: {
+      type: String,
+    },
+    bnPriceNote: {
+      type: String,
+    },
     badge: {
       type: String,
       default: 'Popular',
+    },
+    bnBadge: {
+      type: String,
     },
     category: {
       type: String,
@@ -52,9 +69,18 @@ const packageSchema = new mongoose.Schema(
       type: String,
       default: '1-10 Persons',
     },
+    minTravelers: {
+      type: String,
+    },
+    bnMinTravelers: {
+      type: String,
+    },
     difficulty: {
       type: String,
       default: 'Moderate',
+    },
+    bnDifficulty: {
+      type: String,
     },
     image: {
       type: String,
@@ -70,9 +96,39 @@ const packageSchema = new mongoose.Schema(
         type: String,
       },
     ],
+    bnIncluded: [
+      {
+        type: String,
+      },
+    ],
     exclusions: [
       {
         type: String,
+      },
+    ],
+    bnExcluded: [
+      {
+        type: String,
+      },
+    ],
+    whatToPack: [
+      {
+        type: String,
+      },
+    ],
+    bnWhatToPack: [
+      {
+        type: String,
+      },
+    ],
+    meals: [
+      {
+        type: mongoose.Schema.Types.Mixed,
+      },
+    ],
+    scheduleDays: [
+      {
+        type: mongoose.Schema.Types.Mixed,
       },
     ],
     highlights: [
@@ -100,3 +156,4 @@ const packageSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model('Package', packageSchema);
+

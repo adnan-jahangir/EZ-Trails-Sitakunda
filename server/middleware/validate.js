@@ -62,54 +62,65 @@ const bookingSchema = z.object({
 }).passthrough();
 
 // =================== CONTACT VALIDATION ===================
-const contactSchema = z.object({
-  name: z
-    .string({ required_error: 'Name is required' })
-    .min(2, 'Name must be at least 2 characters')
-    .max(100)
-    .trim(),
+const contactSchema = z
+  .object({
+    name: z
+      .string({ required_error: 'Name is required' })
+      .min(2, 'Name must be at least 2 characters')
+      .max(100)
+      .trim(),
 
-  phone: z
-    .string()
-    .min(10, 'Phone number must be at least 10 digits')
-    .max(15)
-    .regex(/^[0-9+\-\s()]+$/, 'Invalid phone number')
-    .optional()
-    .or(z.literal('')),
+    phone: z
+      .string()
+      .min(10, 'Phone number must be at least 10 digits')
+      .max(15)
+      .regex(/^[0-9+\-\s()]+$/, 'Invalid phone number')
+      .optional()
+      .or(z.literal('')),
 
-  email: z
-    .string()
-    .email('Invalid email')
-    .optional()
-    .or(z.literal('')),
+    email: z
+      .string()
+      .email('Invalid email')
+      .optional()
+      .or(z.literal('')),
 
-  message: z
-    .string({ required_error: 'Message is required' })
-    .min(5, 'Message must be at least 5 characters')
-    .max(2000, 'Message is too long'),
-});
+    subject: z.string().max(200).optional(),
+    topic: z.string().max(200).optional(),
+
+    message: z
+      .string({ required_error: 'Message is required' })
+      .min(5, 'Message must be at least 5 characters')
+      .max(2000, 'Message is too long'),
+  })
+  .passthrough();
 
 // =================== CUSTOM REQUEST VALIDATION ===================
-const customRequestSchema = z.object({
-  customerName: z
-    .string({ required_error: 'Name is required' })
-    .min(2)
-    .max(100)
-    .trim(),
+const customRequestSchema = z
+  .object({
+    customerName: z
+      .string({ required_error: 'Name is required' })
+      .min(2)
+      .max(100)
+      .trim(),
 
-  phone: z
-    .string({ required_error: 'Phone is required' })
-    .min(10)
-    .max(15)
-    .regex(/^[0-9+\-\s()]+$/, 'Invalid phone number'),
+    phone: z
+      .string({ required_error: 'Phone is required' })
+      .min(10)
+      .max(15)
+      .regex(/^[0-9+\-\s()]+$/, 'Invalid phone number'),
 
-  groupSize: z.number().int().min(1).max(100).optional(),
-  travelDate: z.string().optional(),
-  duration: z.string().max(100).optional(),
-  budget: z.string().max(100).optional(),
-  selectedSpots: z.array(z.string()).optional(),
-  specialRequests: z.string().max(2000).optional(),
-});
+    groupSize: z.union([z.number().int().min(1).max(100), z.string()]).optional(),
+    groupType: z.string().max(100).optional(),
+    travelDate: z.string().optional(),
+    duration: z.string().max(100).optional(),
+    budget: z.union([z.string().max(100), z.number()]).optional(),
+    estimatedBudget: z.union([z.string().max(100), z.number()]).optional(),
+    selectedSpots: z.array(z.string()).optional(),
+    destinations: z.array(z.string()).optional(),
+    preferences: z.any().optional(),
+    specialRequests: z.string().max(2000).optional(),
+  })
+  .passthrough();
 
 // =================== PACKAGE VALIDATION ===================
 const packageSchema = z.object({

@@ -396,14 +396,14 @@
               <!-- About -->
               <div>
                 <h2 class="font-display text-2xl font-bold text-primary mb-3">About ${dest.name}</h2>
-                <p class="text-sm text-slate-600 leading-relaxed">${dest.description}</p>
+                <p class="text-sm text-slate-600 leading-relaxed">${dest.description || dest.shortDesc || 'সীতাকুণ্ডের মনোরম দর্শনীয় স্থান।'}</p>
               </div>
 
               <!-- Things To Do -->
               <div>
                 <h3 class="font-display text-xl font-bold text-primary mb-3">Things to Do & Experience</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  ${dest.thingsToDo.map(t => `
+                  ${((Array.isArray(dest.thingsToDo) && dest.thingsToDo.length > 0) ? dest.thingsToDo : ['বুনো ট্রেইলে ট্রেকিং ও ক্যাম্পিং', 'প্রাকৃতিক সৌন্দর্য উপভোগ ও ফটোগ্রাফি']).map(t => `
                     <div class="bg-slate-50 text-slate-700 border border-slate-200/80 p-3.5 rounded-xl text-xs font-semibold flex items-center gap-2">
                       <span class="material-symbols-outlined text-emerald-600 text-base flex-shrink-0">check_circle</span>
                       <span>${t}</span>
@@ -416,7 +416,7 @@
               <div>
                 <h3 class="font-display text-xl font-bold text-primary mb-3">Local Tips & Travel Advice</h3>
                 <div class="space-y-2.5">
-                  ${dest.tips.map(tip => `
+                  ${((Array.isArray(dest.tips) && dest.tips.length > 0) ? dest.tips : ['পর্যাপ্ত বিশুদ্ধ খাবার পানি সাথে রাখুন', 'গ্রিপিং ট্র্যাকিং জুতো পরিধান করুন']).map(tip => `
                     <div class="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200/60 text-xs text-amber-950 flex items-start gap-2.5">
                       <span class="material-symbols-outlined text-amber-700 text-base mt-0.5">tips_and_updates</span>
                       <span class="leading-relaxed">${tip}</span>
@@ -561,7 +561,7 @@
           L.DomEvent.disableScrollPropagation(div);
           div.innerHTML = `
             <div class="hidden sm:flex items-center gap-2 select-none mb-1">
-              <a href="https://www.google.com/maps/dir/?api=1&destination=${currentLat},${currentLng}" target="_blank" class="bg-white/95 hover:bg-white text-slate-800 text-[11px] font-bold px-3.5 py-2 rounded-xl shadow-md border border-slate-200 flex items-center gap-1.5 hover:text-primary transition-all">
+              <a href="${dest.mapUrl || `https://www.google.com/maps/dir/?api=1&destination=${currentLat},${currentLng}`}" target="_blank" class="bg-white/95 hover:bg-white text-slate-800 text-[11px] font-bold px-3.5 py-2 rounded-xl shadow-md border border-slate-200 flex items-center gap-1.5 hover:text-primary transition-all">
                 <span class="material-symbols-outlined text-sm text-emerald-600">directions</span>
                 <span>Google Maps Directions</span>
               </a>

@@ -202,7 +202,7 @@
                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider" id="i18n-lbl-email">
                       Email Address
                     </label>
-                    <span class="text-[10px] text-slate-400 font-semibold" id="i18n-lbl-email-hint">Optional for PDF ticket</span>
+                    <span class="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200" id="i18n-lbl-email-hint">Recommended for Confirmation Alert</span>
                   </div>
                   <div class="relative">
                     <span class="material-symbols-outlined absolute left-3.5 top-3 text-slate-400 text-lg pointer-events-none">mail</span>
@@ -943,7 +943,7 @@
       if (lblPhone) lblPhone.innerHTML = `${isBn ? 'হোয়াটসঅ্যাপ / মোবাইল নম্বর' : 'WhatsApp / Phone Number'} <span class="text-rose-500">*</span>`;
       if (custPhone) custPhone.placeholder = isBn ? '01812345678' : '1812345678';
       if (lblEmail) lblEmail.textContent = isBn ? 'ইমেইল ঠিকানা' : 'Email Address';
-      if (hintEmail) hintEmail.textContent = isBn ? 'পিডিএফ টিকেটের জন্য (ঐচ্ছিক)' : 'Optional for PDF ticket';
+      if (hintEmail) hintEmail.textContent = isBn ? 'কনফার্মেশন অ্যালার্টের জন্য (সুপারিশকৃত)' : 'Recommended for Confirmation Alert';
       if (custEmail) custEmail.placeholder = isBn ? 'যেমনঃ name@gmail.com' : 'e.g. name@gmail.com';
       if (lblDate) lblDate.innerHTML = `${isBn ? 'ভ্রমণের তারিখ' : 'Travel Date'} <span class="text-rose-500">*</span>`;
       if (lblPickup) lblPickup.innerHTML = `${isBn ? 'সীতাকুণ্ডে পিকআপ পয়েন্ট' : 'Sitakunda Pickup Location'} <span class="text-rose-500">*</span>`;

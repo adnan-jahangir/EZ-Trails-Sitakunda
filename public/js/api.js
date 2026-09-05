@@ -87,8 +87,8 @@ const TourstkAPI = {
       if (!res.ok) {
         if (res.status === 401 && endpoint.startsWith('/admin') || (options.authRequired && res.status === 401)) {
           this.clearAuth();
-          if (window.location.pathname.includes('/admin/')) {
-            window.location.href = 'index.html?auth=required';
+          if (window.location.pathname.includes('/tourstk-hq') || window.location.pathname.includes('/admin')) {
+            window.location.href = '/tourstk-hq?auth=required';
           }
         }
         throw new Error(data.message || `Request failed with status ${res.status}`);
@@ -463,15 +463,25 @@ const TourstkAPI = {
       bnName: p.bnTitle || p.bnName || '',
       tagline: p.tagline || p.shortDesc || '',
       shortDesc: p.tagline || p.shortDesc || '',
+      bnTagline: p.bnTagline || p.bnShortDesc || '',
+      bnShortDesc: p.bnTagline || p.bnShortDesc || '',
       category: p.category || p.duration || 'Standard Tour',
       duration: p.duration || '2 Days • 1 Night',
+      bnDuration: p.bnDuration || '',
       days: p.days || 1,
       nights: p.nights || 0,
       price: Number(p.price) || 0,
       originalPrice: Number(p.originalPrice) || 0,
+      priceNote: p.priceNote || 'per person all-inclusive',
+      bnPriceNote: p.bnPriceNote || 'জনপ্রতি সর্বমোট',
       badge: p.badge || 'Popular',
+      bnBadge: p.bnBadge || '',
       difficulty: p.difficulty || 'Moderate',
+      bnDifficulty: p.bnDifficulty || '',
+      type: p.type || p.category || '2 Days • 1 Night',
+      bnType: p.bnType || '',
       minTravelers: p.groupSize || p.minTravelers || 'Min 4 Travelers',
+      bnMinTravelers: p.bnMinTravelers || '',
       groupSize: p.groupSize || p.minTravelers || 'Min 4 Travelers',
       image: p.image || 'images/spots/chandranath-hill.jpg',
       destinations: p.spots || p.destinations || [],
@@ -479,7 +489,13 @@ const TourstkAPI = {
       included: p.inclusions || p.included || p.includesList || ['Transport', 'Accommodation', 'Meals', 'Guide'],
       inclusions: p.inclusions || p.included || p.includesList || ['Transport', 'Accommodation', 'Meals', 'Guide'],
       includesList: p.inclusions || p.included || p.includesList || ['Transport', 'Accommodation', 'Meals', 'Guide'],
+      bnIncluded: p.bnIncluded || [],
       exclusions: p.exclusions || [],
+      bnExcluded: p.bnExcluded || [],
+      whatToPack: p.whatToPack || [],
+      bnWhatToPack: p.bnWhatToPack || [],
+      meals: p.meals || [],
+      scheduleDays: p.scheduleDays || [],
       highlights: p.highlights || [],
       featured: !!p.featured,
       isActive: p.isActive !== false,
@@ -490,7 +506,36 @@ const TourstkAPI = {
     try {
       const res = await this.getPackages();
       if (res?.success && Array.isArray(res.data)) {
-        const normalized = res.data.map(p => this.normalizePackage(p)).filter(Boolean);
+        const existingMap = new Map((typeof window.TOURSTK !== 'undefined' && Array.isArray(window.TOURSTK.packages)) ? window.TOURSTK.packages.map(ep => [ep.id, ep]) : []);
+        const normalized = res.data.map(p => {
+          const norm = this.normalizePackage(p);
+          const local = existingMap.get(norm.id);
+          if (local) {
+            norm.meals = (norm.meals && norm.meals.length > 0) ? norm.meals : (local.meals || []);
+            norm.scheduleDays = (norm.scheduleDays && norm.scheduleDays.length > 0) ? norm.scheduleDays : (local.scheduleDays || []);
+            norm.whatToPack = (norm.whatToPack && norm.whatToPack.length > 0) ? norm.whatToPack : (local.whatToPack || []);
+            norm.bnWhatToPack = (norm.bnWhatToPack && norm.bnWhatToPack.length > 0) ? norm.bnWhatToPack : (local.bnWhatToPack || []);
+            norm.bnIncluded = (norm.bnIncluded && norm.bnIncluded.length > 0) ? norm.bnIncluded : (local.bnIncluded || []);
+            norm.bnExcluded = (norm.bnExcluded && norm.bnExcluded.length > 0) ? norm.bnExcluded : (local.bnExcluded || []);
+            norm.bnTagline = norm.bnTagline || local.bnTagline || '';
+            norm.bnShortDesc = norm.bnShortDesc || local.bnShortDesc || '';
+            norm.bnDuration = norm.bnDuration || local.bnDuration || '';
+            norm.bnType = norm.bnType || local.bnType || '';
+            norm.bnBadge = norm.bnBadge || local.bnBadge || '';
+            norm.bnDifficulty = norm.bnDifficulty || local.bnDifficulty || '';
+            norm.bnMinTravelers = norm.bnMinTravelers || local.bnMinTravelers || '';
+            norm.bnPriceNote = norm.bnPriceNote || local.bnPriceNote || '';
+          }
+          return norm;
+        }).filter(Boolean);
+
+        // Keep local signature packages if DB hasn't seeded them yet
+        for (const [id, localPkg] of existingMap.entries()) {
+          if (!normalized.some(np => np.id === id)) {
+            normalized.push(localPkg);
+          }
+        }
+
         if (typeof window.TOURSTK !== 'undefined') {
           window.TOURSTK.packages = normalized;
         }

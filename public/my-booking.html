@@ -156,12 +156,13 @@
         const searchIdentifier = id || phone;
         if (searchIdentifier && typeof TourstkAPI !== 'undefined') {
           const apiRes = await TourstkAPI.trackBooking(searchIdentifier);
-          if (apiRes.success && apiRes.data && apiRes.data.length > 0) {
+          const rawList = Array.isArray(apiRes?.data) ? apiRes.data : (apiRes?.data ? [apiRes.data] : []);
+          if (apiRes.success && rawList.length > 0) {
             const cleanPhoneDigits = phone.replace(/[^0-9]/g, '');
             const last8 = cleanPhoneDigits.length >= 8 ? cleanPhoneDigits.slice(-8) : cleanPhoneDigits;
             const cleanId = (id || '').trim().toLowerCase();
 
-            const match = apiRes.data.find(b => {
+            const match = rawList.find(b => {
               const bPhone = (b.phone || '').replace(/[^0-9]/g, '');
               const bId = (b.bookingId || b.id || '').toLowerCase();
               if (cleanId && last8) {
@@ -170,7 +171,7 @@
               if (cleanId) return bId === cleanId || bId.includes(cleanId);
               if (last8) return bPhone.includes(last8) || last8.includes(bPhone.slice(-8));
               return true;
-            }) || apiRes.data[0];
+            }) || rawList[0];
 
             if (match) {
               booking = {

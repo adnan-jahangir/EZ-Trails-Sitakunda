@@ -5,7 +5,7 @@ const ContactMessage = require('../models/ContactMessage');
 // @access  Public
 const submitContactMessage = async (req, res, next) => {
   try {
-    const { name, phone, email, subject, message } = req.body;
+    const { name, phone, email, subject, topic, message } = req.body;
 
     if (!name || !phone || !message) {
       return res.status(400).json({ success: false, message: 'Please provide name, phone and message' });
@@ -14,8 +14,8 @@ const submitContactMessage = async (req, res, next) => {
     const item = await ContactMessage.create({
       name,
       phone,
-      email,
-      subject: subject || 'Sitakunda Tour Inquiry',
+      email: email || '',
+      subject: subject || topic || 'Sitakunda Tour Inquiry',
       message,
     });
 

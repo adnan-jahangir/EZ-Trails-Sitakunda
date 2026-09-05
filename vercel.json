@@ -57,30 +57,38 @@
     },
     {
       "source": "/admin",
-      "destination": "/public/admin/index.html"
-    },
-    {
-      "source": "/admin/",
-      "destination": "/public/admin/index.html"
-    },
-    {
-      "source": "/admin/index",
-      "destination": "/public/admin/index.html"
-    },
-    {
-      "source": "/admin/bookings",
-      "destination": "/public/admin/bookings.html"
-    },
-    {
-      "source": "/admin/packages",
-      "destination": "/public/admin/packages.html"
-    },
-    {
-      "source": "/admin/custom-requests",
-      "destination": "/public/admin/custom-requests.html"
+      "destination": "/public/404.html"
     },
     {
       "source": "/admin/(.*)",
+      "destination": "/public/404.html"
+    },
+    {
+      "source": "/tourstk-hq",
+      "destination": "/public/admin/index.html"
+    },
+    {
+      "source": "/tourstk-hq/",
+      "destination": "/public/admin/index.html"
+    },
+    {
+      "source": "/tourstk-hq/index",
+      "destination": "/public/admin/index.html"
+    },
+    {
+      "source": "/tourstk-hq/bookings",
+      "destination": "/public/admin/bookings.html"
+    },
+    {
+      "source": "/tourstk-hq/packages",
+      "destination": "/public/admin/packages.html"
+    },
+    {
+      "source": "/tourstk-hq/custom-requests",
+      "destination": "/public/admin/custom-requests.html"
+    },
+    {
+      "source": "/tourstk-hq/(.*)",
       "destination": "/public/admin/index.html"
     },
     {

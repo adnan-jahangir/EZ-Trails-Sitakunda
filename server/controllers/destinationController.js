@@ -20,7 +20,7 @@ const getDestinations = async (req, res, next) => {
 // @access  Private (SuperAdmin, Manager)
 const createDestination = async (req, res, next) => {
   try {
-    let { destinationId, name, bnName, category, difficulty, bestTime, shortDesc, description, image, gallery } = req.body;
+    let { destinationId, name, bnName, category, difficulty, bestTime, shortDesc, description, image, gallery, thingsToDo, tips, lat, lng, mapUrl, tags } = req.body;
     if (!destinationId) {
       destinationId = name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     }
@@ -39,6 +39,12 @@ const createDestination = async (req, res, next) => {
       description,
       image: image || 'images/spots/chandranath-hill.jpg',
       gallery: Array.isArray(gallery) ? gallery : undefined,
+      thingsToDo: Array.isArray(thingsToDo) ? thingsToDo : undefined,
+      tips: Array.isArray(tips) ? tips : undefined,
+      lat: (lat !== undefined && lat !== null && lat !== '') ? Number(lat) : 22.6186,
+      lng: (lng !== undefined && lng !== null && lng !== '') ? Number(lng) : 91.6705,
+      mapUrl: mapUrl || undefined,
+      tags: Array.isArray(tags) ? tags : undefined,
     });
     cacheService.invalidatePrefix('destinations');
 
